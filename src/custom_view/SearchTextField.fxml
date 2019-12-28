@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<fx:root
+        type="javafx.scene.layout.HBox"
+        xmlns:fx="http://javafx.com/fxml"
+        xmlns="http://javafx.com/javafx">
+
+    <TextField fx:id="searchTextField"
+               maxWidth="Infinity"
+               alignment="CENTER_LEFT"
+               promptText="Search">
+
+
+        <BorderPane.margin>
+            <Insets topRightBottomLeft="8"/>
+        </BorderPane.margin>
+
+        <padding>
+            <Insets topRightBottomLeft="5"/>
+        </padding>
+
+    </TextField>
+
+</fx:root>

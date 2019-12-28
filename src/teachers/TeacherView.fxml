@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.geometry.Insets?>
+<?import custom_view.SearchTextFieldController?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="teachers.TeacherController"
+>
+
+    <center>
+
+        <StackPane>
+            <VBox>
+
+                <BorderPane>
+                    <left>
+                        <Label id="headline" text="Teachers"/>
+                    </left>
+                    <right>
+
+                        <HBox>
+                            <padding>
+                                <Insets topRightBottomLeft="5"/>
+                            </padding>
+
+                            <SearchTextFieldController fx:id="searchField"/>
+
+                            <Button text="ADD">
+                                <BorderPane.margin>
+                                    <Insets topRightBottomLeft="8"/>
+                                </BorderPane.margin>
+
+                            </Button>
+                        </HBox>
+                    </right>
+                </BorderPane>
+
+                <TableView fx:id="teacherTable" VBox.vgrow="ALWAYS" onKeyPressed="#onTableKeyPressed">
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                    <columns>
+
+                        <TableColumn text="Name">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="name"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Verification Code">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="verificationCode"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Verified">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="verified"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn text="Profile Completed">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="profileCompleted"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                    </columns>
+
+                </TableView>
+            </VBox>
+            <ProgressIndicator fx:id="progressIndicator"/>
+        </StackPane>
+
+
+    </center>
+
+</BorderPane>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<?import custom_view.ImageViewController?>
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="events.EventsController"
+           stylesheets="@/styles/dark_metro_style.css"
+
+>
+
+
+    <ProgressIndicator fx:id="mainProgressIndicator"/>
+
+
+    <StackPane>
+
+
+        <SplitPane>
+            <VBox>
+
+                <Label text="Events" alignment="CENTER" id="headline">
+
+                </Label>
+
+                <TextField fx:id="searchTextField"
+                           maxWidth="Infinity"
+                           alignment="CENTER"
+                           promptText="Search"
+                           onKeyPressed="#onSearchTextEntered">
+
+                    <VBox.margin>
+                        <Insets topRightBottomLeft="8"/>
+                    </VBox.margin>
+                    <padding>
+                        <Insets topRightBottomLeft="4"/>
+                    </padding>
+
+                </TextField>
+
+                <ListView fx:id="eventsList" VBox.vgrow="ALWAYS"/>
+            </VBox>
+            <VBox fx:id="eventDetailPane">
+                <Label text="Details"  id="headline">
+
+                </Label>
+                <ImageView fx:id="eventImage"/>
+
+
+                <GridPane vgap="10" alignment="TOP_CENTER">
+
+                    <padding>
+                        <Insets topRightBottomLeft="16"/>
+                    </padding>
+
+
+                    <!--Event Headline-->
+                    <!--(0,0)-->
+                    <Label fx:id="eventTitle" id="headline" alignment="CENTER" text="Title: "
+                           GridPane.rowIndex="0"
+                           GridPane.columnIndex="0" GridPane.vgrow="ALWAYS"/>
+
+
+                    <!--Event Description -->
+                    <!--(1,0)-->
+                    <Label text="Description: " GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <!--(1,1)-->
+                    <Label fx:id="eventDescription" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+
+                    <!--Event Time -->
+                    <!--(2,0)-->
+                    <Label text="Event Time: " GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <!--(2,1)-->
+                    <Label fx:id="eventTime" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+
+                    <!--Event Created At-->
+                    <!--(3,0)-->
+                    <Label text="Created At: " GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                    <!--(3,1)-->
+                    <Label fx:id="createdAt" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+
+                    <!--Event Date-->
+                    <!--(4,0)-->
+                    <Label text="Event Date: " GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                    <!--(4,1)-->
+                    <Label fx:id="eventDate" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+
+                    <!--Add Button-->
+                    <!--(5,1)-->
+                    <Button fx:id="editButton" text="Edit" GridPane.rowIndex="5"
+                            GridPane.hgrow="ALWAYS" alignment="CENTER" GridPane.columnSpan="4"/>
+
+                </GridPane>
+
+
+            </VBox>
+
+<!--            <VBox>-->
+<!--                <Label text="Add Event" alignment="CENTER" id="subHeadline">-->
+
+<!--                </Label>-->
+<!--                <GridPane vgap="10" alignment="TOP_CENTER" fx:id="eventAddPane">-->
+
+<!--                    <padding>-->
+<!--                        <Insets topRightBottomLeft="16"/>-->
+<!--                    </padding>-->
+
+
+<!--                    &lt;!&ndash;Event Headline&ndash;&gt;-->
+<!--                    &lt;!&ndash;(0,0)&ndash;&gt;-->
+<!--                    <Label text="Title: " GridPane.rowIndex="0" GridPane.columnIndex="0"/>-->
+<!--                    <TextField fx:id="titleTextField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>-->
+
+
+<!--                    &lt;!&ndash;Event Description &ndash;&gt;-->
+<!--                    &lt;!&ndash;(1,0)&ndash;&gt;-->
+<!--                    <Label text="Description: " GridPane.rowIndex="1" GridPane.columnIndex="0"/>-->
+<!--                    &lt;!&ndash;(1,1)&ndash;&gt;-->
+<!--                    <TextField fx:id="descriptionTextField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>-->
+
+
+<!--                    &lt;!&ndash;Event Time &ndash;&gt;-->
+<!--                    &lt;!&ndash;(2,0)&ndash;&gt;-->
+<!--                    <Label text="Event Time: " GridPane.rowIndex="2" GridPane.columnIndex="0"/>-->
+<!--                    &lt;!&ndash;(2,1)&ndash;&gt;-->
+<!--                    <TextField fx:id="eventTimeTextField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>-->
+
+
+<!--                    &lt;!&ndash;Event Created At&ndash;&gt;-->
+<!--                    &lt;!&ndash;(3,0)&ndash;&gt;-->
+<!--                    <Label text="Created At: " GridPane.rowIndex="3" GridPane.columnIndex="0"/>-->
+<!--                    &lt;!&ndash;(3,1)&ndash;&gt;-->
+<!--                    <TextField fx:id="createdAtTextField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>-->
+
+
+<!--                    &lt;!&ndash;Event Date&ndash;&gt;-->
+<!--                    &lt;!&ndash;(4,0)&ndash;&gt;-->
+<!--                    <Label text="Event Date: " GridPane.rowIndex="4" GridPane.columnIndex="0"/>-->
+<!--                    &lt;!&ndash;(4,1)&ndash;&gt;-->
+<!--                    <TextField fx:id="eventDateTextField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>-->
+
+
+<!--                    &lt;!&ndash;Image Chooser&ndash;&gt;-->
+<!--&lt;!&ndash;                    <Button text="Choose Image" GridPane.rowIndex="5" GridPane.columnIndex="0" onAction="#chooseImage"/>&ndash;&gt;-->
+
+
+<!--                    <ImageViewController GridPane.rowIndex="5" GridPane.columnIndex="0">-->
+
+<!--                    </ImageViewController>-->
+
+
+<!--                    &lt;!&ndash;Add Button&ndash;&gt;-->
+<!--                    &lt;!&ndash;(5,1)&ndash;&gt;-->
+<!--                    <Button fx:id="addButton" text="Add" GridPane.rowIndex="6" GridPane.columnIndex="1"-->
+<!--                            GridPane.hgrow="ALWAYS"/>-->
+
+<!--                </GridPane>-->
+<!--            </VBox>-->
+        </SplitPane>
+
+
+        <ProgressIndicator fx:id="detailProgressIndicator"/>
+
+    </StackPane>
+
+
+</StackPane>
