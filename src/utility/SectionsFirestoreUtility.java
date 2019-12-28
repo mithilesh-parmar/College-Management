@@ -84,6 +84,7 @@ public class SectionsFirestoreUtility {
     }
 
     public void addLecture(Lecture lecture, String dayOfWeek, Section section) {
+        System.out.println(lecture+""+dayOfWeek+""+section);
         section.addLecture(lecture, dayOfWeek);
         System.out.println(section.toJSON());
         new Thread(() -> FirestoreConstants.sectionsClassScheduleCollectionReference.document(section.getName()).set(section.toJSON())).start();

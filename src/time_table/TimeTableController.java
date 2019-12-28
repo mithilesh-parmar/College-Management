@@ -7,7 +7,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -48,7 +47,8 @@ public class TimeTableController implements Initializable, DataChangeListener {
     private BooleanProperty loadingData = new SimpleBooleanProperty(true);
     private SectionsFirestoreUtility firestoreUtility = SectionsFirestoreUtility.getInstance();
 
-    private Section selectedSection;
+    private Section previouslySelectedSection;
+    private Toggle previouslySelectedDayOfWeek;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -65,11 +65,13 @@ public class TimeTableController implements Initializable, DataChangeListener {
 
 
         sectionsListView.getSelectionModel().selectedItemProperty().addListener(this::changedSelectedSection);
+        sectionsListView.getSelectionModel().selectFirst();
 
 
         addLectureButton.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+
 
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddLectureView.fxml"));
                 Parent parent = null;
@@ -85,7 +87,7 @@ public class TimeTableController implements Initializable, DataChangeListener {
 
                     dialogController.button.setOnAction(actionEvent1 -> onAddButtonClick(dialogController, dialog));
 
-                    dialog.showAndWait();
+                    dialog.show();
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -103,16 +105,24 @@ public class TimeTableController implements Initializable, DataChangeListener {
     public void onDataLoaded(ObservableList data) {
         loadingData.set(false);
         sectionsListView.setItems(firestoreUtility.sections);
-        sectionsListView.requestFocus();
-        if (sectionsListView.getItems() != null && selectedSection == null) {
-            System.out.println("Selecting first");
-            sectionsListView.getSelectionModel().selectFirst();
+
+        if (previouslySelectedSection != null) {
+            System.out.println("Selecting : " + previouslySelectedSection);
+            sectionsListView.getSelectionModel().select(previouslySelectedSection);
+            dayChooser.selectToggle(previouslySelectedDayOfWeek);
+            sectionsListView.getFocusModel().focusPrevious();
+//            sectionsListView.getFocusModel().focus(sectionsListView.getItems().indexOf(previouslySelectedSection));
+
         }
+
     }
 
     @Override
     public void onDataChange(QuerySnapshot data) {
-        selectedSection = sectionsListView.getSelectionModel().getSelectedItem();
+        System.out.println(getClass() + " onDataChange: selected section value: " + previouslySelectedSection);
+        previouslySelectedSection = sectionsListView.getSelectionModel().getSelectedItem();
+        previouslySelectedDayOfWeek = dayChooser.getSelectedToggle();
+        System.out.println(getClass() + " onDataChange: Setting selected section to: " + previouslySelectedSection);
         loadingData.set(true);
     }
 
@@ -137,7 +147,7 @@ public class TimeTableController implements Initializable, DataChangeListener {
         firestoreUtility.addLecture(
                 lecture,
                 dayChooser.getSelectedToggle().getUserData().toString(),
-                selectedSection
+                sectionsListView.getSelectionModel().getSelectedItem()
         );
 
 
@@ -209,11 +219,8 @@ public class TimeTableController implements Initializable, DataChangeListener {
 
 
     private void changedSelectedSection(ObservableValue<? extends Section> observableValue, Section section, Section t1) {
-        selectedSection = t1;
 
-        System.out.println("Observable: " + observableValue);
-        System.out.println("Section: " + section);
-        System.out.println("t1: " + t1);
+
         if (t1 != null && t1.getClassSchedules() != null && t1.getClassSchedules().containsKey("1")) {
             timeTableForSection.setItems(t1.getClassSchedules().get("1"));
             dayChooser.getToggles().get(0).setSelected(true);
