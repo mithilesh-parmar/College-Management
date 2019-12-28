@@ -4,6 +4,8 @@ import com.google.cloud.firestore.EventListener;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import custom_view.SearchTextFieldController;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 
 import javafx.collections.ObservableList;
@@ -32,6 +34,7 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
     public ProgressIndicator progressIndicator;
     public SearchTextFieldController searchField;
 
+    private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
     private TeacherFirestoreUtility firestoreUtility = TeacherFirestoreUtility.getInstance();
 
 
@@ -40,6 +43,7 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
         searchField.setCallback(this);
         firestoreUtility.setListener(this);
         firestoreUtility.getTeachers();
+        progressIndicator.visibleProperty().bind(dataLoading);
     }
 
     public void onTableKeyPressed(KeyEvent keyEvent) {
@@ -48,13 +52,13 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
 
     @Override
     public void onDataLoaded(ObservableList data) {
+        dataLoading.set(false);
         teacherTable.setItems(firestoreUtility.teachers);
-        progressIndicator.setVisible(false);
     }
 
     @Override
     public void onDataChange(QuerySnapshot data) {
-        progressIndicator.setVisible(true);
+        dataLoading.set(true);
     }
 
     @Override
@@ -67,6 +71,7 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
 
     @Override
     public void performSearch(String oldValue, String newValue) {
+        if (dataLoading.get()) return;
         // if pressing backspace then set initial values to list
         if (oldValue != null && (newValue.length() < oldValue.length())) {
             teacherTable.setItems(firestoreUtility.teachers);
@@ -77,7 +82,9 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
 
         ObservableList<Teacher> subList = FXCollections.observableArrayList();
         for (Teacher p : teacherTable.getItems()) {
-            String text = p.getName().toUpperCase() + " " + p.getVerificationCode().toUpperCase();
+            String text =
+                    p.getName().toUpperCase() + " "
+                            + p.getVerificationCode().toUpperCase() + " ";
             // if the search text contains the manufacturer then add it to sublist
             if (text.contains(searchtext)) {
                 subList.add(p);

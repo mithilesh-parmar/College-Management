@@ -16,98 +16,95 @@
 >
 
     <left>
-        <VBox>
-            <Label text="Sections" id="headline"/>
-            <TextField fx:id="searchTextField"
-                       maxWidth="Infinity"
-                       alignment="CENTER"
-                       promptText="Search"
-                       onKeyPressed="#onSearchTextEntered">
 
-                <VBox.margin>
-                    <Insets topRightBottomLeft="8"/>
-                </VBox.margin>
-                <padding>
-                    <Insets topRightBottomLeft="4"/>
-                </padding>
+        <StackPane>
 
-            </TextField>
-            <ListView fx:id="sectionsListView"/>
-        </VBox>
+
+            <VBox>
+                <Label text="Sections" id="headline"/>
+                <TextField fx:id="searchTextField"
+                           maxWidth="Infinity"
+                           alignment="CENTER"
+                           promptText="Search"
+                           onKeyPressed="#onSearchTextEntered">
+
+                    <VBox.margin>
+                        <Insets topRightBottomLeft="8"/>
+                    </VBox.margin>
+                    <padding>
+                        <Insets topRightBottomLeft="4"/>
+                    </padding>
+
+                </TextField>
+                <ListView fx:id="sectionsListView"/>
+            </VBox>
+            <ProgressIndicator fx:id="progressIndicator"/>
+
+        </StackPane>
+
+
     </left>
 
 
     <center>
 
-        <StackPane>
+        <VBox VBox.vgrow="ALWAYS">
+
+            <!--DAYS VIEW-->
+            <HBox HBox.hgrow="ALWAYS" alignment="CENTER">
+                <padding>
+                    <Insets topRightBottomLeft="10"/>
+                </padding>
+                <ToggleButton text="MON" fx:id="mondayToggleButton"/>
+                <ToggleButton text="TUE" fx:id="tuesdayToggleButton"/>
+                <ToggleButton text="WED" fx:id="wednesdayToggleButton"/>
+                <ToggleButton text="THUR" fx:id="thursdayToggleButton"/>
+                <ToggleButton text="FRI" fx:id="fridayToggleButton"/>
+                <ToggleButton text="SAT" fx:id="saturdayToggleButton"/>
+            </HBox>
+
+            <Label text="Time Table" id="headline" GridPane.columnIndex="0" GridPane.halignment="LEFT"/>
 
 
-            <VBox VBox.vgrow="ALWAYS">
+            <TableView fx:id="timeTableForSection" VBox.vgrow="ALWAYS">
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+                <columns>
 
-                <HBox HBox.hgrow="ALWAYS" alignment="CENTER">
-                    <padding>
-                        <Insets topRightBottomLeft="10"/>
-                    </padding>
-                    <ToggleButton text="MON" fx:id="mondayToggleButton"/>
-                    <ToggleButton text="TUE" fx:id="tuesdayToggleButton"/>
-                    <ToggleButton text="WED" fx:id="wednesdayToggleButton"/>
-                    <ToggleButton text="THUR" fx:id="thursdayToggleButton"/>
-                    <ToggleButton text="FRI" fx:id="fridayToggleButton"/>
-                    <ToggleButton text="SAT" fx:id="saturdayToggleButton"/>
-                </HBox>
+                    <TableColumn text="Subject">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="name"/>
+                        </cellValueFactory>
+                    </TableColumn>
 
+                    <TableColumn text="Start Time">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="startTime"/>
+                        </cellValueFactory>
+                    </TableColumn>
 
-                <BorderPane>
-                    <left>
-                        <Label text="Time Table" id="headline" GridPane.columnIndex="0" GridPane.halignment="LEFT"/>
-                    </left>
-                    <right>
-                        <Button text="ADD" alignment="CENTER_RIGHT" GridPane.columnIndex="1"
-                                GridPane.halignment="RIGHT">
-                            <BorderPane.margin>
-                                <Insets topRightBottomLeft="5"/>
-                            </BorderPane.margin>
-                        </Button>
-                    </right>
-                </BorderPane>
+                    <TableColumn text="End Time">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="endTime"/>
+                        </cellValueFactory>
+                    </TableColumn>
 
+                </columns>
 
-                <TableView fx:id="timeTableForSection" VBox.vgrow="ALWAYS">
-                    <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-                    </columnResizePolicy>
-                    <columns>
-
-                        <TableColumn text="Subject">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="name"/>
-                            </cellValueFactory>
-                        </TableColumn>
-
-                        <TableColumn text="Start Time">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="startTime"/>
-                            </cellValueFactory>
-                        </TableColumn>
-
-                        <TableColumn text="End Time">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="endTime"/>
-                            </cellValueFactory>
-                        </TableColumn>
-
-                    </columns>
-
-                </TableView>
-            </VBox>
+            </TableView>
 
 
-            <ProgressIndicator fx:id="progressIndicator"/>
+            <Button fx:id="addLectureButton" text="ADD" alignment="CENTER_RIGHT" GridPane.columnIndex="1"
+                    GridPane.halignment="RIGHT">
+                <BorderPane.margin>
+                    <Insets topRightBottomLeft="5"/>
+                </BorderPane.margin>
+            </Button>
 
-
-        </StackPane>
-
+        </VBox>
 
     </center>
+
 
 </BorderPane>

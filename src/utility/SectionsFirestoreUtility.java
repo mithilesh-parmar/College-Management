@@ -6,7 +6,9 @@ import com.google.cloud.firestore.QuerySnapshot;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import listeners.DataChangeListener;
+import model.Lecture;
 import model.Section;
 
 import java.util.List;
@@ -21,7 +23,16 @@ public class SectionsFirestoreUtility {
 
     public ObservableList<String> days = FXCollections.observableArrayList();
 
-    private SectionsFirestoreUtility(){
+    private Task uploadTask = new Task() {
+
+        @Override
+        protected Object call() throws Exception {
+
+            return null;
+        }
+    };
+
+    private SectionsFirestoreUtility() {
         getDays();
     }
 
@@ -68,8 +79,14 @@ public class SectionsFirestoreUtility {
         if (sections.size() > 0) listener.onDataLoaded(sections);
         else {
             FirestoreConstants.sectionsCollectionReference.addSnapshotListener(studentDataListener);
-
         }
+
+    }
+
+    public void addLecture(Lecture lecture, String dayOfWeek, Section section) {
+        section.addLecture(lecture, dayOfWeek);
+        System.out.println(section.toJSON());
+        new Thread(() -> FirestoreConstants.sectionsClassScheduleCollectionReference.document(section.getName()).set(section.toJSON())).start();
 
     }
 
@@ -78,7 +95,7 @@ public class SectionsFirestoreUtility {
     }
 
     private void parseSectionsData(List<QueryDocumentSnapshot> data) {
-        sections.clear();
+        if (sections != null) sections.clear();
         for (QueryDocumentSnapshot document : data) sections.add(Section.fromJSON(document.getData()));
     }
 }

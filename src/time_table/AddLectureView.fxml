@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+<AnchorPane minHeight="300.0" minWidth="400.0" xmlns="http://javafx.com/javafx/8.0.111"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="time_table.AddLectureController"
+            stylesheets="@/styles/dark_metro_style.css"
+>
+    <VBox alignment="CENTER" layoutX="131.0" layoutY="50.0" prefHeight="200.0" prefWidth="100.0"
+          AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0"
+          AnchorPane.topAnchor="5.0">
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Adding Person Dialog"/>
+        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="10.0">
+            <children>
+                <Label alignment="CENTER_RIGHT" minWidth="100.0" text="Subject Name"/>
+                <TextField fx:id="subjectTextField" HBox.hgrow="ALWAYS"/>
+            </children>
+            <padding>
+                <Insets right="30.0"/>
+            </padding>
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="10.0">
+            <children>
+                <Label alignment="CENTER_RIGHT" minWidth="100.0" text="Start Time"/>
+                <TextField fx:id="startTimeTextField" HBox.hgrow="ALWAYS"/>
+            </children>
+            <padding>
+                <Insets right="30.0"/>
+            </padding>
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="10.0">
+            <children>
+                <Label alignment="CENTER_RIGHT" minWidth="100.0" text="End Time"/>
+                <TextField fx:id="endTimeTextField" HBox.hgrow="ALWAYS"/>
+            </children>
+            <padding>
+                <Insets right="30.0"/>
+            </padding>
+        </HBox>
+
+
+        <HBox alignment="CENTER_RIGHT">
+            <children>
+                <Button mnemonicParsing="false" fx:id="button" onAction="#btnAddPersonClicked" text="Add"/>
+            </children>
+            <opaqueInsets>
+                <Insets/>
+            </opaqueInsets>
+            <padding>
+                <Insets right="30.0"/>
+            </padding>
+        </HBox>
+    </VBox>
+</AnchorPane>

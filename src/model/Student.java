@@ -128,7 +128,7 @@ public class Student {
     }
 
     public String getRequestedRemark() {
-        return requestedRemark.get();
+        return requestedRemark == null ? " " : requestedRemark.get();
     }
 
     public StringProperty requestedRemarkProperty() {

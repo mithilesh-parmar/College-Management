@@ -5,6 +5,8 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -53,6 +55,7 @@ public class EventsController implements Initializable, DataChangeListener {
     public TextField searchTextField;
 
 
+    private BooleanProperty loadingData = new SimpleBooleanProperty(true);
     private EventFirestoreUtility firestoreUtility = EventFirestoreUtility.getInstance();
 
     @Override
@@ -65,6 +68,8 @@ public class EventsController implements Initializable, DataChangeListener {
         firestoreUtility.getEvents();
 
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> performSearch(oldValue, newValue));
+
+        mainProgressIndicator.visibleProperty().bind(loadingData);
 
         eventImage.setFitHeight(150);
         eventImage.setFitWidth(150);
@@ -106,8 +111,7 @@ public class EventsController implements Initializable, DataChangeListener {
 
     @Override
     public void onDataLoaded(ObservableList data) {
-
-        mainProgressIndicator.setVisible(false);
+        loadingData.set(false);
         detailProgressIndicator.setVisible(false);
         eventsList.setItems(firestoreUtility.events);
         eventsList.getSelectionModel().selectFirst();
@@ -115,8 +119,7 @@ public class EventsController implements Initializable, DataChangeListener {
 
     @Override
     public void onDataChange(QuerySnapshot data) {
-
-        mainProgressIndicator.setVisible(true);
+        loadingData.set(true);
     }
 
     private void setFieldsData(Event event) {
@@ -168,6 +171,7 @@ public class EventsController implements Initializable, DataChangeListener {
      * @param newValue
      */
     private void performSearch(String oldValue, String newValue) {
+        if (loadingData.get()) return;
         // if pressing backspace then set initial values to list
         if (oldValue != null && (newValue.length() < oldValue.length())) {
             eventsList.setItems(firestoreUtility.events);

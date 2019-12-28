@@ -3,6 +3,8 @@ package students;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import custom_view.SearchTextFieldController;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -30,14 +32,15 @@ public class StudentController implements Initializable, DataChangeListener, Sea
     public TableView<Student> studentTable;
     public ProgressIndicator progressIndicator;
     public SearchTextFieldController searchTextField;
-
     private StudentFirestoreUtility firestoreUtility = StudentFirestoreUtility.getInstance();
+    private BooleanProperty loadingData = new SimpleBooleanProperty(true);
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         firestoreUtility.setListener(this);
         firestoreUtility.getStudents();
         searchTextField.setCallback(this);
+        progressIndicator.visibleProperty().bind(loadingData);
     }
 
     public void onTableKeyPressed(KeyEvent keyEvent) {
@@ -46,16 +49,13 @@ public class StudentController implements Initializable, DataChangeListener, Sea
 
     @Override
     public void onDataLoaded(ObservableList data) {
+        loadingData.set(false);
         studentTable.setItems(firestoreUtility.students);
-        progressIndicator.setVisible(false);
     }
 
     @Override
     public void onDataChange(QuerySnapshot data) {
-
-        System.out.println("Data Change detected");
-        progressIndicator.setVisible(true);
-
+        loadingData.set(true);
     }
 
     @Override
@@ -66,6 +66,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
 
     @Override
     public void performSearch(String oldValue, String newValue) {
+        if (loadingData.get()) return;
         // if pressing backspace then set initial values to list
         if (oldValue != null && (newValue.length() < oldValue.length())) {
             studentTable.setItems(firestoreUtility.students);
@@ -76,7 +77,13 @@ public class StudentController implements Initializable, DataChangeListener, Sea
 
         ObservableList<Student> subList = FXCollections.observableArrayList();
         for (Student p : studentTable.getItems()) {
-            String text = p.getName().toUpperCase() + " " + p.getClassName().toUpperCase() + " " + p.getAddress() + " " + p.getEmail();
+            String text =
+                    p.getName().toUpperCase() + " "
+                            + p.getClassName().toUpperCase() + " "
+                            + p.getAddress().toUpperCase() + " "
+                            + p.getEmail().toUpperCase() + " "
+                            + p.getParentNumber().toUpperCase() + " "
+                            + p.getSection().toUpperCase() + " ";
             // if the search text contains the manufacturer then add it to sublist
             if (text.contains(searchtext)) {
                 subList.add(p);

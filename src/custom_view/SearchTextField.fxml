@@ -9,18 +9,17 @@
         xmlns:fx="http://javafx.com/fxml"
         xmlns="http://javafx.com/javafx">
 
+    <padding>
+        <Insets topRightBottomLeft="8"/>
+    </padding>
+
     <TextField fx:id="searchTextField"
                maxWidth="Infinity"
                alignment="CENTER_LEFT"
                promptText="Search">
 
-
-        <BorderPane.margin>
-            <Insets topRightBottomLeft="8"/>
-        </BorderPane.margin>
-
         <padding>
-            <Insets topRightBottomLeft="5"/>
+            <Insets topRightBottomLeft="8"/>
         </padding>
 
     </TextField>

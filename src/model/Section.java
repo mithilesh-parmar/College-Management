@@ -42,35 +42,79 @@ public class Section {
         setClassSchedules(FXCollections.observableMap(classSchedules));
     }
 
-    public static Section fromJSON(Map<String, Object> json) {
 
-//        System.out.println(json.get("time_table"));
+    public void addLecture(Lecture lecture, String dayOfWeek) {
+
+//        if there's an entry for a particular day
+        if (classSchedules.containsKey(dayOfWeek)) {
+
+//             get the list and append the lecture
+            classSchedules.get(dayOfWeek).add(lecture);
+
+        } else {
+
+//             make a new empty list
+            ObservableList list = FXCollections.observableArrayList();
+            list.add(lecture);
+            classSchedules.put(dayOfWeek, list);
+
+        }
+
+        System.out.println("Lecture added ");
+        System.out.println(classSchedules);
+
+    }
+
+    public Map<String, Object> toJSON() {
+        Map<String, Object> json = new HashMap<>();
+        json.put("class_id", classId.get());
+        json.put("name", name.get());
+
+
+        Map<String, List<Lecture>> listMap = new HashMap<>();
+
+        classSchedules.forEach((key, lectures) -> {
+
+            List lectureList = new ArrayList();
+
+            lectures.forEach(lecture -> lectureList.add(lecture.toJSON()));
+
+
+            listMap.put(key, lectureList);
+        });
+
+        json.put("time_table", listMap);
+        return json;
+    }
+
+    public static Section fromJSON(Map<String, Object> json) {
 
         HashMap<String, List> timeTableDataMap = (HashMap) json.get("time_table");
 
 
         Map<String, ObservableList<Lecture>> classSchedule = new HashMap<>();
 
-        for (Map.Entry mapElement : timeTableDataMap.entrySet()) {
-            List<Lecture> lectureList = new ArrayList<>();
+        if (timeTableDataMap != null)
+            for (Map.Entry mapElement : timeTableDataMap.entrySet()) {
+                List<Lecture> lectureList = new ArrayList<>();
 
-            Object key = mapElement.getKey();
-            List value = (List) mapElement.getValue();
+                Object key = mapElement.getKey();
+                List value = (List) mapElement.getValue();
 
 //            if this day already has lecture registered
-            if (classSchedule.containsKey(key)) {
-                lectureList = classSchedule.get(key);
+                if (classSchedule.containsKey(key)) {
+                    lectureList = classSchedule.get(key);
+                }
+
+                for (Object data : value) {
+
+                    lectureList.add(Lecture.fromJSON((Map<String, Object>) data));
+
+                }
+
+
+                classSchedule.put((String) key, FXCollections.observableList(lectureList));
             }
-
-            for (Object data : value) {
-
-                lectureList.add(Lecture.fromJSON((Map<String, Object>) data));
-
-            }
-
-            System.out.println("Adding day: " + key + " with lectures: " + lectureList);
-            classSchedule.put((String) key, FXCollections.observableList(lectureList));
-        }
 
 
         return new Section(

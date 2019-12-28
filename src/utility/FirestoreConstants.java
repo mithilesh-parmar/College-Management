@@ -29,5 +29,11 @@ public class FirestoreConstants {
             .document("GKevzOMWBqbFtPezdLzF")
             .collection("sections");
 
+    final static CollectionReference sectionsClassScheduleCollectionReference = FirestoreClient
+            .getFirestore()
+            .collection("colleges")
+            .document("GKevzOMWBqbFtPezdLzF")
+            .collection("sections");
+
 
 }

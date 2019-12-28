@@ -3,6 +3,7 @@ package model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Lecture {
@@ -25,9 +26,19 @@ public class Lecture {
         );
     }
 
+    public Map<String, Object> toJSON() {
+//        TODO add json converter
+        Map<String, Object> json = new HashMap<>();
+        json.put("sub_name", name.get());
+        json.put("start_time", startTime.get());
+        json.put("end_time", endTime.get());
+
+        return json;
+    }
+
     @Override
     public String toString() {
-        return name.get() + " start_time: " + startTime.get() + " end_time: " + endTime.get();
+        return toJSON().toString();
     }
 
     public String getName() {

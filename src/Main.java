@@ -21,6 +21,7 @@ public class Main extends Application {
         primaryStage.setTitle("ISchool");
         primaryStage.setScene(new Scene(root));
 //        primaryStage.setFullScreen(true);
+        primaryStage.centerOnScreen();
         primaryStage.show();
     }
 
