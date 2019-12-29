@@ -1,30 +1,32 @@
 package teachers;
 
-import com.google.cloud.firestore.EventListener;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import custom_view.SearchTextFieldController;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import listeners.DataChangeListener;
-import model.Student;
 import model.Teacher;
-import utility.FirestoreConstants;
 import utility.SearchCallback;
 import utility.TeacherFirestoreUtility;
+import view_helper.PopupWindow;
 
 
+import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class TeacherController implements Initializable, DataChangeListener, SearchCallback {
@@ -33,6 +35,7 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
     public TableView<Teacher> teacherTable;
     public ProgressIndicator progressIndicator;
     public SearchTextFieldController searchField;
+    public Button addButton;
 
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
     private TeacherFirestoreUtility firestoreUtility = TeacherFirestoreUtility.getInstance();
@@ -43,6 +46,10 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
         searchField.setCallback(this);
         firestoreUtility.setListener(this);
         firestoreUtility.getTeachers();
+        addButton.setOnAction(actionEvent -> {
+            loadAddView();
+
+        });
         progressIndicator.visibleProperty().bind(dataLoading);
     }
 
@@ -66,7 +73,54 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
 
     }
 
-    public void onSearchTextEntered(KeyEvent keyEvent) {
+
+    private void loadAddView() {
+        FXMLLoader loader;
+        loader = new FXMLLoader(getClass().getResource("/teachers/AddTeacherView.fxml"));
+        final Stage stage = new Stage();
+        Parent parent = null;
+        try {
+
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Add Teacher Details");
+
+            parent = loader.load();
+            Scene scene = new Scene(parent, 600, 300);
+
+
+            stage.setScene(scene);
+            AddTeacherController controller = loader.getController();
+
+            controller.setListener(new TeacherListener() {
+                @Override
+                public void onTeacherSubmit(Teacher teacher) {
+                    close(stage);
+                    Platform.runLater(() -> {
+
+                        firestoreUtility.addTeacherToFirestore(teacher);
+
+                    });
+                }
+
+                @Override
+                public void onTeacherEdit(Teacher teacher) {
+                    close(stage);
+                }
+
+                @Override
+                public void onCancel() {
+                    close(stage);
+                }
+            });
+
+            stage.showAndWait();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -94,4 +148,6 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
         // set the items to listview that matches
         teacherTable.setItems(subList);
     }
+
+
 }

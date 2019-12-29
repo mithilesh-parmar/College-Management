@@ -10,6 +10,8 @@ import listeners.DataChangeListener;
 import model.Teacher;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TeacherFirestoreUtility {
 
@@ -17,6 +19,7 @@ public class TeacherFirestoreUtility {
     private static TeacherFirestoreUtility instance;
     public ObservableList<Teacher> teachers;
     private DataChangeListener listener;
+    private Logger logger = Logger.getLogger(getClass().getName());
 
     private EventListener<QuerySnapshot> teacherDataListener = (snapshot, e) -> {
         if (e != null) {
@@ -59,12 +62,17 @@ public class TeacherFirestoreUtility {
 
     }
 
+    public void addTeacherToFirestore(Teacher teacher) {
+        FirestoreConstants.teacherCollectionReference.add(teacher.toJSON());
+    }
+
     public void setListener(DataChangeListener listener) {
         this.listener = listener;
     }
 
 
     public ObservableList<Teacher> parseTeachersData(List<QueryDocumentSnapshot> data) {
+        teachers.clear();
         for (QueryDocumentSnapshot document : data) teachers.add(Teacher.fromJSON(document.getData()));
         return teachers;
     }

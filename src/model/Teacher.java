@@ -5,10 +5,12 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Teacher {
     private StringProperty name = new SimpleStringProperty(),
+            email = new SimpleStringProperty(),
             profilePictureUrl = new SimpleStringProperty(),
             token = new SimpleStringProperty(),
             verificationCode = new SimpleStringProperty();
@@ -19,8 +21,9 @@ public class Teacher {
     public Teacher() {
     }
 
-    public Teacher(String name, String profilePictureUrl, String token, String verificationCode, boolean verified, boolean profileCompleted) {
+    public Teacher(String name, String email, String profilePictureUrl, String token, String verificationCode, boolean verified, boolean profileCompleted) {
         setName(name);
+        setEmail(email);
         setProfilePictureUrl(profilePictureUrl);
         setToken(token);
         setVerificationCode(verificationCode);
@@ -31,12 +34,39 @@ public class Teacher {
     public static Teacher fromJSON(Map<String, Object> json) {
         return new Teacher(
                 (String) json.get("name"),
+                (String) json.get("email"),
                 (String) json.get("pp_url"),
                 (String) json.get("token"),
                 (String) json.get("verification_code"),
                 (boolean) json.get("verified"),
                 (boolean) json.get("profile_completed")
         );
+    }
+
+    public String getEmail() {
+        return email.get();
+    }
+
+    public StringProperty emailProperty() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email.set(email);
+    }
+
+    public Map<String, Object> toJSON() {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("name", name.get());
+        map.put("pp_url", profilePictureUrl.get());
+        map.put("email", email.get());
+        map.put("token", token.get());
+        map.put("verification_code", verificationCode.get());
+        map.put("verified", verified.get());
+        map.put("profile_completed", profileCompleted.get());
+
+        return map;
     }
 
     public String getName() {

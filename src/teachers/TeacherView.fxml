@@ -30,7 +30,7 @@
 
                             <SearchTextFieldController fx:id="searchField"/>
 
-                            <Button text="ADD">
+                            <Button text="ADD" fx:id="addButton">
                                 <BorderPane.margin>
                                     <Insets topRightBottomLeft="8"/>
                                 </BorderPane.margin>
@@ -51,6 +51,13 @@
                                 <PropertyValueFactory property="name"/>
                             </cellValueFactory>
                         </TableColumn>
+
+                        <TableColumn text="Email">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="email"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
 
                         <TableColumn text="Verification Code">
                             <cellValueFactory>

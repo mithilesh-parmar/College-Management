@@ -110,8 +110,8 @@ public class TimeTableController implements Initializable, DataChangeListener {
             System.out.println("Selecting : " + previouslySelectedSection);
             sectionsListView.getSelectionModel().select(previouslySelectedSection);
             dayChooser.selectToggle(previouslySelectedDayOfWeek);
-            sectionsListView.getFocusModel().focusPrevious();
-//            sectionsListView.getFocusModel().focus(sectionsListView.getItems().indexOf(previouslySelectedSection));
+
+            sectionsListView.getFocusModel().focus(sectionsListView.getItems().indexOf(previouslySelectedSection));
 
         }
 
