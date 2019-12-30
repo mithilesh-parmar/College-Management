@@ -1,34 +1,27 @@
 package test;
 
-import com.google.api.gax.paging.Page;
-import com.google.auth.oauth2.GoogleCredentials;
+
+import com.google.api.services.storage.Storage;
 import com.google.cloud.storage.Blob;
+import constants.Constants;
 import utility.CloudStorageUtility;
 import utility.DocumentType;
-import utility.DocumentUploadListener;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class StorageTest {
     public static void main(String[] args) throws IOException {
 
+
         CloudStorageUtility storageUtility = CloudStorageUtility.getInstance();
+//
+        Blob b = storageUtility.uploadDocument(Constants.profileImageFolder, "", new File("/Users/mithileshparmar/Desktop/test.png"), DocumentType.IMAGE.toString());
 
-        storageUtility.setListener(new DocumentUploadListener() {
-            @Override
-            public void onSuccess(Blob blob) {
-                System.out.println("Uploaded " + blob.getSelfLink());
-            }
 
-            @Override
-            public void onFailure(Exception e) {
-                System.out.println("error: " + e);
-            }
-        });
-
-//        storageUtility.uploadDocument("pp_images", new File("/Users/mithileshparmar/Desktop/image.png"), DocumentType.IMAGE.toString());
+        System.out.println(b.getMediaLink());
 
     }
 }

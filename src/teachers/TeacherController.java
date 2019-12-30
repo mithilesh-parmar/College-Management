@@ -16,7 +16,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
@@ -24,7 +26,6 @@ import model.Teacher;
 import utility.DocumentUploadListener;
 import utility.SearchCallback;
 import utility.TeacherFirestoreUtility;
-import view_helper.PopupWindow;
 
 
 import java.io.File;
@@ -50,15 +51,29 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
         firestoreUtility.setListener(this);
         firestoreUtility.setDocumentUploadListener(this);
         firestoreUtility.getTeachers();
-        addButton.setOnAction(actionEvent -> {
-            loadAddView();
 
-        });
+        addButton.setOnAction(actionEvent -> loadAddView(null));
+
         progressIndicator.visibleProperty().bind(dataLoading);
+
+        teacherTable.setOnKeyPressed(event -> handleOnKeyPressed(event));
+
+        teacherTable.setOnMouseClicked(event -> handleOnMouseClicked(event));
     }
 
-    public void onTableKeyPressed(KeyEvent keyEvent) {
 
+    private void handleOnKeyPressed(KeyEvent keyEvent) {
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+            loadAddView(teacherTable.getSelectionModel().getSelectedItem());
+        } else if (keyEvent.getCode().equals(KeyCode.BACK_SPACE)) {
+            System.out.println("Backspace pressed");
+        }
+    }
+
+    private void handleOnMouseClicked(MouseEvent event) {
+        if (event.getClickCount() == 2) {
+            System.out.println("Clicked ");
+        }
     }
 
     @Override
@@ -78,7 +93,17 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
     }
 
 
-    private void loadAddView() {
+    @Override
+    public void onSuccess(Blob blob) {
+        dataLoading.set(false);
+    }
+
+    @Override
+    public void onFailure(Exception e) {
+        dataLoading.set(false);
+    }
+
+    private void loadAddView(Teacher teacher) {
         FXMLLoader loader;
         loader = new FXMLLoader(getClass().getResource("/teachers/AddTeacherView.fxml"));
         final Stage stage = new Stage();
@@ -94,6 +119,8 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
             stage.setScene(scene);
             AddTeacherController controller = loader.getController();
 
+            if (teacher != null) controller.setTeacher(teacher);
+
             controller.setListener(new TeacherListener() {
                 @Override
                 public void onTeacherSubmit(Teacher teacher, File profileImage) {
@@ -101,7 +128,8 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
                     dataLoading.set(true);
                     Platform.runLater(() -> {
 
-                        firestoreUtility.addTeacherToFirestore(teacher, profileImage);
+//                        firestoreUtility.addTeacherToFirestore(teacher, profileImage);
+                        firestoreUtility.updateTeacherDetails(teacher, profileImage);
 
                     });
                 }
@@ -125,18 +153,6 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
         }
 
     }
-
-
-    @Override
-    public void onSuccess(Blob blob) {
-        dataLoading.set(false);
-    }
-
-    @Override
-    public void onFailure(Exception e) {
-        dataLoading.set(false);
-    }
-
 
     @Override
     public void performSearch(String oldValue, String newValue) {

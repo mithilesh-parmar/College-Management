@@ -35,7 +35,6 @@
     </ImageButton>
 
 
-
     <!-- Add Name Label -->
     <Label text="Full Name : " GridPane.columnIndex="0"
            GridPane.rowIndex="1">
@@ -54,38 +53,8 @@
                GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
 
-    <!-- Add Password Label -->
-    <Label text="Verification Code : " GridPane.columnIndex="0"
-           GridPane.rowIndex="3">
-    </Label>
-    <!-- Add Password Field -->
-    <TextField fx:id="verificationCodeTextField" prefHeight="40"
-               GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-
-    <!-- Add Verified Label -->
-    <Label text="Verified  : " GridPane.columnIndex="0"
-           GridPane.rowIndex="5">
-    </Label>
-    <!-- Add Verified Radio Group -->
-    <HBox GridPane.columnIndex="1" GridPane.rowIndex="5" spacing="10">
-        <RadioButton fx:id="verifiedTrueRadioButton" text="Yes" userData="true"/>
-        <RadioButton fx:id="verifiedFalseRadioButton" text="NO" userData="false"/>
-    </HBox>
-
-
-    <!-- Add Verified Label -->
-    <Label text="Profile Completed  : " GridPane.columnIndex="0"
-           GridPane.rowIndex="6">
-    </Label>
-    <!-- Add Password Field -->
-    <HBox GridPane.columnIndex="1" GridPane.rowIndex="6" spacing="10">
-        <RadioButton fx:id="profileCompletedTrueRadioButton" text="Yes" userData="true"/>
-        <RadioButton fx:id="profileCompletedFalseRadioButton" text="NO" userData="false"/>
-    </HBox>
-
-
     <!-- Add Submit Button -->
-    <Button fx:id="submitButton" text="Submit"
+    <Button fx:id="submitButton" text="Update"
             prefWidth="100" prefHeight="40" defaultButton="true"
             GridPane.columnIndex="0" GridPane.rowIndex="7"
             GridPane.columnSpan="2" GridPane.rowSpan="1"

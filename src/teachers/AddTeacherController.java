@@ -7,8 +7,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
 import model.Teacher;
 
+import javax.annotation.security.RunAs;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,30 +24,14 @@ public class AddTeacherController implements Initializable {
     public ImageButton profileImageView;
 
 
-    private ToggleGroup profileCompleted;
-    public RadioButton profileCompletedTrueRadioButton;
-    public RadioButton profileCompletedFalseRadioButton;
-
-    private ToggleGroup verified;
-    public RadioButton verifiedTrueRadioButton;
-    public RadioButton verifiedFalseRadioButton;
-    public TextField verificationCodeTextField;
-
     private TeacherListener listener;
     private File profileImageFile;
+
+    private Teacher teacher;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-
-        profileCompleted = new ToggleGroup();
-        verified = new ToggleGroup();
-
-        verified.getToggles().addAll(verifiedFalseRadioButton, verifiedTrueRadioButton);
-        profileCompleted.getToggles().addAll(profileCompletedFalseRadioButton, profileCompletedTrueRadioButton);
-
-        verified.selectToggle(verifiedFalseRadioButton);
-        profileCompleted.selectToggle(profileCompletedFalseRadioButton);
 
         profileImageView.setListener(file -> profileImageFile = file);
 
@@ -54,18 +40,17 @@ public class AddTeacherController implements Initializable {
 
             String name = nameField.getText().toString();
             String email = emailField.getText().toString();
-            String verificationCode = verificationCodeTextField.getText().toString();
-            boolean isVerified = Boolean.parseBoolean(verified.getSelectedToggle().getUserData().toString());
-            boolean isProfileCompleted = Boolean.parseBoolean(profileCompleted.getSelectedToggle().getUserData().toString());
 
 
             Teacher teacher = new Teacher(
-                    name, email, "", "", verificationCode, isVerified, isProfileCompleted
+                    name, email, "", "", "", false, false
             );
 
 
             if (listener != null) {
 
+                System.out.println(teacher);
+                System.out.println(profileImageFile);
                 listener.onTeacherSubmit(teacher, profileImageFile);
             }
 
@@ -73,6 +58,24 @@ public class AddTeacherController implements Initializable {
         });
     }
 
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+        fillTeacherData();
+    }
+
+    private void fillTeacherData() {
+
+        System.out.println(teacher.toJSON());
+
+        nameField.setText(teacher.getName());
+
+        emailField.setText(teacher.getEmail());
+
+
+        if (teacher.getProfilePictureUrl() != null)
+            profileImageView.setImage(teacher.getProfilePictureUrl());
+
+    }
 
     public void setListener(TeacherListener listener) {
         this.listener = listener;

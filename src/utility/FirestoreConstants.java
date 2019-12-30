@@ -11,7 +11,7 @@ public class FirestoreConstants {
             .document("GKevzOMWBqbFtPezdLzF")
             .collection("students");
 
-    final static CollectionReference teacherCollectionReference = FirestoreClient
+    public final static CollectionReference teacherCollectionReference = FirestoreClient
             .getFirestore()
             .collection("colleges")
             .document("GKevzOMWBqbFtPezdLzF")

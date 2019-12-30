@@ -2,10 +2,7 @@ package utility;
 
 import com.google.api.gax.paging.Page;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.Bucket;
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
+import com.google.cloud.storage.*;
 import constants.Constants;
 
 import java.io.File;
@@ -42,11 +39,14 @@ public class CloudStorageUtility {
                             projectBucketName, Storage.BucketGetOption.fields(Storage.BucketField.values())
                     );
 
-
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public Bucket getProjectBucket() {
+        return projectBucket;
     }
 
     public void setListener(DocumentUploadListener listener) {
@@ -60,6 +60,11 @@ public class CloudStorageUtility {
         return instance;
     }
 
+    public Blob getDocument(String srcFilename) {
+        Blob blob = storage.get(BlobId.of(projectBucketName, srcFilename));
+        return blob;
+    }
+
     public Blob uploadDocument(String uploadFolderPath, String fileName, File document, String documentType) {
 
 
@@ -70,11 +75,16 @@ public class CloudStorageUtility {
             System.out.println("Uploading to: " + uploadFolderPath);
             Blob blob = projectBucket.create(uploadFolderPath, new FileInputStream(document), documentType);
 
+
+            blob.createAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER));
+
             if (listener != null) listener.onSuccess(blob);
             return blob;
         } catch (FileNotFoundException e) {
             listener.onFailure(e);
 
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return null;
 

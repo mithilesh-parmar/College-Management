@@ -1,12 +1,7 @@
 package utility;
 
-import com.google.api.gax.paging.Page;
-import com.google.auth.oauth2.ServiceAccountCredentials;
-import com.google.cloud.firestore.EventListener;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
-import com.google.cloud.storage.*;
-import com.google.firebase.cloud.StorageClient;
+import com.google.cloud.firestore.*;
+import com.google.cloud.storage.Blob;
 import constants.Constants;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -16,10 +11,7 @@ import model.Teacher;
 
 import java.io.*;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
+import java.util.concurrent.ExecutionException;
 
 public class TeacherFirestoreUtility {
 
@@ -70,13 +62,68 @@ public class TeacherFirestoreUtility {
 
     }
 
+    public void updateTeacherDetails(Teacher teacher, File profileImage) {
+
+
+        if (profileImage == null) {
+
+            setTeacherDataToFirestore(teacher);
+            documentUploadListener.onSuccess(null);
+        } else {
+            CloudStorageUtility storageUtility = CloudStorageUtility.getInstance();
+
+            storageUtility.setListener(new DocumentUploadListener() {
+                @Override
+                public void onSuccess(Blob blob) {
+
+                    teacher.setProfilePictureUrl(blob.getMediaLink());
+
+                    setTeacherDataToFirestore(teacher);
+                    documentUploadListener.onSuccess(blob);
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    documentUploadListener.onFailure(e);
+                }
+            });
+
+            new Thread(() -> storageUtility.uploadDocument(Constants.profileImageFolder, teacher.getNameWithoutSpaces(), profileImage, DocumentType.IMAGE.toString())).start();
+
+        }
+
+
+    }
+
+
+//    TODO add id field
+    private void setTeacherDataToFirestore(Teacher teacher) {
+        String teachNameAndEmail = teacher.getName() + " " + teacher.getEmail();
+        System.out.println("Teacher name and email: " + teachNameAndEmail);
+        FirestoreConstants.teacherCollectionReference.listDocuments().forEach(documentReference -> {
+            try {
+                DocumentSnapshot documentSnapshot = documentReference.get().get();
+                String documentNameAndEmail = documentSnapshot.get("name") + " " + documentSnapshot.get("email");
+                System.out.println("Document Name and email: " + documentNameAndEmail);
+                if (teachNameAndEmail.contains(documentNameAndEmail)) {
+                    System.out.println("Updating: " + documentNameAndEmail + " : " + teacher.toJSON());
+                    documentReference.update(teacher.toJSON());
+                }
+
+
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     public void addTeacherToFirestore(Teacher teacher, File profileImage) {
         CloudStorageUtility storageUtility = CloudStorageUtility.getInstance();
         storageUtility.setListener(new DocumentUploadListener() {
             @Override
             public void onSuccess(Blob blob) {
 
-                teacher.setProfilePictureUrl(blob.getSelfLink());
+                teacher.setProfilePictureUrl(blob.getMediaLink());
                 FirestoreConstants.teacherCollectionReference.add(teacher.toJSON());
 
                 documentUploadListener.onSuccess(blob);

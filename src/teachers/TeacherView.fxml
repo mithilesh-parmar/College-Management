@@ -40,7 +40,7 @@
                     </right>
                 </BorderPane>
 
-                <TableView fx:id="teacherTable" VBox.vgrow="ALWAYS" onKeyPressed="#onTableKeyPressed">
+                <TableView fx:id="teacherTable" VBox.vgrow="ALWAYS" >
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
                     </columnResizePolicy>
