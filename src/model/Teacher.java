@@ -141,6 +141,14 @@ public class Teacher {
         this.profileCompleted.set(profileCompleted);
     }
 
+    public String getNameWithoutSpaces() {
+        String teacherName = name.get();
+
+        teacherName = teacherName.replace(" ", "_");
+
+        return teacherName;
+    }
+
     @Override
     public String toString() {
         return name.get();

@@ -2,11 +2,9 @@ package custom_view;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -17,7 +15,7 @@ public class ImageButton extends Button {
 
     private StringProperty path = new SimpleStringProperty("/assets/cancel.png");
     private ImageView imageView;
-    private ChooseImageListener listener;
+    private ImageButtonListener listener;
 
     public ImageButton() {
         imageView = new ImageView();
@@ -33,10 +31,16 @@ public class ImageButton extends Button {
         setOnMouseClicked(event -> showFileChooser());
     }
 
+    public void setListener(ImageButtonListener listener) {
+        this.listener = listener;
+    }
 
     private void showFileChooser() {
         File file;
+        FileChooser.ExtensionFilter extFilterJPG = new FileChooser.ExtensionFilter("JPG files (*.jpg)", "*.JPG");
+        FileChooser.ExtensionFilter extFilterPNG = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.PNG");
         FileChooser fileChooser = new FileChooser();
+//        fileChooser.getExtensionFilters().addAll(extFilterJPG, extFilterPNG);
         file = fileChooser.showOpenDialog(getScene().getWindow());
 
 

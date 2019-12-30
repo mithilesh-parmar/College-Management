@@ -1,5 +1,7 @@
 package teachers;
 
+import custom_view.ImageButton;
+import custom_view.ImageButtonListener;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
@@ -7,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import model.Teacher;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -16,7 +19,7 @@ public class AddTeacherController implements Initializable {
     public Button submitButton;
     public TextField nameField;
     public TextField emailField;
-
+    public ImageButton profileImageView;
 
 
     private ToggleGroup profileCompleted;
@@ -29,6 +32,7 @@ public class AddTeacherController implements Initializable {
     public TextField verificationCodeTextField;
 
     private TeacherListener listener;
+    private File profileImageFile;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -41,6 +45,7 @@ public class AddTeacherController implements Initializable {
         profileCompleted.getToggles().addAll(profileCompletedFalseRadioButton, profileCompletedTrueRadioButton);
 
 //        profileImageView.setOwner(submitButton.getScene().getWindow());
+        profileImageView.setListener(file -> profileImageFile = file);
 
         submitButton.setOnAction(actionEvent -> {
 
@@ -50,14 +55,16 @@ public class AddTeacherController implements Initializable {
             boolean isVerified = Boolean.parseBoolean(verified.getSelectedToggle().getUserData().toString());
             boolean isProfileCompleted = Boolean.parseBoolean(profileCompleted.getSelectedToggle().getUserData().toString());
 
+
             Teacher teacher = new Teacher(
                     name, email, "", "", verificationCode, isVerified, isProfileCompleted
             );
 
-            System.out.println(teacher);
+
+
             if (listener != null) {
 
-                listener.onTeacherSubmit(teacher);
+                listener.onTeacherSubmit(teacher,profileImageFile);
             }
 
 

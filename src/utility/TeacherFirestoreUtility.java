@@ -1,17 +1,25 @@
 package utility;
 
+import com.google.api.gax.paging.Page;
+import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.firestore.EventListener;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.storage.*;
+import com.google.firebase.cloud.StorageClient;
+import constants.Constants;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import listeners.DataChangeListener;
 import model.Teacher;
 
+import java.io.*;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class TeacherFirestoreUtility {
 
@@ -19,7 +27,7 @@ public class TeacherFirestoreUtility {
     private static TeacherFirestoreUtility instance;
     public ObservableList<Teacher> teachers;
     private DataChangeListener listener;
-    private Logger logger = Logger.getLogger(getClass().getName());
+
 
     private EventListener<QuerySnapshot> teacherDataListener = (snapshot, e) -> {
         if (e != null) {
@@ -62,8 +70,25 @@ public class TeacherFirestoreUtility {
 
     }
 
-    public void addTeacherToFirestore(Teacher teacher) {
-        FirestoreConstants.teacherCollectionReference.add(teacher.toJSON());
+    public void addTeacherToFirestore(Teacher teacher, File profileImage) {
+        CloudStorageUtility storageUtility = CloudStorageUtility.getInstance();
+        storageUtility.setListener(new DocumentUploadListener() {
+            @Override
+            public void onSuccess(Blob blob) {
+
+                teacher.setProfilePictureUrl(blob.getSelfLink());
+                FirestoreConstants.teacherCollectionReference.add(teacher.toJSON());
+
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+
+        storageUtility.uploadDocument(Constants.profileImageFolder, teacher.getNameWithoutSpaces(), profileImage, DocumentType.IMAGE.toString());
+
     }
 
     public void setListener(DataChangeListener listener) {

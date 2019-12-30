@@ -2,6 +2,6 @@ package custom_view;
 
 import java.io.File;
 
-public interface ChooseImageListener {
+public interface ImageButtonListener {
     void onImageSelected(File file);
 }

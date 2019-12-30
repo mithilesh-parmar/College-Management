@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Font?>
-<?import custom_view.ChooseImageController?>
 <?import custom_view.ImageButton?>
 <GridPane fx:controller="teachers.AddTeacherController"
           xmlns:fx="http://javafx.com/fxml" alignment="center"
@@ -31,7 +27,7 @@
             GridPane.rowIndex="0" GridPane.columnSpan="2"
             GridPane.rowSpan="1" GridPane.halignment="CENTER"
             minHeight="300" minWidth="300"
-
+            fx:id="profileImageView"
     >
 
     </ImageButton>

@@ -25,6 +25,7 @@ import utility.TeacherFirestoreUtility;
 import view_helper.PopupWindow;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -86,7 +87,7 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
             stage.setTitle("Add Teacher Details");
 
             parent = loader.load();
-            Scene scene = new Scene(parent, 600, 300);
+            Scene scene = new Scene(parent);
 
 
             stage.setScene(scene);
@@ -94,11 +95,11 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
 
             controller.setListener(new TeacherListener() {
                 @Override
-                public void onTeacherSubmit(Teacher teacher) {
+                public void onTeacherSubmit(Teacher teacher, File profileImage) {
                     close(stage);
                     Platform.runLater(() -> {
 
-                        firestoreUtility.addTeacherToFirestore(teacher);
+                        firestoreUtility.addTeacherToFirestore(teacher, profileImage);
 
                     });
                 }
