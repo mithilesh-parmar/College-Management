@@ -91,8 +91,6 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
 
             parent = loader.load();
             Scene scene = new Scene(parent);
-
-
             stage.setScene(scene);
             AddTeacherController controller = loader.getController();
 

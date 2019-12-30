@@ -13,13 +13,17 @@ public class ImageButton extends Button {
     private final String STYLE_NORMAL = "-fx-background-color: transparent; -fx-padding: 15, 15, 15, 15;";
     private final String STYLE_PRESSED = "-fx-background-color: transparent; -fx-padding: 16 14 14 16;";
 
-    private StringProperty path = new SimpleStringProperty("/assets/cancel.png");
+    private StringProperty path = new SimpleStringProperty("/assets/add-user.png");
     private ImageView imageView;
     private ImageButtonListener listener;
 
     public ImageButton() {
         imageView = new ImageView();
         imageView.setImage(new Image(getClass().getResourceAsStream(path.get())));
+        imageView.setSmooth(true);
+        imageView.setPreserveRatio(true);
+        imageView.setFitHeight(200);
+        imageView.setFitWidth(200);
         setGraphic(imageView);
 
         setStyle(STYLE_NORMAL);

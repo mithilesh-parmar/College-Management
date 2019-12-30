@@ -44,8 +44,11 @@ public class AddTeacherController implements Initializable {
         verified.getToggles().addAll(verifiedFalseRadioButton, verifiedTrueRadioButton);
         profileCompleted.getToggles().addAll(profileCompletedFalseRadioButton, profileCompletedTrueRadioButton);
 
-//        profileImageView.setOwner(submitButton.getScene().getWindow());
+        verified.selectToggle(verifiedFalseRadioButton);
+        profileCompleted.selectToggle(profileCompletedFalseRadioButton);
+
         profileImageView.setListener(file -> profileImageFile = file);
+
 
         submitButton.setOnAction(actionEvent -> {
 
@@ -61,10 +64,9 @@ public class AddTeacherController implements Initializable {
             );
 
 
-
             if (listener != null) {
 
-                listener.onTeacherSubmit(teacher,profileImageFile);
+                listener.onTeacherSubmit(teacher, profileImageFile);
             }
 
 

@@ -8,7 +8,9 @@
 <?import custom_view.ImageButton?>
 <GridPane fx:controller="teachers.AddTeacherController"
           xmlns:fx="http://javafx.com/fxml" alignment="center"
-          hgap="10" vgap="10">
+          hgap="10" vgap="10"
+          stylesheets="@/styles/dark_metro_style.css"
+>
     <padding>
         <Insets top="40" right="40" bottom="40" left="40"/>
     </padding>
@@ -65,7 +67,7 @@
            GridPane.rowIndex="5">
     </Label>
     <!-- Add Verified Radio Group -->
-    <HBox GridPane.columnIndex="1" GridPane.rowIndex="5">
+    <HBox GridPane.columnIndex="1" GridPane.rowIndex="5" spacing="10">
         <RadioButton fx:id="verifiedTrueRadioButton" text="Yes" userData="true"/>
         <RadioButton fx:id="verifiedFalseRadioButton" text="NO" userData="false"/>
     </HBox>
@@ -76,7 +78,7 @@
            GridPane.rowIndex="6">
     </Label>
     <!-- Add Password Field -->
-    <HBox GridPane.columnIndex="1" GridPane.rowIndex="6">
+    <HBox GridPane.columnIndex="1" GridPane.rowIndex="6" spacing="10">
         <RadioButton fx:id="profileCompletedTrueRadioButton" text="Yes" userData="true"/>
         <RadioButton fx:id="profileCompletedFalseRadioButton" text="NO" userData="false"/>
     </HBox>
