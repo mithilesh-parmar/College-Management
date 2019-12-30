@@ -1,6 +1,7 @@
 package teachers;
 
 import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.storage.Blob;
 import custom_view.SearchTextFieldController;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -20,6 +21,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
 import model.Teacher;
+import utility.DocumentUploadListener;
 import utility.SearchCallback;
 import utility.TeacherFirestoreUtility;
 import view_helper.PopupWindow;
@@ -30,7 +32,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class TeacherController implements Initializable, DataChangeListener, SearchCallback {
+public class TeacherController implements Initializable, DataChangeListener, SearchCallback, DocumentUploadListener {
 
 
     public TableView<Teacher> teacherTable;
@@ -46,6 +48,7 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
     public void initialize(URL url, ResourceBundle resourceBundle) {
         searchField.setCallback(this);
         firestoreUtility.setListener(this);
+        firestoreUtility.setDocumentUploadListener(this);
         firestoreUtility.getTeachers();
         addButton.setOnAction(actionEvent -> {
             loadAddView();
@@ -97,6 +100,7 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
                 @Override
                 public void onTeacherSubmit(Teacher teacher, File profileImage) {
                     close(stage);
+                    dataLoading.set(true);
                     Platform.runLater(() -> {
 
                         firestoreUtility.addTeacherToFirestore(teacher, profileImage);
@@ -124,6 +128,18 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
 
     }
 
+
+    @Override
+    public void onSuccess(Blob blob) {
+        dataLoading.set(false);
+    }
+
+    @Override
+    public void onFailure(Exception e) {
+        dataLoading.set(false);
+    }
+
+
     @Override
     public void performSearch(String oldValue, String newValue) {
         if (dataLoading.get()) return;
@@ -149,6 +165,4 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
         // set the items to listview that matches
         teacherTable.setItems(subList);
     }
-
-
 }

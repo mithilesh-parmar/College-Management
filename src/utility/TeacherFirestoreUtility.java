@@ -27,7 +27,7 @@ public class TeacherFirestoreUtility {
     private static TeacherFirestoreUtility instance;
     public ObservableList<Teacher> teachers;
     private DataChangeListener listener;
-
+    private DocumentUploadListener documentUploadListener;
 
     private EventListener<QuerySnapshot> teacherDataListener = (snapshot, e) -> {
         if (e != null) {
@@ -79,16 +79,21 @@ public class TeacherFirestoreUtility {
                 teacher.setProfilePictureUrl(blob.getSelfLink());
                 FirestoreConstants.teacherCollectionReference.add(teacher.toJSON());
 
+                documentUploadListener.onSuccess(blob);
             }
 
             @Override
             public void onFailure(Exception e) {
-
+                documentUploadListener.onFailure(e);
             }
         });
 
-        storageUtility.uploadDocument(Constants.profileImageFolder, teacher.getNameWithoutSpaces(), profileImage, DocumentType.IMAGE.toString());
+        new Thread(() -> storageUtility.uploadDocument(Constants.profileImageFolder, teacher.getNameWithoutSpaces(), profileImage, DocumentType.IMAGE.toString())).start();
 
+    }
+
+    public void setDocumentUploadListener(DocumentUploadListener documentUploadListener) {
+        this.documentUploadListener = documentUploadListener;
     }
 
     public void setListener(DataChangeListener listener) {
