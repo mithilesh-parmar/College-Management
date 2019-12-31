@@ -62,12 +62,17 @@ public class TeacherFirestoreUtility {
 
     }
 
+    public void deleteTeacher(Teacher teacher) {
+        if (teacher == null) return;
+        FirestoreConstants.teacherCollectionReference.document(teacher.getID()).delete();
+    }
+
     public void updateTeacherDetails(Teacher teacher, File profileImage) {
 
 
         if (profileImage == null) {
 
-            setTeacherDataToFirestore(teacher);
+            FirestoreConstants.teacherCollectionReference.document(teacher.getID()).update(teacher.toJSON());
             documentUploadListener.onSuccess(null);
         } else {
             CloudStorageUtility storageUtility = CloudStorageUtility.getInstance();
@@ -78,7 +83,7 @@ public class TeacherFirestoreUtility {
 
                     teacher.setProfilePictureUrl(blob.getMediaLink());
 
-                    setTeacherDataToFirestore(teacher);
+                    FirestoreConstants.teacherCollectionReference.document(teacher.getID()).update(teacher.toJSON());
                     documentUploadListener.onSuccess(blob);
                 }
 
@@ -102,22 +107,7 @@ public class TeacherFirestoreUtility {
         System.out.println("Teacher name and email: " + teachNameAndEmail);
 
 
-        FirestoreConstants.teacherCollectionReference.document(teacher.getID()).update(teacher.toJSON());
-//        FirestoreConstants.teacherCollectionReference.listDocuments().forEach(documentReference -> {
-//            try {
-//                DocumentSnapshot documentSnapshot = documentReference.get().get();
-//                String documentNameAndEmail = documentSnapshot.get("name") + " " + documentSnapshot.get("email");
-//                System.out.println("Document Name and email: " + documentNameAndEmail);
-//                if (teachNameAndEmail.contains(documentNameAndEmail)) {
-//                    System.out.println("Updating: " + documentNameAndEmail + " : " + teacher.toJSON());
-//                    documentReference.update(teacher.toJSON());
-//                }
-//
-//
-//            } catch (InterruptedException | ExecutionException e) {
-//                e.printStackTrace();
-//            }
-//        });
+//        FirestoreConstants.teacherCollectionReference.document(teacher.getID()).update(teacher.toJSON());
     }
 
     public void addTeacherToFirestore(Teacher teacher, File profileImage) {

@@ -18,6 +18,7 @@ import java.io.File;
 
 
 public class ImageButton extends Button {
+
     private final String STYLE_NORMAL = "-fx-background-color: transparent; -fx-padding: 15, 15, 15, 15;";
     private final String STYLE_PRESSED = "-fx-background-color: transparent; -fx-padding: 16 14 14 16;";
 
@@ -84,8 +85,6 @@ public class ImageButton extends Button {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(extFilterJPG, extFilterPNG);
         file = fileChooser.showOpenDialog(getScene().getWindow());
-
-
         imageView.setImage(new Image(file.toURI().toString()));
         if (listener != null) listener.onImageSelected(file);
 

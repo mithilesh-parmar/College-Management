@@ -2,6 +2,7 @@ package teachers;
 
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.storage.Blob;
+import custom_view.AlertWindow;
 import custom_view.SearchTextFieldController;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -13,9 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -66,7 +65,7 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
         if (keyEvent.getCode().equals(KeyCode.ENTER)) {
             loadAddView(teacherTable.getSelectionModel().getSelectedItem());
         } else if (keyEvent.getCode().equals(KeyCode.BACK_SPACE)) {
-            System.out.println("Backspace pressed");
+            showConfirmationAlert(teacherTable.getSelectionModel().getSelectedItem());
         }
     }
 
@@ -75,6 +74,22 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
             System.out.println("Clicked ");
         }
     }
+
+    private void showConfirmationAlert(Teacher teacher) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        alert.setTitle("Delete User");
+        alert.setHeaderText("Are you sure that you want to delete\n Name: " + teacher.getName() + " with email: " + teacher.getEmail() + " ?");
+
+        alert.showAndWait();
+
+        if (alert.getResult() == ButtonType.OK) {
+            firestoreUtility.deleteTeacher(teacher);
+        }
+
+
+    }
+
 
     @Override
     public void onDataLoaded(ObservableList data) {
@@ -128,7 +143,6 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
                     dataLoading.set(true);
                     Platform.runLater(() -> {
 
-//                        firestoreUtility.addTeacherToFirestore(teacher, profileImage);
                         firestoreUtility.updateTeacherDetails(teacher, profileImage);
 
                     });

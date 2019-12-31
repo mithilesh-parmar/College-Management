@@ -45,6 +45,12 @@ public class Teacher {
         );
     }
 
+
+
+    public String prettyPrint() {
+        return "Name: " + name.get() + "\nEmail: " + email.get();
+    }
+
     public String getID() {
         return ID.get();
     }
