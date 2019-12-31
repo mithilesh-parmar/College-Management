@@ -20,8 +20,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
+import listeners.NotificationDialogListener;
+import model.Notification;
 import model.Teacher;
 import teachers.add_teacher.AddTeacherController;
+import teachers.notifications.NotificationsController;
 import utility.DocumentUploadListener;
 import utility.SearchCallback;
 import utility.TeacherFirestoreUtility;
@@ -150,6 +153,36 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
     }
 
     private void loadNotificationsView(Teacher teacher) {
+        FXMLLoader loader;
+        loader = new FXMLLoader(getClass().getResource("/teachers/notifications/NotificationsView.fxml"));
+        final Stage stage = new Stage();
+        Parent parent = null;
+        try {
+
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Notifications");
+
+            parent = loader.load();
+            Scene scene = new Scene(parent);
+            stage.setScene(scene);
+            NotificationsController controller = loader.getController();
+
+            controller.setListener(new NotificationDialogListener() {
+                @Override
+                public void sendNotification(Notification notification) {
+                    close(stage);
+                    firestoreUtility.publishNotification(teacher, notification);
+                }
+            });
+
+
+            stage.showAndWait();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

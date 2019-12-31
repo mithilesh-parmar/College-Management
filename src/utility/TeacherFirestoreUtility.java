@@ -7,6 +7,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import listeners.DataChangeListener;
+import model.Notification;
 import model.Teacher;
 
 import java.io.*;
@@ -98,6 +99,10 @@ public class TeacherFirestoreUtility {
         }
 
 
+    }
+
+    public void publishNotification(Teacher teacher, Notification notification) {
+        FirestoreConstants.teacherCollectionReference.document(teacher.getID()).collection("push_notification").add(notification.toJSON());
     }
 
 

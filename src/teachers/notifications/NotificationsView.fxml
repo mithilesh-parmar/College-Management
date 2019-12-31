@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+
+
+<GridPane fx:controller="teachers.notifications.NotificationsController"
+          xmlns:fx="http://javafx.com/fxml" alignment="center"
+          hgap="10" vgap="10"
+          stylesheets="@/styles/dark_metro_style.css">
+    <padding>
+        <Insets top="40" right="40" bottom="40" left="40"/>
+    </padding>
+    <columnConstraints>
+        <ColumnConstraints minWidth="100" prefWidth="100"
+                           maxWidth="Infinity" halignment="RIGHT">
+        </ColumnConstraints>
+        <ColumnConstraints minWidth="200" prefWidth="200"
+                           maxWidth="Infinity" hgrow="ALWAYS">
+        </ColumnConstraints>
+    </columnConstraints>
+
+
+    <Label text="Title : " GridPane.columnIndex="0"
+           GridPane.rowIndex="1">
+    </Label>
+
+    <TextField fx:id="titleTextField" prefHeight="40"
+               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+
+    <Label text="Message : " GridPane.columnIndex="0"
+           GridPane.rowIndex="2">
+    </Label>
+
+    <TextField fx:id="messageTextField" prefHeight="40"
+               GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+
+    <Button fx:id="sendButton" text="Send"
+            prefWidth="100" prefHeight="40" defaultButton="true"
+            GridPane.columnIndex="0" GridPane.rowIndex="3"
+            GridPane.columnSpan="2" GridPane.rowSpan="1"
+            GridPane.halignment="CENTER"
+    >
+        <GridPane.margin>
+            <Insets top="20" right="0" bottom="20" left="0"/>
+        </GridPane.margin>
+    </Button>
+</GridPane>
+
