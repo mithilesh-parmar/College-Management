@@ -2,7 +2,6 @@ package teachers;
 
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.storage.Blob;
-import custom_view.AlertWindow;
 import custom_view.SearchTextFieldController;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -22,6 +21,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
 import model.Teacher;
+import teachers.add_teacher.AddTeacherController;
 import utility.DocumentUploadListener;
 import utility.SearchCallback;
 import utility.TeacherFirestoreUtility;
@@ -42,22 +42,51 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
 
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
     private TeacherFirestoreUtility firestoreUtility = TeacherFirestoreUtility.getInstance();
-
+    private ContextMenu tableContextMenu = new ContextMenu();
+    private MenuItem notificationsMenuButton = new MenuItem("Notifications");
+    private MenuItem deleteMenuButton = new MenuItem("Delete");
+    private MenuItem editMenuButton = new MenuItem("Edit");
+    private MenuItem cancelMenuButton = new MenuItem("Cancel");
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+
+        tableContextMenu.getItems().addAll(notificationsMenuButton, deleteMenuButton, editMenuButton, cancelMenuButton);
+
+        tableContextMenu.setHideOnEscape(true);
+        tableContextMenu.setAutoHide(true);
+
+
+        cancelMenuButton.setOnAction(actionEvent -> tableContextMenu.hide());
+        notificationsMenuButton.setOnAction(actionEvent -> {
+            loadNotificationsView(teacherTable.getSelectionModel().getSelectedItem());
+        });
+
+        deleteMenuButton.setOnAction(actionEvent -> {
+            showConfirmationAlert(teacherTable.getSelectionModel().getSelectedItem());
+        });
+
+        editMenuButton.setOnAction(actionEvent -> {
+            loadAddView(teacherTable.getSelectionModel().getSelectedItem());
+        });
+
+
         searchField.setCallback(this);
         firestoreUtility.setListener(this);
         firestoreUtility.setDocumentUploadListener(this);
         firestoreUtility.getTeachers();
 
-//        addButton.setOnAction(actionEvent -> loadAddView(null));
 
         progressIndicator.visibleProperty().bind(dataLoading);
 
-        teacherTable.setOnKeyPressed(event -> handleOnKeyPressed(event));
+        teacherTable.setOnKeyPressed(this::handleOnKeyPressed);
 
-        teacherTable.setOnMouseClicked(event -> handleOnMouseClicked(event));
+        teacherTable.setOnMouseClicked(this::handleOnMouseClicked);
+        teacherTable.setOnContextMenuRequested(event -> {
+            System.out.println("context menu requested");
+            tableContextMenu.show(teacherTable, event.getScreenX(), event.getScreenY());
+        });
     }
 
 
@@ -70,8 +99,10 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
     }
 
     private void handleOnMouseClicked(MouseEvent event) {
+        if (tableContextMenu.isShowing() && !tableContextMenu.isFocused()) tableContextMenu.hide();
         if (event.getClickCount() == 2) {
-            System.out.println("Clicked ");
+            loadAddView(teacherTable.getSelectionModel().getSelectedItem());
+
         }
     }
 
@@ -118,9 +149,13 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
         dataLoading.set(false);
     }
 
+    private void loadNotificationsView(Teacher teacher) {
+
+    }
+
     private void loadAddView(Teacher teacher) {
         FXMLLoader loader;
-        loader = new FXMLLoader(getClass().getResource("/teachers/AddTeacherView.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/teachers/add_teacher/AddTeacherView.fxml"));
         final Stage stage = new Stage();
         Parent parent = null;
         try {
@@ -141,11 +176,7 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
                 public void onTeacherSubmit(Teacher teacher, File profileImage) {
                     close(stage);
                     dataLoading.set(true);
-                    Platform.runLater(() -> {
-
-                        firestoreUtility.updateTeacherDetails(teacher, profileImage);
-
-                    });
+                    Platform.runLater(() -> firestoreUtility.updateTeacherDetails(teacher, profileImage));
                 }
 
                 @Override
