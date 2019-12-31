@@ -27,7 +27,9 @@ public class TeacherTest {
             try {
                 DocumentSnapshot documentSnapshot = documentReference.get().get();
 
-                System.out.println(documentSnapshot.get("name") + " " + documentSnapshot.get("email"));
+                FirestoreConstants.teacherCollectionReference.document(documentSnapshot.getId()).update("id", documentSnapshot.getId());
+
+                System.out.println(documentSnapshot.get("name") + " " + documentSnapshot.get("email") + " : " + documentSnapshot.getId());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {

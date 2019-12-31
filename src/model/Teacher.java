@@ -13,7 +13,7 @@ public class Teacher {
             email = new SimpleStringProperty(),
             profilePictureUrl = new SimpleStringProperty(),
             token = new SimpleStringProperty(),
-            verificationCode = new SimpleStringProperty();
+            verificationCode = new SimpleStringProperty(), ID = new SimpleStringProperty();
     private BooleanProperty verified = new SimpleBooleanProperty(false),
             profileCompleted = new SimpleBooleanProperty(false);
 
@@ -21,7 +21,8 @@ public class Teacher {
     public Teacher() {
     }
 
-    public Teacher(String name, String email, String profilePictureUrl, String token, String verificationCode, boolean verified, boolean profileCompleted) {
+    public Teacher(String ID, String name, String email, String profilePictureUrl, String token, String verificationCode, boolean verified, boolean profileCompleted) {
+        setID(ID);
         setName(name);
         setEmail(email);
         setProfilePictureUrl(profilePictureUrl);
@@ -33,6 +34,7 @@ public class Teacher {
 
     public static Teacher fromJSON(Map<String, Object> json) {
         return new Teacher(
+                (String) json.get("id"),
                 (String) json.get("name"),
                 (String) json.get("email"),
                 (String) json.get("pp_url"),
@@ -41,6 +43,18 @@ public class Teacher {
                 (boolean) json.get("verified"),
                 (boolean) json.get("profile_completed")
         );
+    }
+
+    public String getID() {
+        return ID.get();
+    }
+
+    public StringProperty IDProperty() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID.set(ID);
     }
 
     public String getEmail() {
@@ -57,7 +71,7 @@ public class Teacher {
 
     public Map<String, Object> toJSON() {
         Map<String, Object> map = new HashMap<>();
-
+        map.put("id", ID.get());
         map.put("name", name.get());
         map.put("pp_url", profilePictureUrl.get());
         map.put("email", email.get());

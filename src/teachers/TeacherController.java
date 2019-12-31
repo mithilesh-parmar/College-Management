@@ -39,7 +39,7 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
     public TableView<Teacher> teacherTable;
     public ProgressIndicator progressIndicator;
     public SearchTextFieldController searchField;
-    public Button addButton;
+//    public Button addButton;
 
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
     private TeacherFirestoreUtility firestoreUtility = TeacherFirestoreUtility.getInstance();
@@ -52,7 +52,7 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
         firestoreUtility.setDocumentUploadListener(this);
         firestoreUtility.getTeachers();
 
-        addButton.setOnAction(actionEvent -> loadAddView(null));
+//        addButton.setOnAction(actionEvent -> loadAddView(null));
 
         progressIndicator.visibleProperty().bind(dataLoading);
 

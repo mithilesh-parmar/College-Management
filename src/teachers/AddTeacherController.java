@@ -42,16 +42,24 @@ public class AddTeacherController implements Initializable {
             String email = emailField.getText().toString();
 
 
-            Teacher teacher = new Teacher(
-                    name, email, "", "", "", false, false
-            );
+            Teacher updatedTeacher = new Teacher("", name, email, "", "", "", false, false);
 
 
             if (listener != null) {
 
-                System.out.println(teacher);
+                System.out.println(updatedTeacher);
                 System.out.println(profileImageFile);
-                listener.onTeacherSubmit(teacher, profileImageFile);
+
+
+                if (teacher != null) {
+                    updatedTeacher.setVerified(teacher.isVerified());
+                    updatedTeacher.setProfileCompleted(teacher.isProfileCompleted());
+                    updatedTeacher.setVerificationCode(teacher.getVerificationCode());
+                    updatedTeacher.setToken(teacher.getToken());
+                    updatedTeacher.setID(teacher.getID());
+                    updatedTeacher.setProfilePictureUrl(teacher.getProfilePictureUrl());
+                }
+                listener.onTeacherSubmit(updatedTeacher, profileImageFile);
             }
 
 

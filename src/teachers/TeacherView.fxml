@@ -30,12 +30,12 @@
 
                             <SearchTextFieldController fx:id="searchField"/>
 
-                            <Button text="ADD" fx:id="addButton">
-                                <BorderPane.margin>
-                                    <Insets topRightBottomLeft="8"/>
-                                </BorderPane.margin>
+<!--                            <Button text="ADD" fx:id="addButton">-->
+<!--                                <BorderPane.margin>-->
+<!--                                    <Insets topRightBottomLeft="8"/>-->
+<!--                                </BorderPane.margin>-->
 
-                            </Button>
+<!--                            </Button>-->
                         </HBox>
                     </right>
                 </BorderPane>

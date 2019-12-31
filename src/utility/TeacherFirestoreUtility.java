@@ -96,25 +96,28 @@ public class TeacherFirestoreUtility {
     }
 
 
-//    TODO add id field
+    //    TODO add id field
     private void setTeacherDataToFirestore(Teacher teacher) {
         String teachNameAndEmail = teacher.getName() + " " + teacher.getEmail();
         System.out.println("Teacher name and email: " + teachNameAndEmail);
-        FirestoreConstants.teacherCollectionReference.listDocuments().forEach(documentReference -> {
-            try {
-                DocumentSnapshot documentSnapshot = documentReference.get().get();
-                String documentNameAndEmail = documentSnapshot.get("name") + " " + documentSnapshot.get("email");
-                System.out.println("Document Name and email: " + documentNameAndEmail);
-                if (teachNameAndEmail.contains(documentNameAndEmail)) {
-                    System.out.println("Updating: " + documentNameAndEmail + " : " + teacher.toJSON());
-                    documentReference.update(teacher.toJSON());
-                }
 
 
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-        });
+        FirestoreConstants.teacherCollectionReference.document(teacher.getID()).update(teacher.toJSON());
+//        FirestoreConstants.teacherCollectionReference.listDocuments().forEach(documentReference -> {
+//            try {
+//                DocumentSnapshot documentSnapshot = documentReference.get().get();
+//                String documentNameAndEmail = documentSnapshot.get("name") + " " + documentSnapshot.get("email");
+//                System.out.println("Document Name and email: " + documentNameAndEmail);
+//                if (teachNameAndEmail.contains(documentNameAndEmail)) {
+//                    System.out.println("Updating: " + documentNameAndEmail + " : " + teacher.toJSON());
+//                    documentReference.update(teacher.toJSON());
+//                }
+//
+//
+//            } catch (InterruptedException | ExecutionException e) {
+//                e.printStackTrace();
+//            }
+//        });
     }
 
     public void addTeacherToFirestore(Teacher teacher, File profileImage) {

@@ -58,6 +58,7 @@ public class ImageButton extends Button {
 
     public void setImage(String imageURL) {
 
+        if (imageURL.isEmpty() || imageURL == null) return;
         imageLoading.set(true);
         Image image = new Image(imageURL, true);
 
@@ -81,7 +82,7 @@ public class ImageButton extends Button {
         FileChooser.ExtensionFilter extFilterJPG = new FileChooser.ExtensionFilter("JPG files (*.jpg)", "*.JPG");
         FileChooser.ExtensionFilter extFilterPNG = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.PNG");
         FileChooser fileChooser = new FileChooser();
-//        fileChooser.getExtensionFilters().addAll(extFilterJPG, extFilterPNG);
+        fileChooser.getExtensionFilters().addAll(extFilterJPG, extFilterPNG);
         file = fileChooser.showOpenDialog(getScene().getWindow());
 
 
@@ -89,5 +90,7 @@ public class ImageButton extends Button {
         if (listener != null) listener.onImageSelected(file);
 
     }
+
+
 
 }
