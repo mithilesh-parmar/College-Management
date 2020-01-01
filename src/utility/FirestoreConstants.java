@@ -5,7 +5,7 @@ import com.google.firebase.cloud.FirestoreClient;
 
 public class FirestoreConstants {
 
-    final static CollectionReference studentCollectionReference = FirestoreClient
+    public final static CollectionReference studentCollectionReference = FirestoreClient
             .getFirestore()
             .collection("colleges")
             .document("GKevzOMWBqbFtPezdLzF")
@@ -17,19 +17,19 @@ public class FirestoreConstants {
             .document("GKevzOMWBqbFtPezdLzF")
             .collection("teachers");
 
-    final static CollectionReference eventCollectionReference = FirestoreClient
+    public final static CollectionReference eventCollectionReference = FirestoreClient
             .getFirestore()
             .collection("colleges")
             .document("GKevzOMWBqbFtPezdLzF")
             .collection("events");
 
-    final static CollectionReference sectionsCollectionReference = FirestoreClient
+    public final static CollectionReference sectionsCollectionReference = FirestoreClient
             .getFirestore()
             .collection("colleges")
             .document("GKevzOMWBqbFtPezdLzF")
             .collection("sections");
 
-    final static CollectionReference sectionsClassScheduleCollectionReference = FirestoreClient
+    public final static CollectionReference sectionsClassScheduleCollectionReference = FirestoreClient
             .getFirestore()
             .collection("colleges")
             .document("GKevzOMWBqbFtPezdLzF")

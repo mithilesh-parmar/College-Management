@@ -74,7 +74,6 @@ public class AddTeacherController implements Initializable {
 
     private void fillTeacherData() {
 
-        System.out.println(teacher.toJSON());
 
         nameField.setText(teacher.getName());
 

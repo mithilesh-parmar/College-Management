@@ -9,7 +9,7 @@
 <?import javafx.geometry.Insets?>
 
 
-<GridPane fx:controller="teachers.notifications.NotificationsController"
+<GridPane fx:controller="custom_view.notification_view.NotificationsController"
           xmlns:fx="http://javafx.com/fxml" alignment="center"
           hgap="10" vgap="10"
           stylesheets="@/styles/dark_metro_style.css">

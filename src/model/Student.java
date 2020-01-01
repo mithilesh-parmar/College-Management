@@ -4,10 +4,12 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Student {
     private StringProperty address = new SimpleStringProperty(),
+            ID = new SimpleStringProperty(),
             profilePictureURL = new SimpleStringProperty(),
             section = new SimpleStringProperty(),
             token = new SimpleStringProperty(),
@@ -21,7 +23,8 @@ public class Student {
             verified = new SimpleBooleanProperty(),
             profileCompleted = new SimpleBooleanProperty();
 
-    public Student(String address,
+    public Student(String ID,
+                   String address,
                    String profilePictureURL,
                    String section,
                    String token,
@@ -36,6 +39,7 @@ public class Student {
     ) {
 
 
+        setID(ID);
         setAddress(address);
         setProfilePictureURL(profilePictureURL);
         setSection(section);
@@ -50,8 +54,10 @@ public class Student {
         setProfileCompleted(profileCompleted);
     }
 
+
     public static Student fromJSON(Map<String, Object> json) {
         return new Student(
+                (String) json.get("id"),
                 (String) json.get("address"),
                 (String) json.get("pp_url"),
                 (String) json.get("section"),
@@ -65,6 +71,36 @@ public class Student {
                 (boolean) json.get("verified"),
                 (boolean) json.get("profile_completed")
         );
+    }
+
+    public Map<String, Object> toJSON() {
+        Map<String, Object> json = new HashMap<>();
+        json.put("id", ID.get());
+        json.put("address", address.get());
+        json.put("pp_url", profilePictureURL.get());
+        json.put("section", section.get());
+        json.put("token", token.get());
+        json.put("parent_number", parentNumber.get());
+        json.put("requested_remark", requestedRemark.get());
+        json.put("name", name.get());
+        json.put("class_name", className.get());
+        json.put("email", email.get());
+        json.put("requested", requested.get());
+        json.put("verified", verified.get());
+        json.put("profile_completed", profileCompleted.get());
+        return json;
+    }
+
+    public String getID() {
+        return ID.get();
+    }
+
+    public StringProperty IDProperty() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID.set(ID);
     }
 
     public String getAddress() {

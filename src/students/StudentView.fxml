@@ -31,23 +31,12 @@
                         <Label id="headline" text="Students"/>
                     </left>
                     <right>
-
-                        <HBox>
-
                             <SearchTextFieldController fx:id="searchTextField"/>
-                            <Button text="ADD">
-                                <BorderPane.margin>
-                                    <Insets topRightBottomLeft="5"/>
-                                </BorderPane.margin>
-                            </Button>
-                        </HBox>
-
-
                     </right>
                 </BorderPane>
 
 
-                <TableView fx:id="studentTable" VBox.vgrow="ALWAYS" onKeyPressed="#onTableKeyPressed">
+                <TableView fx:id="studentTable" VBox.vgrow="ALWAYS" >
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
                     </columnResizePolicy>

@@ -20,11 +20,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
-import listeners.NotificationDialogListener;
+import custom_view.notification_view.NotificationDialogListener;
 import model.Notification;
 import model.Teacher;
 import teachers.add_teacher.AddTeacherController;
-import teachers.notifications.NotificationsController;
+import custom_view.notification_view.NotificationsController;
 import utility.DocumentUploadListener;
 import utility.SearchCallback;
 import utility.TeacherFirestoreUtility;
@@ -87,7 +87,6 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
 
         teacherTable.setOnMouseClicked(this::handleOnMouseClicked);
         teacherTable.setOnContextMenuRequested(event -> {
-            System.out.println("context menu requested");
             tableContextMenu.show(teacherTable, event.getScreenX(), event.getScreenY());
         });
     }
@@ -154,7 +153,7 @@ public class TeacherController implements Initializable, DataChangeListener, Sea
 
     private void loadNotificationsView(Teacher teacher) {
         FXMLLoader loader;
-        loader = new FXMLLoader(getClass().getResource("/teachers/notifications/NotificationsView.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/custom_view/notification_view/NotificationsView.fxml"));
         final Stage stage = new Stage();
         Parent parent = null;
         try {

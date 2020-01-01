@@ -24,9 +24,8 @@ public class Notification {
 
     public Map<String, Object> toJSON() {
         HashMap<String, Object> json = new HashMap<>();
-
         json.put("msg", message.get());
-        json.put("title", title.get());
+        if (title != null && title.get() != null) json.put("title", title.get());
         return json;
     }
 

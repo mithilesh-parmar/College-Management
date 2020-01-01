@@ -64,12 +64,16 @@ public class ImageButton extends Button {
         Image image = new Image(imageURL, true);
 
         image.progressProperty().addListener((observableValue, number, t1) -> {
-
             if (t1.doubleValue() == 1.0) imageLoading.set(false);
         });
 
         image.errorProperty().addListener((observableValue, aBoolean, t1) -> {
             imageLoading.set(false);
+            System.out.println("error occured while loading image");
+        });
+
+        image.exceptionProperty().addListener((observableValue, e, t1) -> {
+            System.out.println(t1);
         });
 
         imageView.setImage(new Image(imageURL, true));
@@ -89,7 +93,6 @@ public class ImageButton extends Button {
         if (listener != null) listener.onImageSelected(file);
 
     }
-
 
 
 }

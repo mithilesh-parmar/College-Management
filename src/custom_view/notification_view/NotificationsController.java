@@ -1,9 +1,8 @@
-package teachers.notifications;
+package custom_view.notification_view;
 
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import listeners.NotificationDialogListener;
 import model.Notification;
 
 import java.net.URL;

@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
 import listeners.DataChangeListener;
+import model.Notification;
 import model.Student;
 
 import javax.annotation.Nullable;
@@ -41,6 +42,7 @@ public class StudentFirestoreUtility {
         }
     };
 
+
     private StudentFirestoreUtility() {
         students = FXCollections.observableArrayList();
     }
@@ -52,6 +54,23 @@ public class StudentFirestoreUtility {
             }
         }
         return instance;
+    }
+
+    public void getAttendance(Student student, EventListener<QuerySnapshot> studentAttendanceListener) {
+        FirestoreConstants
+                .studentCollectionReference
+                .document(student.getID())
+                .collection("attendance")
+                .addSnapshotListener(studentAttendanceListener);
+    }
+
+    public void publishNotification(Student student, Notification notification) {
+        FirestoreConstants.studentCollectionReference.document(student.getID()).collection("push_notification").add(notification.toJSON());
+    }
+
+    public void publishFeeNotification(Student student, Notification notification) {
+        FirestoreConstants.studentCollectionReference.document(student.getID()).collection("fees_notification").add(notification.toJSON());
+
     }
 
     public void getStudents() {
@@ -68,5 +87,10 @@ public class StudentFirestoreUtility {
     private void parseStudentsData(List<QueryDocumentSnapshot> data) {
         students.clear();
         for (QueryDocumentSnapshot document : data) students.add(Student.fromJSON(document.getData()));
+    }
+
+
+    public void deleteStudent(Student student) {
+        FirestoreConstants.studentCollectionReference.document(student.getID()).delete();
     }
 }

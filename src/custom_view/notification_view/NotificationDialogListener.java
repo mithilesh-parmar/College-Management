@@ -1,4 +1,4 @@
-package listeners;
+package custom_view.notification_view;
 
 import javafx.stage.Stage;
 import model.Notification;

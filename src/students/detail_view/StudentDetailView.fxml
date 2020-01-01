@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import custom_view.ImageButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import custom_view.loading_combobox.section.SectionLoadingComboBox?>
+<GridPane fx:controller="students.detail_view.StudentDetailsController"
+          xmlns:fx="http://javafx.com/fxml" alignment="center"
+          hgap="10" vgap="10"
+          stylesheets="@/styles/dark_metro_style.css"
+>
+    <padding>
+        <Insets top="40" right="40" bottom="40" left="40"/>
+    </padding>
+    <columnConstraints>
+        <ColumnConstraints minWidth="100" prefWidth="100"
+                           maxWidth="Infinity" halignment="RIGHT">
+        </ColumnConstraints>
+        <ColumnConstraints minWidth="200" prefWidth="200"
+                           maxWidth="Infinity" hgrow="ALWAYS">
+        </ColumnConstraints>
+    </columnConstraints>
+
+    <!-- Profile Image -->
+    <ImageButton
+            GridPane.columnIndex="0"
+            GridPane.rowIndex="0" GridPane.columnSpan="2"
+            GridPane.rowSpan="1" GridPane.halignment="CENTER"
+            minHeight="300" minWidth="300"
+            fx:id="profileImageView"
+    >
+
+    </ImageButton>
+
+
+    <!-- Add Name Label -->
+    <Label text="Full Name : " GridPane.columnIndex="0"
+           GridPane.rowIndex="1"/>
+    <!-- Add Name Text Field -->
+    <TextField fx:id="nameField" prefHeight="40"
+               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+
+    <!-- Add Email Label -->
+    <Label text="Email ID : " GridPane.columnIndex="0"
+           GridPane.rowIndex="2">
+    </Label>
+    <!-- Add Email Text Field -->
+    <TextField fx:id="emailField" prefHeight="40"
+               GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+
+    <Label text="Section : " GridPane.columnIndex="0"
+           GridPane.rowIndex="3">
+    </Label>
+    <SectionLoadingComboBox fx:id="sectionTextField" prefHeight="40"
+                            GridPane.columnIndex="1" GridPane.rowIndex="3" alignment="CENTER_LEFT"/>
+
+    <Label text="Parent Number : " GridPane.columnIndex="0"
+           GridPane.rowIndex="4">
+    </Label>
+    <TextField fx:id="parentNumberTextField" prefHeight="40"
+               GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+    <Label text="Requested Remark : " GridPane.columnIndex="0"
+           GridPane.rowIndex="5">
+    </Label>
+    <TextField fx:id="requestedRemarkTextField" prefHeight="40"
+               GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+
+    <Label text="Class Name : " GridPane.columnIndex="0"
+           GridPane.rowIndex="6">
+    </Label>
+    <TextField fx:id="classNameTextField" prefHeight="40"
+               GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+
+    <!-- Add Submit Button -->
+    <Button fx:id="submitButton" text="Update"
+            prefWidth="100" prefHeight="40" defaultButton="true"
+            GridPane.columnIndex="0" GridPane.rowIndex="7"
+            GridPane.columnSpan="2" GridPane.rowSpan="1"
+            GridPane.halignment="CENTER"
+    >
+        <GridPane.margin>
+            <Insets top="20" right="0" bottom="20" left="0"/>
+        </GridPane.margin>
+    </Button>
+</GridPane>
+
