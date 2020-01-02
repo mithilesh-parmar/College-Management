@@ -1,17 +1,12 @@
 package teachers.add_teacher;
 
 import custom_view.ImageButton;
-import custom_view.ImageButtonListener;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.Image;
 import model.Teacher;
-import teachers.TeacherListener;
+import teachers.TeacherDetailViewListener;
 
-import javax.annotation.security.RunAs;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -25,7 +20,7 @@ public class AddTeacherController implements Initializable {
     public ImageButton profileImageView;
 
 
-    private TeacherListener listener;
+    private TeacherDetailViewListener listener;
     private File profileImageFile;
 
     private Teacher teacher;
@@ -85,7 +80,7 @@ public class AddTeacherController implements Initializable {
 
     }
 
-    public void setListener(TeacherListener listener) {
+    public void setListener(TeacherDetailViewListener listener) {
         this.listener = listener;
     }
 }

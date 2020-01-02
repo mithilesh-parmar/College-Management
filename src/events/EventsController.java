@@ -142,6 +142,7 @@ public class EventsController implements Initializable, DataChangeListener {
         createdAt.setText(event.getCreatedAt().toString());
         eventDate.setText(event.getEventDate().toString());
         if (event.getImages() != null && event.getImages().size() > 0) {
+
             eventImage.setImage(new Image(event.getImages().get(0), true));
         } else {
             eventImage.setImage(new Image("/assets/cancel.png"));
@@ -153,7 +154,9 @@ public class EventsController implements Initializable, DataChangeListener {
 
     @Override
     public void onError(Exception e) {
-
+        loadingData.set(false);
+        detailProgressIndicator.setVisible(false);
+        e.printStackTrace();
     }
 
     public void onSearchTextEntered(KeyEvent keyEvent) {
@@ -193,18 +196,6 @@ public class EventsController implements Initializable, DataChangeListener {
         eventsList.setItems(subList);
     }
 
-    public void chooseImage(ActionEvent actionEvent) {
-        final FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showOpenDialog(null);
-        if (file != null) {
-            // openFile(file);
 
-
-            Image image1 = new Image(file.toURI().toString());
-
-            ImageView ip = new ImageView(image1);
-            BackgroundImage backgroundImage = new BackgroundImage(image1, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, null);
-        }
-    }
 }
 

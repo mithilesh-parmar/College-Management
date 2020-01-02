@@ -5,7 +5,7 @@ import model.Teacher;
 
 import java.io.File;
 
-public interface TeacherListener {
+public interface TeacherDetailViewListener {
     void onTeacherSubmit(Teacher teacher, File profileImage);
 
     void onTeacherEdit(Teacher teacher);

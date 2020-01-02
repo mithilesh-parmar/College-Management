@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="events.add_event.AddEventController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <VBox>
+        <Label text="Add Event" alignment="CENTER" id="subHeadline">
+
+        </Label>
+        <GridPane vgap="10" alignment="TOP_CENTER" fx:id="eventAddPane">
+
+            <padding>
+                <Insets topRightBottomLeft="16"/>
+            </padding>
+
+
+            <!--Event Headline-->
+            <!--(0,0)-->
+            <Label text="Title: " GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="titleTextField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+
+            <!--Event Description -->
+            <!--(1,0)-->
+            <Label text="Description: " GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <!--(1,1)-->
+            <TextField fx:id="descriptionTextField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+
+            <!--Event Time -->
+            <!--(2,0)-->
+            <Label text="Event Time: " GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <!--(2,1)-->
+            <TextField fx:id="eventTimeTextField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+
+            <!--Event Created At-->
+            <!--(3,0)-->
+            <Label text="Created At: " GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <!--(3,1)-->
+            <TextField fx:id="createdAtTextField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+
+            <!--Event Date-->
+            <!--(4,0)-->
+            <Label text="Event Date: " GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <!--(4,1)-->
+            <TextField fx:id="eventDateTextField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+
+            <!--Image Chooser-->
+            <!--                    <Button text="Choose Image" GridPane.rowIndex="5" GridPane.columnIndex="0" onAction="#chooseImage"/>-->
+
+
+<!--            <ImageViewController GridPane.rowIndex="5" GridPane.columnIndex="0">-->
+
+<!--            </ImageViewController>-->
+
+
+            <!--Add Button-->
+            <!--(5,1)-->
+            <Button fx:id="addButton" text="Add" GridPane.rowIndex="6" GridPane.columnIndex="1"
+                    GridPane.hgrow="ALWAYS"/>
+
+        </GridPane>
+    </VBox>
+</AnchorPane>

@@ -3,24 +3,33 @@ package utility;
 import com.google.cloud.firestore.*;
 import com.google.cloud.storage.Blob;
 import constants.Constants;
+import custom_view.card_view.Card;
+import custom_view.card_view.CardListener;
 import javafx.application.Platform;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.MapProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import listeners.DataChangeListener;
 import model.Notification;
 import model.Teacher;
+import teachers.TeacherCardListener;
 
 import java.io.*;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class TeacherFirestoreUtility {
 
 
     private static TeacherFirestoreUtility instance;
     public ObservableList<Teacher> teachers;
+    public ListProperty<Card> teacherCards;
     private DataChangeListener listener;
     private DocumentUploadListener documentUploadListener;
+    public MapProperty<Teacher, Card> teacherCardMapProperty;
+    private TeacherCardListener cardListener;
 
     private EventListener<QuerySnapshot> teacherDataListener = (snapshot, e) -> {
         if (e != null) {
@@ -44,6 +53,12 @@ public class TeacherFirestoreUtility {
 
     private TeacherFirestoreUtility() {
         teachers = FXCollections.observableArrayList();
+        teacherCards = new SimpleListProperty<>(FXCollections.observableArrayList());
+        teacherCardMapProperty = new SimpleMapProperty<>(FXCollections.observableHashMap());
+    }
+
+    public void setCardListener(TeacherCardListener cardListener) {
+        this.cardListener = cardListener;
     }
 
     public static TeacherFirestoreUtility getInstance() {
@@ -56,7 +71,6 @@ public class TeacherFirestoreUtility {
     }
 
     public void getTeachers() {
-
         if (teachers.size() > 0) listener.onDataLoaded(teachers);
         else
             FirestoreConstants.teacherCollectionReference.addSnapshotListener(teacherDataListener);
@@ -146,10 +160,44 @@ public class TeacherFirestoreUtility {
     }
 
 
-    public ObservableList<Teacher> parseTeachersData(List<QueryDocumentSnapshot> data) {
+    private void parseTeachersData(List<QueryDocumentSnapshot> data) {
         teachers.clear();
-        for (QueryDocumentSnapshot document : data) teachers.add(Teacher.fromJSON(document.getData()));
-        return teachers;
+        teacherCards.clear();
+        for (QueryDocumentSnapshot document : data) {
+            Teacher teacher = Teacher.fromJSON(document.getData());
+            Card card = new Card(teacher.getName(), teacher.getEmail(), teacher.getProfilePictureUrl());
+
+
+            if (cardListener != null) {
+                card.setListener(new CardListener() {
+                    @Override
+                    public void onCardClick() {
+                        cardListener.onCardClick(teacher);
+                    }
+
+                    @Override
+                    public void onDeleteButtonClick() {
+                        cardListener.onDeleteButtonClick(teacher);
+                    }
+
+                    @Override
+                    public void onEditButtonClick() {
+                        cardListener.onEditButtonClick(teacher);
+                    }
+
+                    @Override
+                    public void onNotificationButtonClick() {
+                        cardListener.onNotificationButtonClick(teacher);
+                    }
+                });
+
+            }
+
+
+            teachers.add(teacher);
+            teacherCards.add(card);
+            teacherCardMapProperty.put(teacher, card);
+        }
     }
 }
 

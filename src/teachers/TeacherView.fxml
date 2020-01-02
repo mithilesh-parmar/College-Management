@@ -12,7 +12,10 @@
             fx:controller="teachers.TeacherController"
 >
 
-    <center>
+
+
+
+    <top>
 
         <StackPane>
             <VBox>
@@ -30,61 +33,60 @@
 
                             <SearchTextFieldController fx:id="searchField"/>
 
-<!--                            <Button text="ADD" fx:id="addButton">-->
-<!--                                <BorderPane.margin>-->
-<!--                                    <Insets topRightBottomLeft="8"/>-->
-<!--                                </BorderPane.margin>-->
-
-<!--                            </Button>-->
                         </HBox>
                     </right>
                 </BorderPane>
 
-                <TableView fx:id="teacherTable" VBox.vgrow="ALWAYS" >
-                    <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-                    </columnResizePolicy>
-                    <columns>
+                <FlowPane fx:id="teacherFlowPane" VBox.vgrow="ALWAYS" alignment="TOP_LEFT"/>
 
-                        <TableColumn text="Name">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="name"/>
-                            </cellValueFactory>
-                        </TableColumn>
+<!--                <TableView fx:id="teacherTable" VBox.vgrow="ALWAYS" >-->
+<!--                    <columnResizePolicy>-->
+<!--                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>-->
+<!--                    </columnResizePolicy>-->
+<!--                    <columns>-->
 
-                        <TableColumn text="Email">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="email"/>
-                            </cellValueFactory>
-                        </TableColumn>
+<!--                        <TableColumn text="Name">-->
+<!--                            <cellValueFactory>-->
+<!--                                <PropertyValueFactory property="name"/>-->
+<!--                            </cellValueFactory>-->
+<!--                        </TableColumn>-->
+
+<!--                        <TableColumn text="Email">-->
+<!--                            <cellValueFactory>-->
+<!--                                <PropertyValueFactory property="email"/>-->
+<!--                            </cellValueFactory>-->
+<!--                        </TableColumn>-->
 
 
-                        <TableColumn text="Verification Code">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="verificationCode"/>
-                            </cellValueFactory>
-                        </TableColumn>
+<!--                        <TableColumn text="Verification Code">-->
+<!--                            <cellValueFactory>-->
+<!--                                <PropertyValueFactory property="verificationCode"/>-->
+<!--                            </cellValueFactory>-->
+<!--                        </TableColumn>-->
 
-                        <TableColumn text="Verified">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="verified"/>
-                            </cellValueFactory>
-                        </TableColumn>
+<!--                        <TableColumn text="Verified">-->
+<!--                            <cellValueFactory>-->
+<!--                                <PropertyValueFactory property="verified"/>-->
+<!--                            </cellValueFactory>-->
+<!--                        </TableColumn>-->
 
-                        <TableColumn text="Profile Completed">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="profileCompleted"/>
-                            </cellValueFactory>
-                        </TableColumn>
+<!--                        <TableColumn text="Profile Completed">-->
+<!--                            <cellValueFactory>-->
+<!--                                <PropertyValueFactory property="profileCompleted"/>-->
+<!--                            </cellValueFactory>-->
+<!--                        </TableColumn>-->
 
-                    </columns>
+<!--                    </columns>-->
 
-                </TableView>
+<!--                </TableView>-->
+
+
+
             </VBox>
             <ProgressIndicator fx:id="progressIndicator"/>
         </StackPane>
 
 
-    </center>
+    </top>
 
 </BorderPane>

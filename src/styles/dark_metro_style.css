@@ -34,6 +34,10 @@
     tab_pane_background_color: white;
 }
 
+#card{
+-fx-background-color: white;
+}
+
 /* To be used in "background" Panes */
 .background{
     -fx-background-color: white;

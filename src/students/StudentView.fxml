@@ -17,6 +17,8 @@
 
     <top>
 
+        <FlowPane fx:id="studentFlowPane" minHeight="200"/>
+
     </top>
 
 
@@ -36,7 +38,7 @@
                 </BorderPane>
 
 
-                <TableView fx:id="studentTable" VBox.vgrow="ALWAYS" >
+                <TableView fx:id="studentTable"  >
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
                     </columnResizePolicy>

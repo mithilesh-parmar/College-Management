@@ -3,19 +3,22 @@ package students;
 import com.google.cloud.firestore.*;
 import custom_view.SearchTextFieldController;
 import custom_view.fees_notification_view.FeesNotificationController;
-import javafx.application.Platform;
+import custom_view.card_view.Card;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
@@ -23,15 +26,11 @@ import custom_view.notification_view.NotificationDialogListener;
 import model.Notification;
 import model.Student;
 import custom_view.notification_view.NotificationsController;
-import model.Teacher;
 import students.attendance.AttendanceController;
 import students.detail_view.StudentDetailsController;
-import teachers.TeacherListener;
-import teachers.add_teacher.AddTeacherController;
 import utility.SearchCallback;
 import utility.StudentFirestoreUtility;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -42,6 +41,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
     public TableView<Student> studentTable;
     public ProgressIndicator progressIndicator;
     public SearchTextFieldController searchTextField;
+    public FlowPane studentFlowPane;
     private StudentFirestoreUtility firestoreUtility = StudentFirestoreUtility.getInstance();
     private BooleanProperty loadingData = new SimpleBooleanProperty(true);
     private ContextMenu tableContextMenu = new ContextMenu();
@@ -53,12 +53,25 @@ public class StudentController implements Initializable, DataChangeListener, Sea
     private MenuItem deleteMenuButton = new MenuItem("Delete");
     private MenuItem editMenuButton = new MenuItem("Edit");
     private MenuItem cancelMenuButton = new MenuItem("Cancel");
+    private ObservableList<Card> cardControllers = FXCollections.observableArrayList();
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
 
         Menu menu = new Menu("Notifications");
+
+
+        studentFlowPane.setHgap(10);
+        studentFlowPane.setVgap(10);
+        studentFlowPane.setAlignment(Pos.CENTER_LEFT);
+
+
+        studentFlowPane.setPadding(new Insets(10));
+
+
+        studentFlowPane.getChildren().addAll(cardControllers);
 
         menu.getItems().addAll(feesNotificationMenuButton, pushNotificationMenuButton);
 
@@ -70,6 +83,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
                 editMenuButton,
                 cancelMenuButton
         );
+
 
         tableContextMenu.setHideOnEscape(true);
         tableContextMenu.setAutoHide(true);
@@ -116,7 +130,16 @@ public class StudentController implements Initializable, DataChangeListener, Sea
     public void onDataLoaded(ObservableList data) {
         loadingData.set(false);
         studentTable.setItems(firestoreUtility.students);
+
+        for (Student student : firestoreUtility.students) {
+
+            cardControllers.add(new Card(student.getEmail(), student.getName(), student.getProfilePictureURL()));
+
+        }
+
+        studentFlowPane.getChildren().addAll(cardControllers);
     }
+
 
     @Override
     public void onDataChange(QuerySnapshot data) {

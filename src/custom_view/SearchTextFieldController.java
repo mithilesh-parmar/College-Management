@@ -31,6 +31,7 @@ public class SearchTextFieldController extends HBox {
 
             searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
                 if (callback != null) callback.performSearch(oldValue, newValue);
+
             });
 
         } catch (IOException exception) {

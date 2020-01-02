@@ -16,7 +16,9 @@
     <TextField fx:id="searchTextField"
                maxWidth="Infinity"
                alignment="CENTER_LEFT"
-               promptText="Search">
+               promptText="Search"
+               HBox.hgrow="ALWAYS"
+    >
 
         <padding>
             <Insets topRightBottomLeft="8"/>
