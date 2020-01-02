@@ -9,101 +9,92 @@
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.geometry.Insets?>
 <?import custom_view.SearchTextFieldController?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="students.StudentController"
-            stylesheets="@/styles/dark_metro_style.css"
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="students.StudentController"
+           stylesheets="@/styles/dark_metro_style.css"
 >
 
-    <top>
 
-        <FlowPane fx:id="studentFlowPane" minHeight="200"/>
+    <VBox>
 
-    </top>
+        <BorderPane>
+            <left>
+                <Label id="headline" text="Students"/>
+            </left>
+            <right>
+                <SearchTextFieldController fx:id="searchTextField"/>
+            </right>
+        </BorderPane>
 
+        <FlowPane fx:id="studentFlowPane" />
 
-    <center>
+        <!--                <TableView fx:id="studentTable"  >-->
+        <!--                    <columnResizePolicy>-->
+        <!--                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>-->
+        <!--                    </columnResizePolicy>-->
+        <!--                    <columns>-->
 
-        <StackPane>
+        <!--                        <TableColumn text="Name">-->
+        <!--                            <cellValueFactory>-->
+        <!--                                <PropertyValueFactory property="name"/>-->
+        <!--                            </cellValueFactory>-->
+        <!--                        </TableColumn>-->
 
-            <VBox>
+        <!--                        <TableColumn text="Class Name">-->
+        <!--                            <cellValueFactory>-->
+        <!--                                <PropertyValueFactory property="className"/>-->
+        <!--                            </cellValueFactory>-->
+        <!--                        </TableColumn>-->
 
-                <BorderPane>
-                    <left>
-                        <Label id="headline" text="Students"/>
-                    </left>
-                    <right>
-                            <SearchTextFieldController fx:id="searchTextField"/>
-                    </right>
-                </BorderPane>
+        <!--                        <TableColumn text="Section">-->
+        <!--                            <cellValueFactory>-->
+        <!--                                <PropertyValueFactory property="section"/>-->
+        <!--                            </cellValueFactory>-->
+        <!--                        </TableColumn>-->
 
+        <!--                        <TableColumn text="Parent No.">-->
+        <!--                            <cellValueFactory>-->
+        <!--                                <PropertyValueFactory property="parentNumber"/>-->
+        <!--                            </cellValueFactory>-->
+        <!--                        </TableColumn>-->
 
-                <TableView fx:id="studentTable"  >
-                    <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-                    </columnResizePolicy>
-                    <columns>
+        <!--                        <TableColumn text="Requested Remark">-->
+        <!--                            <cellValueFactory>-->
+        <!--                                <PropertyValueFactory property="requestedRemark"/>-->
+        <!--                            </cellValueFactory>-->
+        <!--                        </TableColumn>-->
 
-                        <TableColumn text="Name">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="name"/>
-                            </cellValueFactory>
-                        </TableColumn>
+        <!--                        <TableColumn text="Email">-->
+        <!--                            <cellValueFactory>-->
+        <!--                                <PropertyValueFactory property="email"/>-->
+        <!--                            </cellValueFactory>-->
+        <!--                        </TableColumn>-->
 
-                        <TableColumn text="Class Name">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="className"/>
-                            </cellValueFactory>
-                        </TableColumn>
+        <!--                        <TableColumn text="Requested">-->
+        <!--                            <cellValueFactory>-->
+        <!--                                <PropertyValueFactory property="requested"/>-->
+        <!--                            </cellValueFactory>-->
+        <!--                        </TableColumn>-->
 
-                        <TableColumn text="Section">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="section"/>
-                            </cellValueFactory>
-                        </TableColumn>
+        <!--                        <TableColumn text="Verified">-->
+        <!--                            <cellValueFactory>-->
+        <!--                                <PropertyValueFactory property="verified"/>-->
+        <!--                            </cellValueFactory>-->
+        <!--                        </TableColumn>-->
 
-                        <TableColumn text="Parent No.">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="parentNumber"/>
-                            </cellValueFactory>
-                        </TableColumn>
+        <!--                        <TableColumn text="ProfileCompleted">-->
+        <!--                            <cellValueFactory>-->
+        <!--                                <PropertyValueFactory property="profileCompleted"/>-->
+        <!--                            </cellValueFactory>-->
+        <!--                        </TableColumn>-->
+        <!--                    </columns>-->
 
-                        <TableColumn text="Requested Remark">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="requestedRemark"/>
-                            </cellValueFactory>
-                        </TableColumn>
-
-                        <TableColumn text="Email">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="email"/>
-                            </cellValueFactory>
-                        </TableColumn>
-
-                        <TableColumn text="Requested">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="requested"/>
-                            </cellValueFactory>
-                        </TableColumn>
-
-                        <TableColumn text="Verified">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="verified"/>
-                            </cellValueFactory>
-                        </TableColumn>
-
-                        <TableColumn text="ProfileCompleted">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="profileCompleted"/>
-                            </cellValueFactory>
-                        </TableColumn>
-                    </columns>
-
-                </TableView>
-            </VBox>
-            <ProgressIndicator fx:id="progressIndicator"/>
-        </StackPane>
+        <!--                </TableView>-->
 
 
-    </center>
-</BorderPane>
+    </VBox>
+    <ProgressIndicator fx:id="progressIndicator"/>
+
+
+</StackPane>

@@ -20,7 +20,7 @@ public class LoadingImage extends StackPane {
 
 
     private final double size = 50;
-    private final String defaultUrl = "/assets/add-user.png";
+    private final String defaultUrl = "/assets/user.png";
 
     public LoadingImage(String url, double fitHeight, double fitWidth) {
         setImageUrl(url);

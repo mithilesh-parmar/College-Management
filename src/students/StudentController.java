@@ -35,10 +35,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class StudentController implements Initializable, DataChangeListener, SearchCallback {
+public class StudentController implements Initializable, DataChangeListener, SearchCallback, StudentCardListener {
 
 
-    public TableView<Student> studentTable;
+    //    public TableView<Student> studentTable;
     public ProgressIndicator progressIndicator;
     public SearchTextFieldController searchTextField;
     public FlowPane studentFlowPane;
@@ -89,24 +89,25 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         tableContextMenu.setAutoHide(true);
 
         cancelMenuButton.setOnAction(actionEvent -> tableContextMenu.hide());
-        attendanceMenuButton.setOnAction(actionEvent -> loadAttendanceView(studentTable.getSelectionModel().getSelectedItem()));
-        feesNotificationMenuButton.setOnAction(actionEvent -> loadFeeNotificationsView(studentTable.getSelectionModel().getSelectedItem()));
-        pushNotificationMenuButton.setOnAction(actionEvent -> loadNotificationsView(studentTable.getSelectionModel().getSelectedItem()));
-        cancelMenuButton.setOnAction(actionEvent -> tableContextMenu.hide());
-        deleteMenuButton.setOnAction(actionEvent -> showConfirmationAlert(studentTable.getSelectionModel().getSelectedItem()));
+//        attendanceMenuButton.setOnAction(actionEvent -> loadAttendanceView(studentTable.getSelectionModel().getSelectedItem()));
+//        feesNotificationMenuButton.setOnAction(actionEvent -> loadFeeNotificationsView(studentTable.getSelectionModel().getSelectedItem()));
+//        pushNotificationMenuButton.setOnAction(actionEvent -> loadNotificationsView(studentTable.getSelectionModel().getSelectedItem()));
+//        cancelMenuButton.setOnAction(actionEvent -> tableContextMenu.hide());
+//        deleteMenuButton.setOnAction(actionEvent -> showConfirmationAlert(studentTable.getSelectionModel().getSelectedItem()));
 
         feesMenuButton.setOnAction(actionEvent -> {
         });
-        editMenuButton.setOnAction(actionEvent -> loadEditView(studentTable.getSelectionModel().getSelectedItem()));
+//        editMenuButton.setOnAction(actionEvent -> loadEditView(studentTable.getSelectionModel().getSelectedItem()));
 
         firestoreUtility.setListener(this);
+        firestoreUtility.setCardListener(this);
         firestoreUtility.getStudents();
         searchTextField.setCallback(this);
         progressIndicator.visibleProperty().bind(loadingData);
-
-        studentTable.setOnMouseClicked(this::handleOnMouseClicked);
-        studentTable.setOnKeyPressed(this::handleOnKeyPressed);
-        studentTable.setOnContextMenuRequested(event -> tableContextMenu.show(studentTable, event.getScreenX(), event.getScreenY()));
+//
+//        studentTable.setOnMouseClicked(this::handleOnMouseClicked);
+//        studentTable.setOnKeyPressed(this::handleOnKeyPressed);
+//        studentTable.setOnContextMenuRequested(event -> tableContextMenu.show(studentTable, event.getScreenX(), event.getScreenY()));
     }
 
     private void handleOnKeyPressed(KeyEvent keyEvent) {
@@ -114,7 +115,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
 
 
         } else if (keyEvent.getCode().equals(KeyCode.BACK_SPACE)) {
-            showConfirmationAlert(studentTable.getSelectionModel().getSelectedItem());
+//            showConfirmationAlert(studentTable.getSelectionModel().getSelectedItem());
         }
     }
 
@@ -129,15 +130,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
     @Override
     public void onDataLoaded(ObservableList data) {
         loadingData.set(false);
-        studentTable.setItems(firestoreUtility.students);
-
-        for (Student student : firestoreUtility.students) {
-
-            cardControllers.add(new Card(student.getEmail(), student.getName(), student.getProfilePictureURL()));
-
-        }
-
-        studentFlowPane.getChildren().addAll(cardControllers);
+        studentFlowPane.getChildren().setAll(firestoreUtility.studentCards);
     }
 
 
@@ -319,14 +312,14 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         if (loadingData.get()) return;
         // if pressing backspace then set initial values to list
         if (oldValue != null && (newValue.length() < oldValue.length())) {
-            studentTable.setItems(firestoreUtility.students);
+            studentFlowPane.getChildren().setAll(firestoreUtility.studentCards);
         }
 
         // convert the searched text to uppercase
         String searchtext = newValue.toUpperCase();
 
-        ObservableList<Student> subList = FXCollections.observableArrayList();
-        for (Student p : studentTable.getItems()) {
+        ObservableList<Card> subList = FXCollections.observableArrayList();
+        for (Student p : firestoreUtility.students) {
             String text =
                     p.getName().toUpperCase() + " "
                             + p.getClassName().toUpperCase() + " "
@@ -336,12 +329,32 @@ public class StudentController implements Initializable, DataChangeListener, Sea
                             + p.getSection().toUpperCase() + " ";
             // if the search text contains the manufacturer then add it to sublist
             if (text.contains(searchtext)) {
-                subList.add(p);
+                subList.add(firestoreUtility.studentCardMapProperty.get(p));
             }
 
         }
         // set the items to listview that matches
-        studentTable.setItems(subList);
+        studentFlowPane.getChildren().setAll(subList);
+    }
+
+    @Override
+    public void onCardClick(Student student) {
+        loadEditView(student);
+    }
+
+    @Override
+    public void onDeleteButtonClick(Student student) {
+        showConfirmationAlert(student);
+    }
+
+    @Override
+    public void onEditButtonClick(Student student) {
+        loadEditView(student);
+    }
+
+    @Override
+    public void onNotificationButtonClick(Student student) {
+        loadNotificationsView(student);
     }
 }
 

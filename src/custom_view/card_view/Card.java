@@ -27,8 +27,6 @@ public class Card
             notificationsButton = new IconButton("", "/assets/notification.png");
 
 
-    private CardListener listener;
-
     public Card(String name, String email, String imageUrl) {
         nameLabel.setText(name);
         emailLabel.setText(email);
@@ -41,11 +39,9 @@ public class Card
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
 
-
     }
 
     public void setListener(CardListener listener) {
-        this.listener = listener;
         editButton.setOnAction(actionEvent -> listener.onEditButtonClick());
         deleteButton.setOnAction(actionEvent -> listener.onDeleteButtonClick());
         notificationsButton.setOnAction(actionEvent -> listener.onNotificationButtonClick());
@@ -55,7 +51,7 @@ public class Card
     private void loadData(String name, String email, String imageUrl) {
         setPadding(new Insets(10));
         setBorder(new Border(new BorderStroke(Color.BLACK,
-                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                BorderStrokeStyle.DOTTED, new CornerRadii(4), new BorderWidths(1))));
         nameLabel.setText(name);
         emailLabel.setText(email);
 
