@@ -8,54 +8,59 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Text?>
-<AnchorPane minHeight="300.0" minWidth="400.0" xmlns="http://javafx.com/javafx/8.0.111"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="time_table.AddLectureController"
-            stylesheets="@/styles/dark_metro_style.css"
+<GridPane fx:controller="time_table.AddLectureController"
+          xmlns:fx="http://javafx.com/fxml" alignment="center"
+          hgap="10" vgap="10"
+          stylesheets="@/styles/dark_metro_style.css"
 >
-    <VBox alignment="CENTER" layoutX="131.0" layoutY="50.0" prefHeight="200.0" prefWidth="100.0"
-          AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0"
-          AnchorPane.topAnchor="5.0">
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Adding Person Dialog"/>
-        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="10.0">
-            <children>
-                <Label alignment="CENTER_RIGHT" minWidth="100.0" text="Subject Name"/>
-                <TextField fx:id="subjectTextField" HBox.hgrow="ALWAYS"/>
-            </children>
-            <padding>
-                <Insets right="30.0"/>
-            </padding>
-        </HBox>
-        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="10.0">
-            <children>
-                <Label alignment="CENTER_RIGHT" minWidth="100.0" text="Start Time"/>
-                <TextField fx:id="startTimeTextField" HBox.hgrow="ALWAYS"/>
-            </children>
-            <padding>
-                <Insets right="30.0"/>
-            </padding>
-        </HBox>
-        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="10.0">
-            <children>
-                <Label alignment="CENTER_RIGHT" minWidth="100.0" text="End Time"/>
-                <TextField fx:id="endTimeTextField" HBox.hgrow="ALWAYS"/>
-            </children>
-            <padding>
-                <Insets right="30.0"/>
-            </padding>
-        </HBox>
+    <padding>
+        <Insets top="40" right="40" bottom="40" left="40"/>
+    </padding>
+    <columnConstraints>
+        <ColumnConstraints minWidth="100" prefWidth="100"
+                           maxWidth="Infinity" halignment="RIGHT">
+        </ColumnConstraints>
+        <ColumnConstraints minWidth="200" prefWidth="200"
+                           maxWidth="Infinity" hgrow="ALWAYS">
+        </ColumnConstraints>
+    </columnConstraints>
 
 
-        <HBox alignment="CENTER_RIGHT">
-            <children>
-                <Button mnemonicParsing="false" fx:id="button" onAction="#btnAddPersonClicked" text="Add"/>
-            </children>
-            <opaqueInsets>
-                <Insets/>
-            </opaqueInsets>
-            <padding>
-                <Insets right="30.0"/>
-            </padding>
-        </HBox>
-    </VBox>
-</AnchorPane>
+
+    <!-- Add Name Label -->
+    <Label text="Subject Name : " GridPane.columnIndex="0"
+           GridPane.rowIndex="1"/>
+    <!-- Add Name Text Field -->
+    <TextField fx:id="subjectTextField" prefHeight="40"
+               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+
+    <!-- Add Email Label -->
+    <Label text="Start time : " GridPane.columnIndex="0"
+           GridPane.rowIndex="2">
+    </Label>
+    <!-- Add Email Text Field -->
+    <TextField fx:id="startTimeTextField" prefHeight="40"
+               GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+
+    <Label text="End time : " GridPane.columnIndex="0"
+           GridPane.rowIndex="4">
+    </Label>
+    <TextField fx:id="endTimeTextField" prefHeight="40"
+               GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+
+
+    <!-- Add Submit Button -->
+    <Button fx:id="submitButton" text="Update"
+            prefWidth="100" prefHeight="40" defaultButton="true"
+            GridPane.columnIndex="0" GridPane.rowIndex="7"
+            GridPane.columnSpan="2" GridPane.rowSpan="1"
+            GridPane.halignment="CENTER"
+    >
+        <GridPane.margin>
+            <Insets top="20" right="10" bottom="20" left="10"/>
+        </GridPane.margin>
+    </Button>
+</GridPane>

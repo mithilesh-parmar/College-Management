@@ -11,14 +11,18 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 import listeners.DataChangeListener;
 import model.Lecture;
 import model.Section;
+import model.Student;
+import students.detail_view.StudentDetailsController;
 import utility.SectionsFirestoreUtility;
 
 import java.io.IOException;
@@ -68,36 +72,51 @@ public class TimeTableController implements Initializable, DataChangeListener {
         sectionsListView.getSelectionModel().selectFirst();
 
 
-        addLectureButton.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
+        addLectureButton.setOnAction(actionEvent -> loadAddView());
+    }
+
+    //    TODO add listener for addition of lecture
+    private void loadAddView() {
 
 
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddLectureView.fxml"));
-                Parent parent = null;
-                try {
-                    parent = fxmlLoader.load();
-                    AddLectureController dialogController = fxmlLoader.getController();
-                    Dialog<Boolean> dialog = new Dialog<>();
-                    dialog.setGraphic(parent);
-
-                    dialog.initModality(Modality.APPLICATION_MODAL);
-                    dialog.initOwner(sectionsListView.getScene().getWindow());
+        FXMLLoader loader;
+        loader = new FXMLLoader((getClass().getResource("AddLectureView.fxml")));
+        final Stage stage = new Stage();
+        Parent parent = null;
+        try {
 
 
-                    dialogController.button.setOnAction(actionEvent1 -> onAddButtonClick(dialogController, dialog));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Add Student Details");
 
-                    dialog.show();
-
-                } catch (IOException e) {
-                    e.printStackTrace();
+            parent = loader.load();
+            Scene scene = new Scene(parent);
+            stage.setScene(scene);
+            AddLectureController controller = loader.getController();
+            controller.setListener(new LectureListener() {
+                @Override
+                public void onLectureAdded(Lecture lecture) {
+                    close(stage);
+                    loadingData.set(true);
+                    firestoreUtility.addLecture(
+                            lecture,
+                            dayChooser.getSelectedToggle().getUserData().toString(),
+                            sectionsListView.getSelectionModel().getSelectedItem()
+                    );
                 }
+            });
 
-            }
-        });
 
+            stage.showAndWait();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
+
+//    TODO add delete and edit functionality for lecture
 
 //    TODO after adding a lecture select previous section and dayofweek
 
@@ -136,24 +155,6 @@ public class TimeTableController implements Initializable, DataChangeListener {
                             .get(observableValue.getValue().getUserData().toString())
             );
         else timeTableForSection.setItems(FXCollections.observableArrayList());
-    }
-
-    private void onAddButtonClick(AddLectureController dialogController, Dialog dialog) {
-        String subjectName = dialogController.subjectTextField.getText();
-        String startTime = dialogController.startTimeTextField.getText();
-        String endTime = dialogController.endTimeTextField.getText();
-
-        Lecture lecture = new Lecture(subjectName, endTime, startTime);
-        firestoreUtility.addLecture(
-                lecture,
-                dayChooser.getSelectedToggle().getUserData().toString(),
-                sectionsListView.getSelectionModel().getSelectedItem()
-        );
-
-
-        dialog.setResult(Boolean.TRUE);
-        dialog.close();
-
     }
 
 
@@ -227,4 +228,5 @@ public class TimeTableController implements Initializable, DataChangeListener {
         }
 
     }
+
 }

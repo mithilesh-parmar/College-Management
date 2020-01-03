@@ -32,10 +32,13 @@ public class IconButton extends Button {
     }
 
     private void load() {
-        Image image = new Image(iconPath.get(), true);
-        imageView.setImage(image);
-        imageView.setFitHeight(20);
-        imageView.setFitWidth(20);
+        if (iconPath.get() != null && !iconPath.get().isEmpty()) {
+            Image image = new Image(iconPath.get(), true);
+            imageView.setImage(image);
+            imageView.setFitHeight(20);
+            imageView.setFitWidth(20);
+        }
+
 
         label.setText(text.get());
 

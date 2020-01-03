@@ -119,6 +119,20 @@
     focus_ring_border_color: white;
 }
 
+
+#deleteMenuButton{
+
+    button_background_color: derive(red,70%);
+    background_pressed_color: #999999;
+
+    border_hover_color: #7a7a7a;
+
+    text_color: #111;
+    default_button_text_color: white;
+
+    focus_ring_border_color: white;
+}
+
 /*******************************************************************************
  *                                                                             *
  * Check Box                                                                   *

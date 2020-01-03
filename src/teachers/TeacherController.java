@@ -68,6 +68,12 @@ public class TeacherController implements Initializable,
         tableContextMenu.setHideOnEscape(true);
         tableContextMenu.setAutoHide(true);
 
+        tableContextMenu.getItems().addAll(
+                pushNotificationMenuButton,
+                editMenuButton,
+                deleteMenuButton,
+                cancelMenuButton
+        );
         teacherFlowPane.setPadding(new Insets(10));
 
 
@@ -257,12 +263,14 @@ public class TeacherController implements Initializable,
     @Override
     public void onContextMenuRequested(Teacher teacher, MouseEvent event) {
 
+        System.out.println("event: " + event);
         pushNotificationMenuButton.setOnAction(actionEvent -> loadNotificationsView(teacher));
         editMenuButton.setOnAction(actionEvent -> loadAddView(teacher));
         cancelMenuButton.setOnAction(actionEvent -> tableContextMenu.hide());
         deleteMenuButton.setOnAction(actionEvent -> showConfirmationAlert(teacher));
 
         tableContextMenu.show(teacherFlowPane, event.getScreenX(), event.getScreenY());
+        tableContextMenu.requestFocus();
     }
 
 

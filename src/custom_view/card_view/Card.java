@@ -50,11 +50,7 @@ public class Card
         editButton.setOnAction(actionEvent -> listener.onEditButtonClick());
         deleteButton.setOnAction(actionEvent -> listener.onDeleteButtonClick());
         notificationsButton.setOnAction(actionEvent -> listener.onNotificationButtonClick());
-        moreButton.setOnMousePressed(actionEvent -> {
-
-
-            listener.onContextMenuRequested(actionEvent);
-        });
+        moreButton.setOnMousePressed(listener::onContextMenuRequested);
         setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) listener.onCardClick();
         });

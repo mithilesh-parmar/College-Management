@@ -8,6 +8,7 @@
 
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.geometry.Insets?>
+<?import custom_view.icon_button.IconButton?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="time_table.TimeTableController"
@@ -63,8 +64,15 @@
                 <ToggleButton text="SAT" fx:id="saturdayToggleButton"/>
             </HBox>
 
-            <Label text="Time Table" id="headline" GridPane.columnIndex="0" GridPane.halignment="LEFT"/>
-
+            <GridPane>
+                <Label text="Time Table" id="headline" GridPane.columnIndex="0" GridPane.halignment="LEFT"/>
+                <IconButton fx:id="addLectureButton" alignment="CENTER_RIGHT" GridPane.columnIndex="1"
+                            GridPane.halignment="RIGHT" iconPath="/assets/add.png">
+                    <BorderPane.margin>
+                        <Insets topRightBottomLeft="5"/>
+                    </BorderPane.margin>
+                </IconButton>
+            </GridPane>
 
             <TableView fx:id="timeTableForSection" VBox.vgrow="ALWAYS">
                 <columnResizePolicy>
@@ -94,13 +102,6 @@
 
             </TableView>
 
-
-            <Button fx:id="addLectureButton" text="ADD" alignment="CENTER_RIGHT" GridPane.columnIndex="1"
-                    GridPane.halignment="RIGHT">
-                <BorderPane.margin>
-                    <Insets topRightBottomLeft="5"/>
-                </BorderPane.margin>
-            </Button>
 
         </VBox>
 
