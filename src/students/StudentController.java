@@ -15,8 +15,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
@@ -38,7 +36,6 @@ import java.util.ResourceBundle;
 public class StudentController implements Initializable, DataChangeListener, SearchCallback, StudentCardListener {
 
 
-    //    public TableView<Student> studentTable;
     public ProgressIndicator progressIndicator;
     public SearchTextFieldController searchTextField;
     public FlowPane studentFlowPane;
@@ -49,11 +46,9 @@ public class StudentController implements Initializable, DataChangeListener, Sea
     private MenuItem feesMenuButton = new MenuItem("Fees");
     private MenuItem feesNotificationMenuButton = new MenuItem("Fees Notification");
     private MenuItem pushNotificationMenuButton = new MenuItem("Push Notification");
-    //    private MenuItem notificationsMenuButton = new MenuItem("Notifications");
-    private MenuItem deleteMenuButton = new MenuItem("Delete");
+     private MenuItem deleteMenuButton = new MenuItem("Delete");
     private MenuItem editMenuButton = new MenuItem("Edit");
     private MenuItem cancelMenuButton = new MenuItem("Cancel");
-    private ObservableList<Card> cardControllers = FXCollections.observableArrayList();
 
 
     @Override
@@ -71,9 +66,10 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         studentFlowPane.setPadding(new Insets(10));
 
 
-        studentFlowPane.getChildren().addAll(cardControllers);
+        studentFlowPane.getChildren().addAll(firestoreUtility.studentCards);
 
         menu.getItems().addAll(feesNotificationMenuButton, pushNotificationMenuButton);
+
 
         tableContextMenu.getItems().addAll(
                 attendanceMenuButton,
@@ -85,47 +81,21 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         );
 
 
+        attendanceMenuButton.setOnAction(actionEvent -> {
+            System.out.println(actionEvent.getSource());
+        });
+
         tableContextMenu.setHideOnEscape(true);
         tableContextMenu.setAutoHide(true);
-
-        cancelMenuButton.setOnAction(actionEvent -> tableContextMenu.hide());
-//        attendanceMenuButton.setOnAction(actionEvent -> loadAttendanceView(studentTable.getSelectionModel().getSelectedItem()));
-//        feesNotificationMenuButton.setOnAction(actionEvent -> loadFeeNotificationsView(studentTable.getSelectionModel().getSelectedItem()));
-//        pushNotificationMenuButton.setOnAction(actionEvent -> loadNotificationsView(studentTable.getSelectionModel().getSelectedItem()));
-//        cancelMenuButton.setOnAction(actionEvent -> tableContextMenu.hide());
-//        deleteMenuButton.setOnAction(actionEvent -> showConfirmationAlert(studentTable.getSelectionModel().getSelectedItem()));
-
-        feesMenuButton.setOnAction(actionEvent -> {
-        });
-//        editMenuButton.setOnAction(actionEvent -> loadEditView(studentTable.getSelectionModel().getSelectedItem()));
 
         firestoreUtility.setListener(this);
         firestoreUtility.setCardListener(this);
         firestoreUtility.getStudents();
         searchTextField.setCallback(this);
         progressIndicator.visibleProperty().bind(loadingData);
-//
-//        studentTable.setOnMouseClicked(this::handleOnMouseClicked);
-//        studentTable.setOnKeyPressed(this::handleOnKeyPressed);
-//        studentTable.setOnContextMenuRequested(event -> tableContextMenu.show(studentTable, event.getScreenX(), event.getScreenY()));
+
     }
 
-    private void handleOnKeyPressed(KeyEvent keyEvent) {
-        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
-
-
-        } else if (keyEvent.getCode().equals(KeyCode.BACK_SPACE)) {
-//            showConfirmationAlert(studentTable.getSelectionModel().getSelectedItem());
-        }
-    }
-
-    private void handleOnMouseClicked(MouseEvent event) {
-        if (tableContextMenu.isShowing() && !tableContextMenu.isFocused()) tableContextMenu.hide();
-        if (event.getClickCount() == 2) {
-
-
-        }
-    }
 
     @Override
     public void onDataLoaded(ObservableList data) {
@@ -355,6 +325,20 @@ public class StudentController implements Initializable, DataChangeListener, Sea
     @Override
     public void onNotificationButtonClick(Student student) {
         loadNotificationsView(student);
+    }
+
+    @Override
+    public void onContextMenuRequested(Student student, MouseEvent event) {
+
+        attendanceMenuButton.setOnAction(actionEvent -> loadAttendanceView(student));
+
+        feesNotificationMenuButton.setOnAction(actionEvent -> loadFeeNotificationsView(student));
+        pushNotificationMenuButton.setOnAction(actionEvent -> loadNotificationsView(student));
+        deleteMenuButton.setOnAction(actionEvent -> showConfirmationAlert(student));
+        editMenuButton.setOnAction(actionEvent -> loadEditView(student));
+        cancelMenuButton.setOnAction(action -> tableContextMenu.hide());
+
+        tableContextMenu.show(studentFlowPane, event.getScreenX(), event.getScreenY());
     }
 }
 

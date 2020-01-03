@@ -17,8 +17,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
@@ -46,11 +44,16 @@ public class TeacherController implements Initializable,
         TeacherCardListener {
 
 
-    //    public TableView<Teacher> teacherTable;
     public ProgressIndicator progressIndicator;
     public SearchTextFieldController searchField;
     public FlowPane teacherFlowPane;
-//    public Button addButton;
+
+    private ContextMenu tableContextMenu = new ContextMenu();
+    private MenuItem pushNotificationMenuButton = new MenuItem("Push Notification");
+    private MenuItem deleteMenuButton = new MenuItem("Delete");
+    private MenuItem editMenuButton = new MenuItem("Edit");
+    private MenuItem cancelMenuButton = new MenuItem("Cancel");
+
 
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
     private TeacherFirestoreUtility firestoreUtility = TeacherFirestoreUtility.getInstance();
@@ -62,7 +65,8 @@ public class TeacherController implements Initializable,
         teacherFlowPane.setHgap(10);
         teacherFlowPane.setVgap(10);
         teacherFlowPane.setAlignment(Pos.CENTER_LEFT);
-
+        tableContextMenu.setHideOnEscape(true);
+        tableContextMenu.setAutoHide(true);
 
         teacherFlowPane.setPadding(new Insets(10));
 
@@ -249,4 +253,17 @@ public class TeacherController implements Initializable,
     public void onNotificationButtonClick(Teacher teacher) {
         loadNotificationsView(teacher);
     }
+
+    @Override
+    public void onContextMenuRequested(Teacher teacher, MouseEvent event) {
+
+        pushNotificationMenuButton.setOnAction(actionEvent -> loadNotificationsView(teacher));
+        editMenuButton.setOnAction(actionEvent -> loadAddView(teacher));
+        cancelMenuButton.setOnAction(actionEvent -> tableContextMenu.hide());
+        deleteMenuButton.setOnAction(actionEvent -> showConfirmationAlert(teacher));
+
+        tableContextMenu.show(teacherFlowPane, event.getScreenX(), event.getScreenY());
+    }
+
+
 }

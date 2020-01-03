@@ -24,7 +24,8 @@ public class Card
     private Label emailLabel = new Label();
     private Button editButton = new IconButton("", "/assets/edit.png"),
             deleteButton = new IconButton("", "/assets/delete.png"),
-            notificationsButton = new IconButton("", "/assets/notification.png");
+            notificationsButton = new IconButton("", "/assets/notification.png"),
+            moreButton = new IconButton("", "/assets/menu.png");
 
 
     public Card(String name, String email, String imageUrl) {
@@ -32,6 +33,10 @@ public class Card
         emailLabel.setText(email);
         imageView = new LoadingImage(imageUrl, -1, -1);
         loadData(name, email, imageUrl);
+        editButton.setId("menubutton");
+        deleteButton.setId("menubutton");
+        notificationsButton.setId("menubutton");
+        moreButton.setId("menubutton");
     }
 
 
@@ -45,7 +50,15 @@ public class Card
         editButton.setOnAction(actionEvent -> listener.onEditButtonClick());
         deleteButton.setOnAction(actionEvent -> listener.onDeleteButtonClick());
         notificationsButton.setOnAction(actionEvent -> listener.onNotificationButtonClick());
-        setOnMouseClicked(event -> listener.onCardClick());
+        moreButton.setOnMousePressed(actionEvent -> {
+
+
+            listener.onContextMenuRequested(actionEvent);
+        });
+        setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) listener.onCardClick();
+        });
+
     }
 
     private void loadData(String name, String email, String imageUrl) {
@@ -59,9 +72,14 @@ public class Card
         setLeft(imageView);
         setMargin(imageView, new Insets(15));
 
-        VBox vBox = new VBox(2);
-        vBox.setAlignment(Pos.CENTER_LEFT);
-        vBox.getChildren().addAll(nameLabel, emailLabel);
+
+        setMargin(moreButton, new Insets(5));
+
+        HBox centerAreaWithMoreButton = new HBox();
+
+        VBox centerArea = new VBox(2);
+        centerArea.setAlignment(Pos.CENTER_LEFT);
+        centerArea.getChildren().addAll(nameLabel, emailLabel);
 
 
         HBox hBox = new HBox();
@@ -69,8 +87,9 @@ public class Card
         hBox.getChildren().addAll(editButton, notificationsButton, deleteButton);
 
 
-        vBox.getChildren().add(hBox);
-        setRight(vBox);
+        centerArea.getChildren().add(hBox);
+        centerAreaWithMoreButton.getChildren().addAll(centerArea, moreButton);
+        setRight(centerAreaWithMoreButton);
 
 
         setId("card");

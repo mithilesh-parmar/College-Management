@@ -1,5 +1,7 @@
 package custom_view.card_view;
 
+import javafx.scene.input.MouseEvent;
+
 public interface CardListener {
 
     void onCardClick();
@@ -9,5 +11,7 @@ public interface CardListener {
     void onEditButtonClick();
 
     void onNotificationButtonClick();
+
+    void onContextMenuRequested(MouseEvent event);
 
 }

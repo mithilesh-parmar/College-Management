@@ -12,6 +12,7 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.input.MouseEvent;
 import listeners.DataChangeListener;
 import model.Notification;
 import model.Teacher;
@@ -188,6 +189,11 @@ public class TeacherFirestoreUtility {
                     @Override
                     public void onNotificationButtonClick() {
                         cardListener.onNotificationButtonClick(teacher);
+                    }
+
+                    @Override
+                    public void onContextMenuRequested(MouseEvent event) {
+                        cardListener.onContextMenuRequested(teacher,event);
                     }
                 });
 

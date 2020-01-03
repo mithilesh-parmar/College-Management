@@ -1,7 +1,7 @@
 package students;
 
+import javafx.scene.input.MouseEvent;
 import model.Student;
-import model.Teacher;
 
 public interface StudentCardListener {
 
@@ -12,4 +12,6 @@ public interface StudentCardListener {
     void onEditButtonClick(Student student);
 
     void onNotificationButtonClick(Student student);
+
+    void onContextMenuRequested(Student student, MouseEvent event);
 }

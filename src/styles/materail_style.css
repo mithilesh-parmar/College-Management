@@ -93,6 +93,22 @@
     -fx-border-color : white;
 }
 
+
+#menuButton{
+    -fx-background-radius : 50;
+    -fx-border-radius: 50;
+    -fx-background-color: transparent;
+}
+#menuButton:pressed:hover {
+    -fx-border-color : rgba(14, 150, 84,1);
+}
+
+#menuButton:hover {
+    -fx-border-color : white;
+}
+
+
+
 .chart {
     -fx-padding: 0px;
     -fx-background-color:  #202225;

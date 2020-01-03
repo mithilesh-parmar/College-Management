@@ -1,8 +1,6 @@
 package utility;
 
-import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
-import com.google.firebase.cloud.FirestoreClient;
 import custom_view.card_view.Card;
 import custom_view.card_view.CardListener;
 import javafx.application.Platform;
@@ -12,15 +10,13 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.WorkerStateEvent;
+import javafx.scene.input.MouseEvent;
 import listeners.DataChangeListener;
 import model.Notification;
 import model.Student;
 import students.StudentCardListener;
 
-import javax.annotation.Nullable;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class StudentFirestoreUtility {
 
@@ -86,6 +82,7 @@ public class StudentFirestoreUtility {
     }
 
     public void getStudents() {
+
         if (students.size() > 0) listener.onDataLoaded(students);
         else FirestoreConstants.studentCollectionReference.addSnapshotListener(studentDataListener);
 
@@ -129,6 +126,11 @@ public class StudentFirestoreUtility {
                     @Override
                     public void onNotificationButtonClick() {
                         cardListener.onNotificationButtonClick(student);
+                    }
+
+                    @Override
+                    public void onContextMenuRequested(MouseEvent event) {
+                        cardListener.onContextMenuRequested(student, event);
                     }
                 });
 
