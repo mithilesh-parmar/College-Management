@@ -10,7 +10,7 @@
 <?import custom_view.SearchTextFieldController?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
-           fx:controller="teacher_leaves.TeacherLeavesController"
+           fx:controller="teacher_leaves.LeavesController"
            stylesheets="@/styles/dark_metro_style.css"
 >
 

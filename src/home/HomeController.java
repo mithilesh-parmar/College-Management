@@ -7,7 +7,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import model.Menu;
 
@@ -80,6 +79,6 @@ public class HomeController implements Initializable {
         menuList.add(new Menu("Teachers", "/teachers/TeacherView.fxml", ""));
         menuList.add(new Menu("Events", "/events/EventsView.fxml", ""));
         menuList.add(new Menu("Time Table", "/time_table/TimeTableView.fxml", ""));
-        menuList.add(new Menu("Teacher Leaves", "/teacher_leaves/TeacherLeavesView.fxml", ""));
+        menuList.add(new Menu("Teacher Leaves", "/teacher_leaves/LeavesView.fxml", ""));
     }
 }

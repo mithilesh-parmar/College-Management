@@ -46,6 +46,7 @@ public class Card
     }
 
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 

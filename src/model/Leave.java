@@ -6,17 +6,19 @@ import javafx.beans.property.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TeacherLeave {
+public class Leave {
 
     private ObjectProperty<Timestamp> endDate = new SimpleObjectProperty<>(),
             startDate = new SimpleObjectProperty<>();
     private StringProperty teacherId = new SimpleStringProperty(),
             teacherName = new SimpleStringProperty(),
-            reason = new SimpleStringProperty();
+            reason = new SimpleStringProperty(),
+            id = new SimpleStringProperty();
     private LongProperty status = new SimpleLongProperty();
 
 
-    public TeacherLeave(Timestamp startDate, Timestamp endDate, String teacherId, String teacherName, String reason, long status) {
+    public Leave(String id, Timestamp startDate, Timestamp endDate, String teacherId, String teacherName, String reason, long status) {
+        setId(id);
         setStartDate(startDate);
         setEndDate(endDate);
         setTeacherId(teacherId);
@@ -25,9 +27,22 @@ public class TeacherLeave {
         setStatus(status);
     }
 
-    public static TeacherLeave fromJSON(Map<String, Object> json) {
+    public String getId() {
+        return id.get();
+    }
 
-        return new TeacherLeave(
+    public StringProperty idProperty() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id.set(id);
+    }
+
+    public static Leave fromJSON(Map<String, Object> json) {
+
+        return new Leave(
+                (String) json.get("id"),
                 (Timestamp) json.get("start_date"),
                 (Timestamp) json.get("end_date"),
                 (String) json.get("teacher_id"),
@@ -41,6 +56,7 @@ public class TeacherLeave {
 
     public Map<String, Object> toJSON() {
         Map<String, Object> json = new HashMap<>();
+        json.put("id", id.get());
         json.put("start_date", startDate.get());
         json.put("end_date", endDate.get());
         json.put("teacher_id", teacherId.get());
@@ -121,7 +137,6 @@ public class TeacherLeave {
     public void setReason(String reason) {
         this.reason.set(reason);
     }
-
 
 
     public void setStatus(int status) {

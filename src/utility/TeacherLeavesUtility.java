@@ -14,9 +14,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.input.MouseEvent;
 import listeners.DataChangeListener;
-import model.Teacher;
-import model.TeacherLeave;
-import teacher_leaves.TeacherLeavesCardListener;
+import model.Leave;
+import teacher_leaves.LeavesCardListener;
 
 import java.util.List;
 
@@ -25,10 +24,10 @@ public class TeacherLeavesUtility {
     private static TeacherLeavesUtility instance;
 
     public ListProperty<Card> teacherLeavesCards;
-    public ObservableList<TeacherLeave> teacherLeaves;
+    public ObservableList<Leave> teacherLeaves;
     private DataChangeListener listener;
-    public MapProperty<TeacherLeave, Card> teacherLeaveCardMapProperty;
-    private TeacherLeavesCardListener cardListener;
+    public MapProperty<Leave, Card> teacherLeaveCardMapProperty;
+    private LeavesCardListener cardListener;
 
     private EventListener<QuerySnapshot> teacherDataListener = (snapshot, e) -> {
         if (e != null) {
@@ -69,7 +68,7 @@ public class TeacherLeavesUtility {
         this.listener = listener;
     }
 
-    public void setCardListener(TeacherLeavesCardListener cardListener) {
+    public void setCardListener(LeavesCardListener cardListener) {
         this.cardListener = cardListener;
     }
 
@@ -84,14 +83,14 @@ public class TeacherLeavesUtility {
         teacherLeaves.clear();
         teacherLeavesCards.clear();
         for (QueryDocumentSnapshot document : data) {
-            TeacherLeave leave = TeacherLeave.fromJSON(document.getData());
+            Leave leave = Leave.fromJSON(document.getData());
             Card card = new Card(leave.getTeacherName(), leave.getReason(), "", false);
 
             if (cardListener != null) {
                 card.setListener(new CardListener() {
                     @Override
                     public void onCardClick() {
-
+                        cardListener.onCardClick(leave);
                     }
 
                     @Override
@@ -115,43 +114,16 @@ public class TeacherLeavesUtility {
                     }
                 });
             }
-
-//            if (cardListener != null) {
-//                card.setListener(new CardListener() {
-//                    @Override
-//                    public void onCardClick() {
-//                        cardListener.onCardClick(teacher);
-//                    }
-//
-//                    @Override
-//                    public void onDeleteButtonClick() {
-//                        cardListener.onDeleteButtonClick(teacher);
-//                    }
-//
-//                    @Override
-//                    public void onEditButtonClick() {
-//                        cardListener.onEditButtonClick(teacher);
-//                    }
-//
-//                    @Override
-//                    public void onNotificationButtonClick() {
-//                        cardListener.onNotificationButtonClick(teacher);
-//                    }
-//
-//                    @Override
-//                    public void onContextMenuRequested(MouseEvent event) {
-//                        cardListener.onContextMenuRequested(teacher, event);
-//                    }
-//                });
-//
-//            }
-
-
             teacherLeaves.add(leave);
             teacherLeavesCards.add(card);
             teacherLeaveCardMapProperty.put(leave, card);
         }
     }
+
+    public void updateLeave(Leave updatedLeave) {
+        FirestoreConstants.teacherLeavesCollectionReference.document(updatedLeave.getId()).set(updatedLeave.toJSON());
+    }
+
 
 }
 
