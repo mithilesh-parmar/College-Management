@@ -166,7 +166,7 @@ public class TeacherFirestoreUtility {
         teacherCards.clear();
         for (QueryDocumentSnapshot document : data) {
             Teacher teacher = Teacher.fromJSON(document.getData());
-            Card card = new Card(teacher.getName(), teacher.getEmail(), teacher.getProfilePictureUrl());
+            Card card = new Card(teacher.getName(), teacher.getEmail(), teacher.getProfilePictureUrl(),true);
 
 
             if (cardListener != null) {

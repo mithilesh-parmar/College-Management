@@ -39,16 +39,23 @@ public class Main extends Application {
     public static void main(String[] args) throws IOException {
 
 
-        GoogleCredentials credentials = GoogleCredentials.fromStream(Constants.serviceAccount);
+        new Thread(() -> {
+            GoogleCredentials credentials = null;
+            try {
+                credentials = GoogleCredentials.fromStream(Constants.serviceAccount);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
 
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(credentials)
-                .setProjectId(Constants.projectID)
-                .build();
+            FirebaseOptions options = new FirebaseOptions.Builder()
+                    .setCredentials(credentials)
+                    .setProjectId(Constants.projectID)
+                    .build();
 
 
-        FirebaseApp.initializeApp(options);
+            FirebaseApp.initializeApp(options);
+        }).start();
 
 
         launch(args);

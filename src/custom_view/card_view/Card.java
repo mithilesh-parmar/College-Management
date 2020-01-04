@@ -2,6 +2,8 @@ package custom_view.card_view;
 
 import custom_view.icon_button.IconButton;
 import custom_view.loading_image.LoadingImage;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -27,16 +29,20 @@ public class Card
             notificationsButton = new IconButton("", "/assets/notification.png"),
             moreButton = new IconButton("", "/assets/menu.png");
 
+    private BooleanProperty showOptions = new SimpleBooleanProperty(true);
 
-    public Card(String name, String email, String imageUrl) {
+
+    public Card(String name, String email, String imageUrl, boolean showOptions) {
         nameLabel.setText(name);
         emailLabel.setText(email);
         imageView = new LoadingImage(imageUrl, -1, -1);
-        loadData(name, email, imageUrl);
+
         editButton.setId("menubutton");
         deleteButton.setId("menubutton");
         notificationsButton.setId("menubutton");
         moreButton.setId("menubutton");
+        setShowOptions(showOptions);
+        loadData(name, email, imageUrl);
     }
 
 
@@ -44,6 +50,11 @@ public class Card
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
 
+    }
+
+
+    public void setShowOptions(boolean showOptions) {
+        this.showOptions.set(showOptions);
     }
 
     public void setListener(CardListener listener) {
@@ -80,7 +91,7 @@ public class Card
 
         HBox hBox = new HBox();
         hBox.setSpacing(5);
-        hBox.getChildren().addAll(editButton, notificationsButton, deleteButton);
+        if (showOptions.get()) hBox.getChildren().addAll(editButton, notificationsButton, deleteButton);
 
 
         centerArea.getChildren().add(hBox);

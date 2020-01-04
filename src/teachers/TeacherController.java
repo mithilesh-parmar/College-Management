@@ -67,6 +67,10 @@ public class TeacherController implements Initializable,
         teacherFlowPane.setAlignment(Pos.CENTER_LEFT);
         tableContextMenu.setHideOnEscape(true);
         tableContextMenu.setAutoHide(true);
+        teacherFlowPane.setPadding(new Insets(10));
+
+
+        teacherFlowPane.getChildren().addAll(firestoreUtility.teacherCards);
 
         tableContextMenu.getItems().addAll(
                 pushNotificationMenuButton,
@@ -74,10 +78,6 @@ public class TeacherController implements Initializable,
                 deleteMenuButton,
                 cancelMenuButton
         );
-        teacherFlowPane.setPadding(new Insets(10));
-
-
-        teacherFlowPane.getChildren().addAll(firestoreUtility.teacherCards);
 
         searchField.setCallback(this);
         firestoreUtility.setListener(this);

@@ -103,7 +103,7 @@ public class StudentFirestoreUtility {
         for (QueryDocumentSnapshot document : data) {
             Student student = Student.fromJSON(document.getData());
 
-            Card card = new Card(student.getName(), student.getEmail(), student.getProfilePictureURL());
+            Card card = new Card(student.getName(), student.getEmail(), student.getProfilePictureURL(),true);
 
 
             if (cardListener != null) {
