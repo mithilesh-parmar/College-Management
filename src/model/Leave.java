@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class Leave {
 
+
     private ObjectProperty<Timestamp> endDate = new SimpleObjectProperty<>(),
             startDate = new SimpleObjectProperty<>();
     private StringProperty teacherId = new SimpleStringProperty(),
@@ -49,7 +50,6 @@ public class Leave {
                 (String) json.get("teacher_name"),
                 (String) json.get("reason"),
                 (long) json.get("status")
-
         );
     }
 
@@ -65,6 +65,7 @@ public class Leave {
         json.put("status", status.get());
         return json;
     }
+
 
     public long getStatus() {
         return status.get();

@@ -11,7 +11,9 @@ import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.scene.input.MouseEvent;
 import listeners.DataChangeListener;
 import model.Leave;
@@ -24,6 +26,10 @@ public class TeacherLeavesUtility {
     private static TeacherLeavesUtility instance;
 
     public ListProperty<Card> teacherLeavesCards;
+    public ListProperty<Card> approvedLeavesCards;
+    public ListProperty<Card> declinedLeavesCards;
+    public ListProperty<Card> pendingLeavesCards;
+
     public ObservableList<Leave> teacherLeaves;
     private DataChangeListener listener;
     public MapProperty<Leave, Card> teacherLeaveCardMapProperty;
@@ -76,12 +82,19 @@ public class TeacherLeavesUtility {
         teacherLeaves = FXCollections.observableArrayList();
         teacherLeavesCards = new SimpleListProperty<>(FXCollections.observableArrayList());
         teacherLeaveCardMapProperty = new SimpleMapProperty<>(FXCollections.observableHashMap());
+        approvedLeavesCards = new SimpleListProperty<>(FXCollections.observableArrayList());
+        pendingLeavesCards = new SimpleListProperty<>(FXCollections.observableArrayList());
+        declinedLeavesCards = new SimpleListProperty<>(FXCollections.observableArrayList());
+
     }
 
 
     private void parseTeacherLeavesData(List<QueryDocumentSnapshot> data) {
         teacherLeaves.clear();
         teacherLeavesCards.clear();
+        approvedLeavesCards.clear();
+        pendingLeavesCards.clear();
+        declinedLeavesCards.clear();
         for (QueryDocumentSnapshot document : data) {
             Leave leave = Leave.fromJSON(document.getData());
             Card card = new Card(leave.getTeacherName(), leave.getReason(), "", false);
@@ -116,6 +129,13 @@ public class TeacherLeavesUtility {
             }
             teacherLeaves.add(leave);
             teacherLeavesCards.add(card);
+            if (leave.getStatus() == 0) {
+                declinedLeavesCards.add(card);
+            } else if (leave.getStatus() == 1) {
+                approvedLeavesCards.add(card);
+            } else if (leave.getStatus() == 2) {
+                pendingLeavesCards.add(card);
+            }
             teacherLeaveCardMapProperty.put(leave, card);
         }
     }

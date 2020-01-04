@@ -8,6 +8,7 @@
 
 
 <?import custom_view.SearchTextFieldController?>
+<?import javafx.geometry.Insets?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="teacher_leaves.LeavesController"
@@ -25,6 +26,8 @@
                 <SearchTextFieldController fx:id="searchTextField"/>
             </right>
         </BorderPane>
+
+        <ComboBox fx:id="filterComboBox"/>
 
         <FlowPane fx:id="teacherLeavesFlowPane"/>
 

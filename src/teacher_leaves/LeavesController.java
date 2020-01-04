@@ -5,6 +5,8 @@ import custom_view.SearchTextFieldController;
 import custom_view.card_view.Card;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +15,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressIndicator;
@@ -22,7 +25,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
 import model.Leave;
-import model.Teacher;
 import teacher_leaves.edit_view.LeaveEditController;
 import teacher_leaves.edit_view.LeaveEditListener;
 import utility.SearchCallback;
@@ -36,6 +38,7 @@ public class LeavesController implements Initializable, SearchCallback, DataChan
     public SearchTextFieldController searchTextField;
     public FlowPane teacherLeavesFlowPane;
     public ProgressIndicator progressIndicator;
+    public ComboBox<Filter> filterComboBox;
 
     private TeacherLeavesUtility firestoreUtility = TeacherLeavesUtility.getInstance();
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
@@ -46,6 +49,24 @@ public class LeavesController implements Initializable, SearchCallback, DataChan
     private MenuItem editMenuButton = new MenuItem("Edit");
     private MenuItem cancelMenuButton = new MenuItem("Cancel");
 
+    enum Filter {
+
+        ALL("All"),
+        APPROVED("Approved"),
+        DECLINED("Declined"),
+        PENDING("Pending");
+
+        private String title;
+
+        Filter(String title) {
+            this.title = title;
+        }
+
+        @Override
+        public String toString() {
+            return title;
+        }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -56,8 +77,23 @@ public class LeavesController implements Initializable, SearchCallback, DataChan
         teacherLeaveContextMenu.setHideOnEscape(true);
         teacherLeaveContextMenu.setAutoHide(true);
         teacherLeavesFlowPane.setPadding(new Insets(10));
+        filterComboBox.setPadding(new Insets(25));
 
+        filterComboBox.getItems().addAll(Filter.ALL, Filter.APPROVED, Filter.PENDING, Filter.DECLINED);
 
+        filterComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, filter, t1) -> {
+            if (t1 == Filter.ALL) {
+                showAllLeaves();
+            } else if (t1 == Filter.APPROVED) {
+                showApprovedLeaves();
+            } else if (t1 == Filter.PENDING) {
+                showPendingLeaves();
+            } else if (t1 == Filter.DECLINED) {
+                showDeclinedLeaves();
+            }
+        });
+
+        filterComboBox.getSelectionModel().selectFirst();
         teacherLeaveContextMenu.getItems().addAll(acceptMenuButton, declineMenuButton, editMenuButton, cancelMenuButton);
 
         teacherLeavesFlowPane.getChildren().setAll(firestoreUtility.teacherLeavesCards);
@@ -72,6 +108,21 @@ public class LeavesController implements Initializable, SearchCallback, DataChan
 
     }
 
+    private void showAllLeaves() {
+        teacherLeavesFlowPane.getChildren().setAll(firestoreUtility.teacherLeavesCards);
+    }
+
+    private void showApprovedLeaves() {
+        teacherLeavesFlowPane.getChildren().setAll(firestoreUtility.approvedLeavesCards);
+    }
+
+    private void showPendingLeaves() {
+        teacherLeavesFlowPane.getChildren().setAll(firestoreUtility.pendingLeavesCards);
+    }
+
+    private void showDeclinedLeaves() {
+        teacherLeavesFlowPane.getChildren().setAll(firestoreUtility.declinedLeavesCards);
+    }
 
     @Override
     public void onDataLoaded(ObservableList data) {
@@ -127,8 +178,12 @@ public class LeavesController implements Initializable, SearchCallback, DataChan
     public void onContextMenuRequested(Leave leave, MouseEvent event) {
 
         acceptMenuButton.setOnAction(actionEvent -> {
+            leave.setStatus(1);
+            firestoreUtility.updateLeave(leave);
         });
         declineMenuButton.setOnAction(actionEvent -> {
+            leave.setStatus(2);
+            firestoreUtility.updateLeave(leave);
         });
         editMenuButton.setOnAction(actionEvent -> loadEditView(leave));
         cancelMenuButton.setOnAction(actionEvent -> teacherLeaveContextMenu.hide());
