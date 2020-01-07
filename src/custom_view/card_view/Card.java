@@ -46,7 +46,6 @@ public class Card
     }
 
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -71,10 +70,15 @@ public class Card
 
     private void loadData(String name, String email, String imageUrl) {
         setPadding(new Insets(10));
+
+
         setBorder(new Border(new BorderStroke(Color.BLACK,
                 BorderStrokeStyle.DOTTED, new CornerRadii(4), new BorderWidths(1))));
         nameLabel.setText(name);
+        nameLabel.setAlignment(Pos.CENTER_LEFT);
+        nameLabel.setPadding(new Insets(0, 14, 0, 14));
         emailLabel.setText(email);
+        emailLabel.setPadding(new Insets(0, 14, 0, 14));
 
 
         setLeft(imageView);

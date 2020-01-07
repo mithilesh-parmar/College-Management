@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<?import custom_view.SearchTextFieldController?>
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="Attendance.SectionAttendanceController"
+           stylesheets="@/styles/dark_metro_style.css"
+>
+
+
+    <VBox>
+
+        <BorderPane>
+            <left>
+                <Label id="headline" text="Section Attendances"/>
+            </left>
+            <right>
+                <HBox>
+                    <Button text="Add" fx:id="addAttendance"> </Button>
+                    <SearchTextFieldController fx:id="searchTextField"/>
+                </HBox>
+
+            </right>
+
+        </BorderPane>
+
+        <FlowPane fx:id="attendanceFlowPane"/>
+
+
+    </VBox>
+    <ProgressIndicator fx:id="progressIndicator"/>
+
+
+</StackPane>

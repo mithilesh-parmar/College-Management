@@ -3,25 +3,23 @@ package model;
 import com.google.cloud.Timestamp;
 import javafx.beans.property.*;
 
-import java.sql.Time;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Attendance {
+public class StudentAttendance {
     private StringProperty date = new SimpleStringProperty();
     private BooleanProperty present = new SimpleBooleanProperty();
     private ObjectProperty<Timestamp> unixDate = new SimpleObjectProperty<>();
 
-    public Attendance(String date, boolean present, Timestamp unixDate) {
+    public StudentAttendance(String date, boolean present, Timestamp unixDate) {
         setDate(date);
         setPresent(present);
         setUnixDate(unixDate);
 
     }
 
-    public static Attendance fromJSON(Map<String, Object> json) {
-        return new Attendance(
+    public static StudentAttendance fromJSON(Map<String, Object> json) {
+        return new StudentAttendance(
                 (String) json.get("date"),
                 (boolean) json.get("present"),
                 (Timestamp) json.get("unix_date")

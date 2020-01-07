@@ -16,15 +16,24 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
 import model.Lecture;
 import model.Section;
 import model.Student;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import students.detail_view.StudentDetailsController;
 import utility.SectionsFirestoreUtility;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -72,8 +81,41 @@ public class TimeTableController implements Initializable, DataChangeListener {
         sectionsListView.getSelectionModel().selectFirst();
 
 
-        addLectureButton.setOnAction(actionEvent -> loadAddView());
+        addLectureButton.setOnAction(actionEvent -> readFile());
     }
+
+    private void readFile() {
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(addLectureButton.getScene().getWindow());
+        try {
+            read(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InvalidFormatException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    void read(File file) throws IOException, InvalidFormatException {
+        Workbook workbook = new XSSFWorkbook(file);
+
+        // Retrieving the number of sheets in the Workbook
+        System.out.println("Workbook has " + workbook.getNumberOfSheets() + " Sheets : ");
+
+
+        Sheet sheet = workbook.getSheetAt(0);
+        DataFormatter dataFormatter = new DataFormatter();
+        System.out.println("\n\nIterating over Rows and Columns using for-each loop\n");
+        for (Row row : sheet) {
+            for (Cell cell : row) {
+                String cellValue = dataFormatter.formatCellValue(cell);
+                System.out.print(cellValue + "\t");
+            }
+            System.out.println();
+        }
+    }
+
 
     //    TODO add listener for addition of lecture
     private void loadAddView() {

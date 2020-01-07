@@ -11,7 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
-import model.Attendance;
+import model.StudentAttendance;
 import model.Student;
 import utility.StudentFirestoreUtility;
 
@@ -20,13 +20,13 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class AttendanceController implements Initializable {
-    public TableView<Attendance> attendanceTable;
+    public TableView<StudentAttendance> attendanceTable;
     public ProgressIndicator progressIndicator;
 
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
     private StudentFirestoreUtility firestoreUtility = StudentFirestoreUtility.getInstance();
 
-    private ObservableList<Attendance> attendances = FXCollections.observableArrayList();
+    private ObservableList<StudentAttendance> attendances = FXCollections.observableArrayList();
 
     private EventListener<QuerySnapshot> studentAttendanceListener = (snapshot, e) -> {
         if (e != null) {
@@ -61,7 +61,7 @@ public class AttendanceController implements Initializable {
     private void parseAttendanceData(List<QueryDocumentSnapshot> data) {
         dataLoading.set(true);
         attendances.clear();
-        for (QueryDocumentSnapshot document : data) attendances.add(Attendance.fromJSON(document.getData()));
+        for (QueryDocumentSnapshot document : data) attendances.add(StudentAttendance.fromJSON(document.getData()));
         attendanceTable.setItems(attendances);
         dataLoading.set(false);
     }
