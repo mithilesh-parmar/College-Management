@@ -1,6 +1,7 @@
 package students.detail_view;
 
 import custom_view.ImageButton;
+import custom_view.loading_combobox.section.SectionLoadingComboBox;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -20,6 +21,7 @@ public class StudentDetailsController implements Initializable {
     public TextField parentNumberTextField;
     public TextField requestedRemarkTextField;
     public TextField classNameTextField;
+    public SectionLoadingComboBox sectionTextField;
 
     private Student student;
     private StudentListener listener;

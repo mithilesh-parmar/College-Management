@@ -48,7 +48,17 @@ public class FirestoreConstants {
             .document("GKevzOMWBqbFtPezdLzF")
             .collection("attendances");
 
+    public final static CollectionReference classCollectionReference = FirestoreClient
+            .getFirestore()
+            .collection("colleges")
+            .document("GKevzOMWBqbFtPezdLzF")
+            .collection("classes");
 
+    public final static CollectionReference batchCollectionReference = FirestoreClient
+            .getFirestore()
+            .collection("colleges")
+            .document("GKevzOMWBqbFtPezdLzF")
+            .collection("batches");
 
 
 }

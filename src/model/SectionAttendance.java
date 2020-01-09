@@ -3,7 +3,7 @@ package model;
 import com.google.cloud.Timestamp;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+
 import javafx.collections.ObservableMap;
 
 import java.util.HashMap;
@@ -16,7 +16,7 @@ public class SectionAttendance {
             className = new SimpleStringProperty(),
             section = new SimpleStringProperty(),
             date = new SimpleStringProperty();
-    //    Map<String, List<Map<String, Object>>> lectureAttendance = new HashMap<>();
+
     private MapProperty<String, List<Map<String, Object>>> lectureAttendance = new SimpleMapProperty<>();
 
     public SectionAttendance(String className,
@@ -41,8 +41,8 @@ public class SectionAttendance {
                 (String) json.get("class_name"),
                 (String) json.get("section"),
                 (String) json.get("batch"),
-                (String) json.get("date"),
-                (Timestamp) json.get("unix_date"),
+                json.get("date").toString(),
+                (Timestamp) json.get("date_unix"),
                 FXCollections.observableMap((HashMap) json.get("lecture_attendance"))
         );
     }
@@ -53,7 +53,7 @@ public class SectionAttendance {
         json.put("section", section.get());
         json.put("batch", batch.get());
         json.put("date", date.get());
-        json.put("unix_date", dateUnix.get());
+        json.put("date_unix", dateUnix.get());
         json.put("lecture_attendance", lectureAttendance.get());
         return json;
     }

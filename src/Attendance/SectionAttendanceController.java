@@ -1,22 +1,39 @@
 package Attendance;
 
+import Attendance.add_attendance.AddAttendanceController;
 import com.google.cloud.firestore.QuerySnapshot;
 import custom_view.SearchTextFieldController;
+import custom_view.card_view.AttendanceCard;
+import custom_view.card_view.Card;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import listeners.DataChangeListener;
+import model.SectionAttendance;
+import model.Student;
+import model.Teacher;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import students.detail_view.StudentDetailsController;
 import utility.AttendanceFirestoreUtility;
 import utility.AttendanceListener;
 import utility.ExcelSheetUtility;
+import utility.SearchCallback;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,11 +41,14 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 
-public class SectionAttendanceController implements Initializable, DataChangeListener, AttendanceListener {
+public class SectionAttendanceController implements Initializable, DataChangeListener, AttendanceListener, SearchCallback {
+
+
     public SearchTextFieldController searchTextField;
     public FlowPane attendanceFlowPane;
     public ProgressIndicator progressIndicator;
     public Button addAttendance;
+
     private AttendanceFirestoreUtility firestoreUtility = AttendanceFirestoreUtility.getInstance();
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
 
@@ -42,27 +62,45 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
         attendanceFlowPane.setPadding(new Insets(10));
         firestoreUtility.setListener(this);
         firestoreUtility.getAttendance();
+
+        searchTextField.setCallback(this);
+        addAttendance.setId("menubutton");
+
+        addAttendance.setPadding(new Insets(15));
         addAttendance.setOnAction(actionEvent -> {
-            handleAddAttendanceAction();
+            loadEditView();
         });
     }
 
-    private void handleAddAttendanceAction() {
+    private void loadEditView() {
 
-        FileChooser fileChooser = new FileChooser();
-        File excelFile = fileChooser.showOpenDialog(attendanceFlowPane.getScene().getWindow());
 
-        ExcelSheetUtility sheetUtility = new ExcelSheetUtility();
-        sheetUtility.setListener(this);
-        new Thread(() -> {
-            try {
-                sheetUtility.processAttendanceSheet(excelFile);
-            } catch (IOException | InvalidFormatException | ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        FXMLLoader loader;
+        loader = new FXMLLoader(getClass().getResource("/Attendance/add_attendance/AddAttendanceView.fxml"));
+        final Stage stage = new Stage();
+        Parent parent = null;
+        try {
+
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Add Attendance");
+
+            parent = loader.load();
+            Scene scene = new Scene(parent);
+            stage.setScene(scene);
+            AddAttendanceController controller = loader.getController();
+
+            stage.centerOnScreen();
+
+            stage.showAndWait();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
+
 
     @Override
     public void onDataLoaded(ObservableList data) {
@@ -93,5 +131,31 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
     @Override
     public void onAttendanceUploadError() {
 
+    }
+
+    @Override
+    public void performSearch(String oldValue, String newValue) {
+        if (dataLoading.get()) return;
+        // if pressing backspace then set initial values to list
+        if (oldValue != null && (newValue.length() < oldValue.length())) {
+
+            attendanceFlowPane.getChildren().setAll(firestoreUtility.attendanceCards);
+        }
+
+        // convert the searched text to uppercase
+        String searchtext = newValue.toUpperCase();
+
+        ObservableList<AttendanceCard> subList = FXCollections.observableArrayList();
+        for (SectionAttendance p : firestoreUtility.sectionAttendances) {
+            String text = p.getDate().toUpperCase() + " "
+                    + p.getSection().toUpperCase() + " "
+                    + p.getBatch().toUpperCase() + " ";
+            // if the search text contains the manufacturer then add it to sublist
+            if (text.contains(searchtext)) {
+                subList.add(firestoreUtility.sectionAttendanceCardMapProperty.get(p));
+            }
+
+        }
+        attendanceFlowPane.getChildren().setAll(subList);
     }
 }

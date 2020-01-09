@@ -1,4 +1,4 @@
-package custom_view.loading_combobox.classes;
+package custom_view.loading_combobox.batches;
 
 import com.google.cloud.firestore.EventListener;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
@@ -14,17 +14,15 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.StackPane;
-import model.Section;
+import model.Batch;
 import model.StudentClass;
 import utility.FirestoreConstants;
 
 import java.util.List;
 
+public class BatchLoadingComboBox extends StackPane {
 
-//TODO extract classes from firestore
-public class ClassLoadingComboBox extends StackPane {
-
-    private ListProperty<StudentClass> classList = new SimpleListProperty<>();
+    private ListProperty<Batch> batchList = new SimpleListProperty<>();
 
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
 
@@ -38,7 +36,7 @@ public class ClassLoadingComboBox extends StackPane {
         }
         if (snapshot != null && !snapshot.isEmpty()) {
             Platform.runLater(() -> {
-                parseClassData(snapshot.getDocuments());
+                parseBatchData(snapshot.getDocuments());
             });
         } else {
             System.out.print("Current data: null");
@@ -50,21 +48,21 @@ public class ClassLoadingComboBox extends StackPane {
         this.listener = listener;
     }
 
-    public ClassLoadingComboBox() {
+    public BatchLoadingComboBox() {
 
         ProgressIndicator progressIndicator = new ProgressIndicator();
         progressIndicator.visibleProperty().bind(dataLoading);
-        ComboBox<StudentClass> studentClassComboBox = new ComboBox<>();
+        ComboBox<Batch> batchComboBox = new ComboBox<>();
 
 
-        getChildren().addAll(studentClassComboBox, progressIndicator);
+        getChildren().addAll(batchComboBox, progressIndicator);
 
 
-        studentClassComboBox.itemsProperty().bind(classList);
+        batchComboBox.itemsProperty().bind(batchList);
 
         loadSections();
 
-        studentClassComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, section, t1) -> {
+        batchComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, section, t1) -> {
             if (listener != null) listener.onItemSelected(t1);
         });
 
@@ -73,18 +71,18 @@ public class ClassLoadingComboBox extends StackPane {
 
     private void loadSections() {
         dataLoading.set(true);
-        if (classList.size() > 0) return;
-        FirestoreConstants.classCollectionReference.addSnapshotListener(classDataListener);
+        if (batchList.size() > 0) return;
+        FirestoreConstants.batchCollectionReference.addSnapshotListener(classDataListener);
     }
 
-    private void parseClassData(List<QueryDocumentSnapshot> data) {
-        ObservableList<StudentClass> sectionObservableList = FXCollections.observableArrayList();
-        if (classList != null) classList.clear();
+    private void parseBatchData(List<QueryDocumentSnapshot> data) {
+        ObservableList<Batch> sectionObservableList = FXCollections.observableArrayList();
+        if (batchList != null) batchList.clear();
         for (QueryDocumentSnapshot document : data)
-            sectionObservableList.add(StudentClass.fromJSON(document.getData()));
+            sectionObservableList.add(Batch.fromJSON(document.getData()));
 
-        if (classList != null) {
-            classList.set(sectionObservableList);
+        if (batchList != null) {
+            batchList.set(sectionObservableList);
         }
         dataLoading.set(false);
     }

@@ -1,8 +1,11 @@
 package utility;
 
+import Attendance.AttendanceViewCardListener;
 import com.google.cloud.firestore.EventListener;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
+import custom_view.card_view.AttendanceCard;
+import custom_view.card_view.AttendanceCardListener;
 import custom_view.card_view.Card;
 import custom_view.card_view.CardListener;
 import javafx.application.Platform;
@@ -22,7 +25,10 @@ import java.util.List;
 
 public class AttendanceFirestoreUtility {
 
+
     private static AttendanceFirestoreUtility instance;
+
+    private AttendanceViewCardListener cardListener;
 
     public void setListener(DataChangeListener listener) {
         this.listener = listener;
@@ -30,8 +36,8 @@ public class AttendanceFirestoreUtility {
 
     private DataChangeListener listener;
     public ObservableList<SectionAttendance> sectionAttendances;
-    public MapProperty<SectionAttendance, Card> sectionAttendanceCardMapProperty;
-    public ListProperty<Card> attendanceCards;
+    public MapProperty<SectionAttendance, AttendanceCard> sectionAttendanceCardMapProperty;
+    public ListProperty<AttendanceCard> attendanceCards;
 
     private EventListener<QuerySnapshot> attendanceListener = (snapshot, e) -> {
         if (e != null) {
@@ -73,48 +79,34 @@ public class AttendanceFirestoreUtility {
         for (QueryDocumentSnapshot document : data) {
             if (document.getData().containsKey("lecture_attendance")) {
                 System.out.println(document.getData());
-                SectionAttendance sectionAttendance = SectionAttendance.fromJSON(document.getData());
+                SectionAttendance item = SectionAttendance.fromJSON(document.getData());
 
-                Card card = new Card("Date: " + sectionAttendance.getDate(), " \nSection: " + sectionAttendance.getSection(), "", false);
+                AttendanceCard card = new AttendanceCard(
+                        item.getClassName(),
+                        item.getSection(),
+                        item.getBatch(),
+                        item.getDate(),
+                        item.getDateUnix().toString()
+                );
 
+                if (cardListener != null) {
+                    card.setListener(() -> {
+                        cardListener.onCardClick(item);
+                    });
+                }
 
-//            if (cardListener != null) {
-//                card.setListener(new CardListener() {
-//                    @Override
-//                    public void onCardClick() {
-//                        cardListener.onCardClick(teacher);
-//                    }
-//
-//                    @Override
-//                    public void onDeleteButtonClick() {
-//                        cardListener.onDeleteButtonClick(teacher);
-//                    }
-//
-//                    @Override
-//                    public void onEditButtonClick() {
-//                        cardListener.onEditButtonClick(teacher);
-//                    }
-//
-//                    @Override
-//                    public void onNotificationButtonClick() {
-//                        cardListener.onNotificationButtonClick(teacher);
-//                    }
-//
-//                    @Override
-//                    public void onContextMenuRequested(MouseEvent event) {
-//                        cardListener.onContextMenuRequested(teacher, event);
-//                    }
-//                });
-//
-//            }
-
-                sectionAttendances.add(sectionAttendance);
+                sectionAttendances.add(item);
                 attendanceCards.add(card);
-                sectionAttendanceCardMapProperty.put(sectionAttendance, card);
+                sectionAttendanceCardMapProperty.put(item, card);
             }
-            ;
+
 
         }
+    }
+
+
+    public void setCardListener(AttendanceViewCardListener cardListener) {
+        this.cardListener = cardListener;
     }
 
     public static AttendanceFirestoreUtility getInstance() {

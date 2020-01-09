@@ -5,6 +5,9 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Query;
+import model.Batch;
+import model.Section;
+import model.StudentClass;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
@@ -22,14 +25,13 @@ public class ExcelSheetUtility {
 
     private AttendanceListener listener;
 
-    public void processAttendanceSheet(File file)
-            throws IOException, InvalidFormatException, ExecutionException, InterruptedException {
+    public void processAttendanceSheet(File file, Batch batch, StudentClass studentClass, Section section) {
+        try {
 
-        if (listener != null) listener.onAttendanceUploadStart();
 
 //        Read the excel workbook
-        Workbook workbook = new XSSFWorkbook(file);
-
+            Workbook workbook = new XSSFWorkbook(file);
+            if (listener != null) listener.onAttendanceUploadStart();
         /*
            Example
                    contains SubjectName->[
@@ -38,37 +40,42 @@ public class ExcelSheetUtility {
                    {present:true,student_id:657,lecture:Hindi}
                    ]
          */
-        Map<String, List<Map<String, Object>>> lectureAttendance = new HashMap<>();
+            Map<String, List<Map<String, Object>>> lectureAttendance = new HashMap<>();
 
 
-        for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
+            for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
 //            sheet name contains the subject name
-            Sheet sheet = workbook.getSheetAt(i);
+                Sheet sheet = workbook.getSheetAt(i);
 //            subject name with empty arraylist
-            lectureAttendance.put(sheet.getSheetName(), new ArrayList<>());
-            for (Row row : sheet) {
+                lectureAttendance.put(sheet.getSheetName(), new ArrayList<>());
+                for (Row row : sheet) {
 //                add map of student data to that particular subject
-                DataFormatter dataFormatter = new DataFormatter();
-                String present = dataFormatter.formatCellValue(row.getCell(1));
-                String admission_id = dataFormatter.formatCellValue(row.getCell(0));
-                lectureAttendance.get(sheet.getSheetName()).add(addAttendanceForStudent(present, admission_id));
+                    DataFormatter dataFormatter = new DataFormatter();
+                    String present = dataFormatter.formatCellValue(row.getCell(1));
+                    String admission_id = dataFormatter.formatCellValue(row.getCell(0));
+                    lectureAttendance.get(sheet.getSheetName()).add(addAttendanceForStudent(present, admission_id));
 
 //                Add student attendance to firestore
-                addStudentAttendanceData(
-                        sheet.getSheetName(),
-                        admission_id,
-                        Timestamp.now().toString(),
-                        present.toUpperCase().equals("P")
-                );
+                    addStudentAttendanceData(
+                            sheet.getSheetName(),
+                            admission_id,
+                            Timestamp.now().toString(),
+                            present.toUpperCase().equals("P")
+                    );
+
+                }
+//            removing first column {contains student id - present} it is the header
+                lectureAttendance.get(sheet.getSheetName()).remove(0);
 
             }
-//            removing first column {contains student id - present} it is the header
-            lectureAttendance.get(sheet.getSheetName()).remove(0);
 
+//        System.out.println(lectureAttendance);
+            addAttendanceForSection(lectureAttendance, batch, studentClass, section);
+        } catch (IOException | ExecutionException | InterruptedException | InvalidFormatException e) {
+
+            if (listener != null) listener.onAttendanceUploadError();
+            e.printStackTrace();
         }
-
-        System.out.println(lectureAttendance);
-        addAttendanceForSection(lectureAttendance);
     }
 
 
@@ -87,7 +94,7 @@ public class ExcelSheetUtility {
         Query studentRef = FirestoreConstants.studentCollectionReference.whereEqualTo("admission_id", admissionId);
 
         studentRef.get().get().getDocuments().forEach(queryDocumentSnapshot -> {
-            System.out.println(queryDocumentSnapshot.getData());
+//            System.out.println(queryDocumentSnapshot.getData());
             HashMap<String, Object> lectureData = new HashMap<>();
             lectureData.put("date", date);
             lectureData.put("lecture", subjectName);
@@ -100,13 +107,13 @@ public class ExcelSheetUtility {
 
     }
 
-    private void addAttendanceForSection(Map<String, List<Map<String, Object>>> lectureAttendance) {
+    private void addAttendanceForSection(Map<String, List<Map<String, Object>>> lectureAttendance, Batch batch, StudentClass studentClass, Section section) {
         Map<String, Object> json = new HashMap<>();
-        json.put("batch", "2076");
-        json.put("class_name", "1");
-        json.put("date", "today");
+        json.put("batch", batch.getName());
+        json.put("class_name", studentClass.getClassname());
+        json.put("date", Timestamp.now());
         json.put("date_unix", Timestamp.now());
-        json.put("section", "mark");
+        json.put("section", section.getName());
         json.put("lecture_attendance", lectureAttendance);
         ApiFuture<DocumentReference> add = FirestoreConstants.sectionAttendanceCollectionReference.add(json);
         if (add.isDone() && listener != null) listener.onAttendanceUploadFinish();

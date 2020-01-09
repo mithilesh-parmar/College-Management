@@ -44,6 +44,9 @@ public class SectionLoadingComboBox extends StackPane {
         }
     };
 
+    public void setListener(DataLoadingListener listener) {
+        this.listener = listener;
+    }
 
     public SectionLoadingComboBox() {
 

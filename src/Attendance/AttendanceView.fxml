@@ -8,6 +8,11 @@
 
 
 <?import custom_view.SearchTextFieldController?>
+<?import javafx.scene.image.ImageView?>
+<?import custom_view.loading_combobox.section.SectionLoadingComboBox?>
+<?import custom_view.loading_combobox.classes.ClassLoadingComboBox?>
+<?import custom_view.loading_combobox.batches.BatchLoadingComboBox?>
+<?import javafx.geometry.Insets?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="Attendance.SectionAttendanceController"
@@ -17,19 +22,23 @@
 
     <VBox>
 
+
         <BorderPane>
             <left>
                 <Label id="headline" text="Section Attendances"/>
             </left>
             <right>
-                <HBox>
-                    <Button text="Add" fx:id="addAttendance"> </Button>
-                    <SearchTextFieldController fx:id="searchTextField"/>
-                </HBox>
+                <SearchTextFieldController fx:id="searchTextField"/>
 
             </right>
 
         </BorderPane>
+
+        <Button fx:id="addAttendance" text="Upload Attendance" defaultButton="true"
+                GridPane.columnIndex="0" GridPane.rowIndex="3"
+                GridPane.columnSpan="2" GridPane.rowSpan="1"
+                GridPane.halignment="CENTER"/>
+
 
         <FlowPane fx:id="attendanceFlowPane"/>
 
