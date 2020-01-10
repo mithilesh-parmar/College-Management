@@ -4,13 +4,19 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
+import events.add_event.AddEventController;
+import events.add_event.AddEventListener;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,11 +24,17 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import listeners.DataChangeListener;
 import model.Event;
+import model.Student;
+import students.detail_view.StudentDetailsController;
 import utility.EventFirestoreUtility;
 
+import javax.annotation.Nullable;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -49,7 +61,6 @@ public class EventsController implements Initializable, DataChangeListener {
     public TextField createdAtTextField;
     public TextField eventDateTextField;
     public Button addButton;
-    public GridPane eventAddPane;
     public VBox eventDetailPane;
     public Button editButton;
     public TextField searchTextField;
@@ -81,33 +92,57 @@ public class EventsController implements Initializable, DataChangeListener {
 
         });
 
-        editButton.setOnAction(actionEvent -> setFieldsData(eventsList.getSelectionModel().getSelectedItem()));
+        editButton.setOnAction(actionEvent -> loadAddView(eventsList.getSelectionModel().getSelectedItem()));
 
-//        addButton.setOnAction(actionEvent -> {
-//
-//            Event event = new Event(
-//                    titleTextField.getText().toString(),
-//                    descriptionTextField.getText().toString(),
-//                    eventTimeTextField.getText().toString(),
-//                    Timestamp.now(),
-//                    Timestamp.now(),
-//                    List.of()
-//            );
-//
-//
-//            Platform.runLater(() -> {
-//                ApiFuture<DocumentReference> addedDocRef = FirestoreClient.getFirestore()
-//                        .collection("colleges")
-//                        .document("GKevzOMWBqbFtPezdLzF")
-//                        .collection("events")
-//                        .add(event.toJSON());
-//                System.out.println("Done");
-//            });
-//
-//
-//        });
+
+        addButton.setPadding(new Insets(15));
+        addButton.setOnAction(actionEvent -> loadAddView(null));
+
     }
 
+    private void loadAddView(@Nullable Event event) {
+
+
+        FXMLLoader loader;
+        loader = new FXMLLoader(getClass().getResource("/events/add_event/AddEventView.fxml"));
+        final Stage stage = new Stage();
+        Parent parent = null;
+        try {
+
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Add Event Details");
+
+            parent = loader.load();
+            Scene scene = new Scene(parent);
+            stage.setScene(scene);
+
+            AddEventController controller = loader.getController();
+            if (event != null) controller.setEvent(event);
+            controller.setListener(new AddEventListener() {
+                @Override
+                public void onEventAdded(Event event) {
+                    close(stage);
+                    loadingData.set(true);
+                    firestoreUtility.addEvent(event);
+                }
+
+                @Override
+                public void onEventUpdated(Event updatedEvent) {
+                    close(stage);
+                    loadingData.set(true);
+                    firestoreUtility.updateEvent(updatedEvent);
+                }
+            });
+
+            stage.showAndWait();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     @Override
     public void onDataLoaded(ObservableList data) {

@@ -25,9 +25,12 @@
         <HBox>
             <VBox>
 
-                <Label text="Events" alignment="CENTER" id="headline">
+                <HBox>
+                    <Label text="Events" alignment="CENTER" id="headline">
+                    </Label>
+                    <Button fx:id="addButton" text="Add Event" defaultButton="true"/>
+                </HBox>
 
-                </Label>
 
                 <TextField fx:id="searchTextField"
                            maxWidth="Infinity"
@@ -48,7 +51,7 @@
             </VBox>
 
             <VBox fx:id="eventDetailPane">
-                <Label text="Details"  id="headline">
+                <Label text="Details" id="headline">
 
                 </Label>
                 <ImageView fx:id="eventImage"/>

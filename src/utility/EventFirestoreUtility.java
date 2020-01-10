@@ -1,5 +1,6 @@
 package utility;
 
+import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -8,6 +9,7 @@ import listeners.DataChangeListener;
 import model.Event;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class EventFirestoreUtility {
 
@@ -63,5 +65,30 @@ public class EventFirestoreUtility {
         events.clear();
         for (QueryDocumentSnapshot document : data) events.add(Event.fromJSON(document.getData()));
 
+    }
+
+    public void addEvent(Event event) {
+        DocumentReference document = FirestoreConstants.eventCollectionReference.document();
+        event.setId(document.getId());
+        document.set(event.toJSON());
+    }
+
+    public void updateEvent(Event updatedEvent) {
+        System.out.println("Updating event with data: " + updatedEvent.toJSON());
+        try {
+            ApiFuture<QuerySnapshot> future = FirestoreConstants.eventCollectionReference.whereEqualTo("id", updatedEvent.getId()).get();
+            List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+            for (DocumentSnapshot document : documents) {
+                Event previousEvent = Event.fromJSON(document.getData());
+                System.out.println("Previous data: " + previousEvent.toJSON());
+                if (previousEvent.getId().equals(updatedEvent.getId())) {
+                    System.out.println("Updating now.....");
+                    new Thread(() -> document.getReference().set(updatedEvent.toJSON())).start();
+                }
+            }
+            System.out.println("Quitting noew");
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 }

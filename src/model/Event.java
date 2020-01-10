@@ -16,13 +16,15 @@ public class Event {
 
     private SimpleStringProperty title = new SimpleStringProperty(),
             description = new SimpleStringProperty(),
+            id = new SimpleStringProperty(),
             time = new SimpleStringProperty();
     private SimpleObjectProperty<Timestamp> createdAt = new SimpleObjectProperty<>(),
             eventDate = new SimpleObjectProperty<>();
     private SimpleListProperty<String> images = new SimpleListProperty<>();
 
-    public Event(String title, String description, String time, Timestamp createdAt, Timestamp eventDate, List<String> images) {
 
+    public Event(String id, String title, String description, String time, Timestamp createdAt, Timestamp eventDate, List<String> images) {
+        setId(id);
         setTitle(title);
         setDescription(description);
         setTime(time);
@@ -40,19 +42,22 @@ public class Event {
         String title = json.containsKey("title") ? (String) json.get("title") : "";
         String desc = json.containsKey("desc") ? (String) json.get("desc") : "";
         String time = json.containsKey("time") ? (String) json.get("time") : "";
+        String id = json.containsKey("id") ? (String) json.get("id") : "";
         Timestamp createdAt = json.containsKey("created_at") ? (Timestamp) json.get("created_at") : null;
         Timestamp eventDate = json.containsKey("event_date") ? (Timestamp) json.get("event_date") : null;
         List<String> images = json.containsKey("images") ? (List<String>) json.get("images") : null;
 
-        return new Event(title, desc, time, createdAt, eventDate, images);
+        return new Event(id, title, desc, time, createdAt, eventDate, images);
 
 
     }
+
 
     List imagesList = new ArrayList();
 
     public Map<String, Object> toJSON() {
         Map<String, Object> map = new HashMap<>();
+        map.put("id", id.get());
         map.put("title", title.get());
         map.put("desc", description.get());
         map.put("time", time.get());
@@ -62,13 +67,24 @@ public class Event {
         return map;
     }
 
-    public Object getCreatedAt() {
-        return createdAt.isNull().get() ? "Not Mentioned" : createdAt.get();
+    public String getId() {
+        return id.get();
     }
 
-    public Object getEventDate() {
+    public SimpleStringProperty idProperty() {
+        return id;
+    }
 
-        return eventDate.isNull().get() ? "Not Mentioned" : eventDate.get();
+    public void setId(String id) {
+        this.id.set(id);
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt.get();
+    }
+
+    public Timestamp getEventDate() {
+        return eventDate.get();
     }
 
     public ObservableList<String> getImages() {

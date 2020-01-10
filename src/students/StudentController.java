@@ -6,10 +6,13 @@ import custom_view.fees_notification_view.FeesNotificationController;
 import custom_view.card_view.Card;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -46,7 +49,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
     private MenuItem feesMenuButton = new MenuItem("Fees");
     private MenuItem feesNotificationMenuButton = new MenuItem("Fees Notification");
     private MenuItem pushNotificationMenuButton = new MenuItem("Push Notification");
-     private MenuItem deleteMenuButton = new MenuItem("Delete");
+    private MenuItem deleteMenuButton = new MenuItem("Delete");
     private MenuItem editMenuButton = new MenuItem("Edit");
     private MenuItem cancelMenuButton = new MenuItem("Cancel");
 
@@ -57,7 +60,18 @@ public class StudentController implements Initializable, DataChangeListener, Sea
 
         Menu menu = new Menu("Notifications");
 
+        final ScrollPane scroll = new ScrollPane();
 
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);    // Horizontal scroll bar
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);    // Vertical scroll bar
+        scroll.setContent(studentFlowPane);
+        scroll.viewportBoundsProperty().addListener(new ChangeListener<Bounds>() {
+            @Override
+            public void changed(ObservableValue<? extends Bounds> ov, Bounds oldBounds, Bounds bounds) {
+                studentFlowPane.setPrefWidth(bounds.getWidth());
+                studentFlowPane.setPrefHeight(bounds.getHeight());
+            }
+        });
         studentFlowPane.setHgap(10);
         studentFlowPane.setVgap(10);
         studentFlowPane.setAlignment(Pos.CENTER_LEFT);
