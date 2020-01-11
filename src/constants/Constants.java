@@ -20,6 +20,7 @@ public class Constants {
 
     public static final String projectID = "ischool-7f729";
     public static final String profileImageFolder = "pp_images";
+    public static final String serviceAccountFile = "ischool-7f729-firebase-adminsdk-3r9gq-2f1029222a.json";
 
     public static final String projectBucketName = "ischool-7f729.appspot.com";
 

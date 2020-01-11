@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import custom_view.SearchTextFieldController?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.geometry.Insets?>
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="documents.DocumentController"
+           stylesheets="@/styles/dark_metro_style.css"
+>
+
+
+    <VBox>
+
+        <BorderPane>
+            <left>
+                <Label id="headline" text="Student Documents"/>
+            </left>
+            <right>
+                <SearchTextFieldController fx:id="searchTextField"/>
+            </right>
+        </BorderPane>
+
+        <HBox>
+            <padding>
+                <Insets topRightBottomLeft="15"/>
+            </padding>
+            <Button fx:id="addButton" defaultButton="true" text="Upload Document"/>
+            <Button fx:id="refreshButton" text="Refresh"/>
+        </HBox>
+
+
+        <TableView fx:id="documentTable" VBox.vgrow="ALWAYS">
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+            <columns>
+
+                <TableColumn text="Reg. number">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="studentAdmissionNumber"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn text="Document">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="fileName"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn text="Type">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="fileType"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+            </columns>
+
+        </TableView>
+
+
+    </VBox>
+    <ProgressIndicator fx:id="progressIndicator"/>
+
+
+</StackPane>

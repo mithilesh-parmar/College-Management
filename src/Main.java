@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import utility.CloudStorageUtility;
 import utility.FirestoreConstants;
 
 import java.io.File;
@@ -55,6 +56,9 @@ public class Main extends Application {
 
 
             FirebaseApp.initializeApp(options);
+
+//            Loading cloud storage credentials
+            CloudStorageUtility.getInstance();
         }).start();
 
 

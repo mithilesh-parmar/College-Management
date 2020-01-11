@@ -4,11 +4,14 @@ import com.google.api.gax.paging.Page;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.*;
 import constants.Constants;
+import model.StudentDocument;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class CloudStorageUtility {
@@ -17,7 +20,7 @@ public class CloudStorageUtility {
     private static CloudStorageUtility instance;
     private StorageOptions storageOptions;
     private Storage storage;
-    private Bucket projectBucket;
+    public Bucket projectBucket;
     private final String projectBucketName = Constants.projectBucketName;
 
 
@@ -29,7 +32,7 @@ public class CloudStorageUtility {
                     .newBuilder()
                     .setCredentials(
                             GoogleCredentials
-                                    .fromStream(new FileInputStream("ischool-7f729-firebase-adminsdk-3r9gq-2f1029222a.json"))
+                                    .fromStream(new FileInputStream(Constants.serviceAccountFile))
                     ).build();
 
             storage = storageOptions.getService();
@@ -44,6 +47,7 @@ public class CloudStorageUtility {
         }
 
     }
+
 
     public Bucket getProjectBucket() {
         return projectBucket;
@@ -65,7 +69,7 @@ public class CloudStorageUtility {
         return blob;
     }
 
-    public Blob uploadDocument(String uploadFolderPath, String fileName, File document, String documentType) {
+    void uploadDocument(String uploadFolderPath, String fileName, File document, String documentType) {
 
 
         uploadFolderPath = uploadFolderPath + "/" + (fileName.isEmpty() ? document.getName() : (fileName + "." + getFileExtension(document.getName())));
@@ -75,19 +79,26 @@ public class CloudStorageUtility {
             System.out.println("Uploading to: " + uploadFolderPath);
             Blob blob = projectBucket.create(uploadFolderPath, new FileInputStream(document), documentType);
 
-
             blob.createAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER));
-
             if (listener != null) listener.onSuccess(blob);
-            return blob;
         } catch (FileNotFoundException e) {
             listener.onFailure(e);
 
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return null;
 
+    }
+
+    void uploadStudentDocument(StudentDocument studentDocument) {
+        try {
+            System.out.println("Uploading to: " + studentDocument.getCloudStoragePath());
+            Blob blob = projectBucket.create(studentDocument.getCloudStoragePath(), new FileInputStream(studentDocument.getFile()), studentDocument.getFileType());
+
+            blob.createAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER));
+            if (listener != null) listener.onSuccess(blob);
+        } catch (FileNotFoundException e) {
+            listener.onFailure(e);
+
+        }
     }
 
     private String getFileExtension(String fileName) {
