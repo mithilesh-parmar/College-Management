@@ -1,6 +1,7 @@
 package documents.add_document;
 
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -8,6 +9,7 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class AddDocumentController implements Initializable {
@@ -16,7 +18,7 @@ public class AddDocumentController implements Initializable {
     public Button submitButton;
 
     private AddDocumentListener listener;
-    private ObjectProperty<File> selectedDocument = new SimpleObjectProperty<>();
+    private ObjectProperty<List<File>> selectedDocument = new SimpleObjectProperty<>(FXCollections.observableArrayList());
     private BooleanProperty canSubmit = new SimpleBooleanProperty(false);
 
     private StringProperty documentName = new SimpleStringProperty("Choose Document");
@@ -43,10 +45,11 @@ public class AddDocumentController implements Initializable {
     private void handleOnFileChooserAction() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Document");
-        File file = fileChooser.showOpenDialog(fileChooserButton.getScene().getWindow());
-        if (file != null) {
-            selectedDocument.set(file);
-            documentName.set(file.getName());
+
+        List<File> files = fileChooser.showOpenMultipleDialog(fileChooserButton.getScene().getWindow());
+        if (files != null && files.size() > 0) {
+            selectedDocument.set(files);
+            documentName.set(files.get(0).getName() + " and " + files.size() + " selected");
         }
 
         checkCanSubmit();

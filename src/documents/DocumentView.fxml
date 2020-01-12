@@ -27,7 +27,7 @@
             </right>
         </BorderPane>
 
-        <HBox>
+        <HBox spacing="10">
             <padding>
                 <Insets topRightBottomLeft="15"/>
             </padding>

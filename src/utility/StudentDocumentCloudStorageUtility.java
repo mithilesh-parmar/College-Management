@@ -1,6 +1,7 @@
 package utility;
 
 import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.Storage;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
@@ -10,6 +11,7 @@ import listeners.DataChangeListener;
 import model.StudentDocument;
 
 import java.io.File;
+import java.nio.file.Path;
 
 public class StudentDocumentCloudStorageUtility {
 
@@ -18,9 +20,37 @@ public class StudentDocumentCloudStorageUtility {
     public ListProperty<StudentDocument> studentDocuments = new SimpleListProperty<>(FXCollections.observableArrayList());
     private DataChangeListener listener;
 
+    private CloudStorageStudentDocumentListener studentDocumentListener;
+
     private StudentDocumentCloudStorageUtility() {
     }
 
+    public void deleteDocument(StudentDocument studentDocument) {
+        if (studentDocumentListener != null) studentDocumentListener.onStart();
+        new Thread(() -> {
+            storageUtility
+                    .projectBucket
+                    .list(Storage.BlobListOption.prefix(studentDocument.getCloudStoragePath()))
+                    .getValues()
+                    .forEach(blob -> {
+                        System.out.println("Deleting blob " + blob);
+                        blob.delete();
+                    });
+            if (studentDocumentListener != null) studentDocumentListener.onFinish();
+        }
+        ).start();
+    }
+
+    public void downloadDocument(StudentDocument studentDocument) {
+        new Thread(() -> {
+            if (studentDocumentListener != null) studentDocumentListener.onStart();
+            storageUtility
+                    .projectBucket
+                    .get(studentDocument.getCloudStoragePath())
+                    .downloadTo(Path.of(studentDocument.getFileName()));
+            if (studentDocumentListener != null) studentDocumentListener.onFinish();
+        }).start();
+    }
 
     public void getAllDocuments() {
         if (listener != null) listener.onDataLoaded(null);
@@ -62,7 +92,7 @@ public class StudentDocumentCloudStorageUtility {
             documents.forEach(blob -> {
 
                 studentDocuments.get()
-                        .add(new StudentDocument(null, blob.getBucket() + blob.getName(),
+                        .add(new StudentDocument(null, blob.getName(),
                                 blob.getName().split("/")[1],
                                 blob.getName().split("/")[2],
                                 blob.getContentType(),
@@ -71,6 +101,10 @@ public class StudentDocumentCloudStorageUtility {
             });
             if (listener != null) listener.onDataLoaded(null);
         });
+    }
+
+    public void setStudentDocumentListener(CloudStorageStudentDocumentListener studentDocumentListener) {
+        this.studentDocumentListener = studentDocumentListener;
     }
 
     public void setListener(DataChangeListener dataChangeListener) {
@@ -83,4 +117,6 @@ public class StudentDocumentCloudStorageUtility {
         }
         return instance;
     }
+
+
 }
