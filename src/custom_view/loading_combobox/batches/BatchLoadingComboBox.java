@@ -3,7 +3,7 @@ package custom_view.loading_combobox.batches;
 import com.google.cloud.firestore.EventListener;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
-import custom_view.loading_combobox.DataLoadingListener;
+import custom_view.loading_combobox.LoadingComboBoxListener;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
@@ -15,7 +15,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.StackPane;
 import model.Batch;
-import model.StudentClass;
 import utility.FirestoreConstants;
 
 import java.util.List;
@@ -27,7 +26,7 @@ public class BatchLoadingComboBox extends StackPane {
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
 
 
-    private DataLoadingListener listener;
+    private LoadingComboBoxListener listener;
 
     private EventListener<QuerySnapshot> classDataListener = (snapshot, e) -> {
         if (e != null) {
@@ -44,7 +43,7 @@ public class BatchLoadingComboBox extends StackPane {
         }
     };
 
-    public void setListener(DataLoadingListener listener) {
+    public void setListener(LoadingComboBoxListener listener) {
         this.listener = listener;
     }
 

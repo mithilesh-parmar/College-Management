@@ -1,4 +1,4 @@
-package Attendance.add_attendance;
+package attendance.add_attendance;
 
 
 public interface AddAttendanceListener {

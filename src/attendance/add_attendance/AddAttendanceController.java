@@ -1,16 +1,14 @@
-package Attendance.add_attendance;
+package attendance.add_attendance;
 
-import custom_view.loading_combobox.batches.BatchLoadingComboBox;
-import custom_view.loading_combobox.classes.ClassLoadingComboBox;
-import custom_view.loading_combobox.section.SectionLoadingComboBox;
+import custom_view.loading_combobox.course.CourseLoadingComboBox;
+import custom_view.loading_combobox.subject.SubjectLoadingComboBox;
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.*;
 import javafx.stage.FileChooser;
-import model.Batch;
-import model.Section;
-import model.StudentClass;
+import model.Course;
+import model.Subject;
 import utility.AttendanceListener;
 import utility.ExcelSheetUtility;
 
@@ -21,23 +19,24 @@ import java.util.ResourceBundle;
 public class AddAttendanceController implements Initializable, AttendanceListener {
 
 
-
     public Button addExcelSheet;
-    public ProgressIndicator progressIndicator;
-    public BatchLoadingComboBox batchComboBox;
-    public SectionLoadingComboBox sectionComboBox;
-    public ClassLoadingComboBox classComboBox;
     public Button submitButton;
+    public DatePicker attendanceDate;
+    public CourseLoadingComboBox courseLoadingComboBox;
+    public SubjectLoadingComboBox subjectLoadingComboBox;
+    public ComboBox<Integer> yearComboBox;
+
     private AddAttendanceListener listener;
 
     private StringProperty buttonTitle = new SimpleStringProperty("Upload Excel Sheet");
 
     private BooleanProperty dataLoading = new SimpleBooleanProperty(false);
-    private ObjectProperty<Section> selectedSection = new SimpleObjectProperty<>();
-    private ObjectProperty<StudentClass> selectedClass = new SimpleObjectProperty<>();
-    private ObjectProperty<Batch> selectedBatch = new SimpleObjectProperty<>();
+    private ObjectProperty<Course> selectedCourse = new SimpleObjectProperty<>();
+    private ObjectProperty<Integer> selectedYear = new SimpleObjectProperty<>();
+    private ObjectProperty<Subject> selectedLecture = new SimpleObjectProperty<>();
     private ObjectProperty<File> selectedFile = new SimpleObjectProperty<>();
 
+    private ListProperty<Integer> yearList = new SimpleListProperty<>(FXCollections.observableArrayList());
 
     private BooleanProperty valid = new SimpleBooleanProperty(false);
 
@@ -48,23 +47,33 @@ public class AddAttendanceController implements Initializable, AttendanceListene
     @Override
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        progressIndicator.visibleProperty().bind(dataLoading);
+
+        yearComboBox.itemsProperty().bind(yearList);
+
+        selectedCourse.addListener((observableValue, course, t1) -> {
+            yearList.clear();
+            for (int i = 1; i <= t1.getYears(); i++) {
+                yearList.get().add(i);
+            }
+            checkReadyToSubmit();
+        });
+
+        yearComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, integer, t1) -> {
+            selectedYear.set(t1);
+            checkReadyToSubmit();
+        });
+        courseLoadingComboBox.setListener(selectedItem -> {
+            selectedCourse.set((Course) selectedItem);
+            checkReadyToSubmit();
+        });
+
+        subjectLoadingComboBox.setListener(selectedItem -> {
+            selectedLecture.set((Subject) selectedItem);
+            checkReadyToSubmit();
+        });
+
         addExcelSheet.textProperty().bind(buttonTitle);
 
-        classComboBox.setListener(selctedItem -> {
-            selectedClass.set((StudentClass) selctedItem);
-            checkReadyToSubmit();
-        });
-
-        batchComboBox.setListener(selctedItem -> {
-            selectedBatch.set((Batch) selctedItem);
-            checkReadyToSubmit();
-        });
-
-        sectionComboBox.setListener(selctedItem -> {
-            selectedSection.set((Section) selctedItem);
-            checkReadyToSubmit();
-        });
 
         addExcelSheet.setOnAction(actionEvent -> chooseExcelSheet());
         submitButton.setOnAction(actionEvent -> uploadAttendance());
@@ -75,10 +84,10 @@ public class AddAttendanceController implements Initializable, AttendanceListene
     private void uploadAttendance() {
         ExcelSheetUtility sheetUtility = new ExcelSheetUtility();
         sheetUtility.setListener(this);
-        Thread thread = new Thread(() -> sheetUtility.processAttendanceSheet(selectedFile.get(), selectedBatch.get(), selectedClass.get(), selectedSection.get()));
+//        Thread thread = new Thread(() -> sheetUtility.processAttendanceSheet(selectedFile.get(), selectedBatch.get(), selectedClass.get(), selectedSection.get()));
 
 
-        thread.start();
+//        thread.start();
         if (listener != null) listener.onUploadStart();
 
     }
@@ -94,9 +103,9 @@ public class AddAttendanceController implements Initializable, AttendanceListene
 
     private void checkReadyToSubmit() {
         valid.set(
-                (selectedBatch.get() != null
-                        && selectedClass.get() != null
-                        && selectedSection.get() != null
+                (selectedYear.get() != null
+                        && selectedLecture.get() != null
+                        && selectedCourse.get() != null
                         && selectedFile.get() != null
                 )
         );

@@ -1,13 +1,10 @@
 package utility;
 
-import Attendance.AttendanceViewCardListener;
+import attendance.AttendanceViewCardListener;
 import com.google.cloud.firestore.EventListener;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import custom_view.card_view.AttendanceCard;
-import custom_view.card_view.AttendanceCardListener;
-import custom_view.card_view.Card;
-import custom_view.card_view.CardListener;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.MapProperty;
@@ -15,11 +12,8 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.input.MouseEvent;
 import listeners.DataChangeListener;
-import model.Section;
 import model.SectionAttendance;
-import model.Teacher;
 
 import java.util.List;
 

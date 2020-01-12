@@ -3,7 +3,7 @@ package custom_view.loading_combobox.section;
 import com.google.cloud.firestore.EventListener;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
-import custom_view.loading_combobox.DataLoadingListener;
+import custom_view.loading_combobox.LoadingComboBoxListener;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
@@ -27,7 +27,7 @@ public class SectionLoadingComboBox extends StackPane {
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
 
 
-    private DataLoadingListener listener;
+    private LoadingComboBoxListener listener;
 
     private EventListener<QuerySnapshot> sectionsDataListener = (snapshot, e) -> {
         if (e != null) {
@@ -44,7 +44,7 @@ public class SectionLoadingComboBox extends StackPane {
         }
     };
 
-    public void setListener(DataLoadingListener listener) {
+    public void setListener(LoadingComboBoxListener listener) {
         this.listener = listener;
     }
 

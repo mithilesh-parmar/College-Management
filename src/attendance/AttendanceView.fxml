@@ -15,7 +15,7 @@
 <?import javafx.geometry.Insets?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
-           fx:controller="Attendance.SectionAttendanceController"
+           fx:controller="attendance.SectionAttendanceController"
            stylesheets="@/styles/dark_metro_style.css"
 >
 
@@ -34,7 +34,7 @@
 
         </BorderPane>
 
-        <Button fx:id="addAttendance" text="Upload Attendance" defaultButton="true"
+        <Button fx:id="addAttendance" text="Upload attendance" defaultButton="true"
                 GridPane.columnIndex="0" GridPane.rowIndex="3"
                 GridPane.columnSpan="2" GridPane.rowSpan="1"
                 GridPane.halignment="CENTER"/>

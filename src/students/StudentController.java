@@ -45,7 +45,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
     private StudentFirestoreUtility firestoreUtility = StudentFirestoreUtility.getInstance();
     private BooleanProperty loadingData = new SimpleBooleanProperty(true);
     private ContextMenu tableContextMenu = new ContextMenu();
-    private MenuItem attendanceMenuButton = new MenuItem("Attendance");
+    private MenuItem attendanceMenuButton = new MenuItem("attendance");
     private MenuItem feesMenuButton = new MenuItem("Fees");
     private MenuItem feesNotificationMenuButton = new MenuItem("Fees Notification");
     private MenuItem pushNotificationMenuButton = new MenuItem("Push Notification");
@@ -189,7 +189,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
 
 
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Attendance");
+            stage.setTitle("attendance");
 
             parent = loader.load();
             Scene scene = new Scene(parent, 500, 600);

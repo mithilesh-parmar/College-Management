@@ -1,4 +1,4 @@
-package Attendance;
+package attendance;
 
 import model.SectionAttendance;
 

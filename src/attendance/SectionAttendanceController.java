@@ -1,10 +1,9 @@
-package Attendance;
+package attendance;
 
-import Attendance.add_attendance.AddAttendanceController;
+import attendance.add_attendance.AddAttendanceController;
 import com.google.cloud.firestore.QuerySnapshot;
 import custom_view.SearchTextFieldController;
 import custom_view.card_view.AttendanceCard;
-import custom_view.card_view.Card;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
@@ -16,30 +15,19 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
 import model.SectionAttendance;
-import model.Student;
-import model.Teacher;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import students.detail_view.StudentDetailsController;
 import utility.AttendanceFirestoreUtility;
 import utility.AttendanceListener;
-import utility.ExcelSheetUtility;
 import utility.SearchCallback;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutionException;
 
 public class SectionAttendanceController implements Initializable, DataChangeListener, AttendanceListener, SearchCallback {
 
@@ -61,7 +49,7 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
         attendanceFlowPane.setAlignment(Pos.CENTER_LEFT);
         attendanceFlowPane.setPadding(new Insets(10));
         firestoreUtility.setListener(this);
-        firestoreUtility.getAttendance();
+//        firestoreUtility.getAttendance();
 
         searchTextField.setCallback(this);
         addAttendance.setId("menubutton");
@@ -76,7 +64,7 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
 
 
         FXMLLoader loader;
-        loader = new FXMLLoader(getClass().getResource("/Attendance/add_attendance/AddAttendanceView.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/attendance/add_attendance/AddAttendanceView.fxml"));
         final Stage stage = new Stage();
         Parent parent = null;
         try {

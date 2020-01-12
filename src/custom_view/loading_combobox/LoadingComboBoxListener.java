@@ -1,5 +1,5 @@
 package custom_view.loading_combobox;
 
-public interface DataLoadingListener {
+public interface LoadingComboBoxListener {
     void onItemSelected(Object selctedItem);
 }
