@@ -14,6 +14,9 @@ import utility.ExcelSheetUtility;
 
 import java.io.File;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class AddAttendanceController implements Initializable, AttendanceListener {
@@ -35,6 +38,7 @@ public class AddAttendanceController implements Initializable, AttendanceListene
     private ObjectProperty<Integer> selectedYear = new SimpleObjectProperty<>();
     private ObjectProperty<Subject> selectedLecture = new SimpleObjectProperty<>();
     private ObjectProperty<File> selectedFile = new SimpleObjectProperty<>();
+    private ObjectProperty<LocalDate> selectedDate = new SimpleObjectProperty<>();
 
     private ListProperty<Integer> yearList = new SimpleListProperty<>(FXCollections.observableArrayList());
 
@@ -49,6 +53,11 @@ public class AddAttendanceController implements Initializable, AttendanceListene
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         yearComboBox.itemsProperty().bind(yearList);
+
+        attendanceDate.valueProperty().addListener((observableValue, localDate, t1) -> {
+            selectedDate.set(t1);
+            checkReadyToSubmit();
+        });
 
         selectedCourse.addListener((observableValue, course, t1) -> {
             yearList.clear();
@@ -84,11 +93,20 @@ public class AddAttendanceController implements Initializable, AttendanceListene
     private void uploadAttendance() {
         ExcelSheetUtility sheetUtility = new ExcelSheetUtility();
         sheetUtility.setListener(this);
-//        Thread thread = new Thread(() -> sheetUtility.processAttendanceSheet(selectedFile.get(), selectedBatch.get(), selectedClass.get(), selectedSection.get()));
 
-
-//        thread.start();
         if (listener != null) listener.onUploadStart();
+        new Thread(
+                () -> sheetUtility
+                        .processAttendanceSheet(
+                                selectedFile.get(),
+                                selectedCourse.get(),
+                                selectedLecture.get(),
+                                Date.from(selectedDate.get().atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                                selectedYear.get()
+                        )
+        ).start();
+
+
 
     }
 
@@ -107,6 +125,7 @@ public class AddAttendanceController implements Initializable, AttendanceListene
                         && selectedLecture.get() != null
                         && selectedCourse.get() != null
                         && selectedFile.get() != null
+                        && selectedDate.get() != null
                 )
         );
     }
@@ -121,6 +140,7 @@ public class AddAttendanceController implements Initializable, AttendanceListene
     public void onAttendanceUploadStart() {
         System.out.println("Uploading Start");
         dataLoading.set(true);
+//        if (listener != null) listener.onUploadStart();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package attendance;
 
 import attendance.add_attendance.AddAttendanceController;
+import attendance.add_attendance.AddAttendanceListener;
 import com.google.cloud.firestore.QuerySnapshot;
 import custom_view.SearchTextFieldController;
 import custom_view.card_view.AttendanceCard;
@@ -46,18 +47,14 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
         progressIndicator.visibleProperty().bind(dataLoading);
         attendanceFlowPane.setHgap(10);
         attendanceFlowPane.setVgap(10);
+        attendanceFlowPane.setPadding(new Insets(16));
         attendanceFlowPane.setAlignment(Pos.CENTER_LEFT);
-        attendanceFlowPane.setPadding(new Insets(10));
         firestoreUtility.setListener(this);
-//        firestoreUtility.getAttendance();
+        firestoreUtility.getAttendance();
 
         searchTextField.setCallback(this);
         addAttendance.setId("menubutton");
-
-        addAttendance.setPadding(new Insets(15));
-        addAttendance.setOnAction(actionEvent -> {
-            loadEditView();
-        });
+        addAttendance.setOnAction(actionEvent -> loadEditView());
     }
 
     private void loadEditView() {
@@ -77,8 +74,13 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
             Scene scene = new Scene(parent);
             stage.setScene(scene);
             AddAttendanceController controller = loader.getController();
-
-            stage.centerOnScreen();
+            controller.setListener(new AddAttendanceListener() {
+                @Override
+                public void onUploadStart() {
+                    close(stage);
+                    System.out.println("Upload Started .....");
+                }
+            });
 
             stage.showAndWait();
 
@@ -135,9 +137,7 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
 
         ObservableList<AttendanceCard> subList = FXCollections.observableArrayList();
         for (SectionAttendance p : firestoreUtility.sectionAttendances) {
-            String text = p.getDate().toUpperCase() + " "
-                    + p.getSection().toUpperCase() + " "
-                    + p.getBatch().toUpperCase() + " ";
+            String text = p.getCourse().toUpperCase() + " " + p.getSubject() + " " + String.valueOf(p.getYear()).toUpperCase();
             // if the search text contains the manufacturer then add it to sublist
             if (text.contains(searchtext)) {
                 subList.add(firestoreUtility.sectionAttendanceCardMapProperty.get(p));

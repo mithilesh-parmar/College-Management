@@ -76,10 +76,10 @@ public class AttendanceFirestoreUtility {
                 SectionAttendance item = SectionAttendance.fromJSON(document.getData());
 
                 AttendanceCard card = new AttendanceCard(
-                        item.getClassName(),
-                        item.getSection(),
-                        item.getBatch(),
-                        item.getDate(),
+                        item.getCourse(),
+                        item.getSubject(),
+                        String.valueOf(item.getYear()),
+                        item.getDate().toDate().toString(),
                         item.getDateUnix().toString()
                 );
 

@@ -4,6 +4,7 @@ import com.google.cloud.Timestamp;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
 import java.util.HashMap;
@@ -11,75 +12,101 @@ import java.util.List;
 import java.util.Map;
 
 public class SectionAttendance {
-    private ObjectProperty<Timestamp> dateUnix = new SimpleObjectProperty<>();
-    private StringProperty batch = new SimpleStringProperty(),
-            className = new SimpleStringProperty(),
-            section = new SimpleStringProperty(),
-            date = new SimpleStringProperty();
+    private StringProperty course, subject;
+    private LongProperty year;
+    private ObjectProperty<Timestamp> date, dateUnix;
+    private ListProperty<Map<String, String>> lectureAttendance;
 
-    private MapProperty<String, List<Map<String, Object>>> lectureAttendance = new SimpleMapProperty<>();
 
-    public SectionAttendance(String className,
-                             String section,
-                             String batch,
-                             String date,
+    public SectionAttendance(String course,
+                             String subject,
+                             Long year,
+                             Timestamp date,
                              Timestamp dateUnix,
-                             ObservableMap<String, List<Map<String, Object>>> lectureAttendance) {
-        setClassName(className);
-        setSection(section);
-        setBatch(batch);
-        setDate(date);
-        setDateUnix(dateUnix);
-        setLectureAttendance(lectureAttendance);
+                             List<Map<String, String>> lectureAttendance) {
+        this.course = new SimpleStringProperty(course);
+        this.subject = new SimpleStringProperty(subject);
+        this.year = new SimpleLongProperty(year);
+        this.date = new SimpleObjectProperty<>(date);
+        this.dateUnix = new SimpleObjectProperty<>(dateUnix);
+        this.lectureAttendance = new SimpleListProperty<>(FXCollections.observableArrayList(lectureAttendance));
     }
 
 
     public static SectionAttendance fromJSON(Map<String, Object> json) {
-//        System.out.println(FXCollections.observableMap((HashMap) json.get("lecture_attendance")));
-
         return new SectionAttendance(
-                (String) json.get("class_name"),
-                (String) json.get("section"),
-                (String) json.get("batch"),
-                json.get("date").toString(),
+                (String) json.get("course"),
+                (String) json.get("subject"),
+                (Long) json.get("year"),
+                (Timestamp) json.get("date"),
                 (Timestamp) json.get("date_unix"),
-                FXCollections.observableMap((HashMap) json.get("lecture_attendance"))
+                (List<Map<String, String>>) json.get("lecture_attendance")
+
         );
     }
 
     public Map<String, Object> toJSON() {
         Map<String, Object> json = new HashMap<>();
-        json.put("class_name", className.get());
-        json.put("section", section.get());
-        json.put("batch", batch.get());
+        json.put("course", course.get());
+        json.put("subject", subject.get());
+        json.put("year", year.get());
         json.put("date", date.get());
         json.put("date_unix", dateUnix.get());
         json.put("lecture_attendance", lectureAttendance.get());
         return json;
     }
 
-    public void setDate(String date) {
+    public String getCourse() {
+        return course.get();
+    }
+
+    public StringProperty courseProperty() {
+        return course;
+    }
+
+    public void setCourse(String course) {
+        this.course.set(course);
+    }
+
+    public String getSubject() {
+        return subject.get();
+    }
+
+    public StringProperty subjectProperty() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject.set(subject);
+    }
+
+
+    public long getYear() {
+        return year.get();
+    }
+
+    public LongProperty yearProperty() {
+        return year;
+    }
+
+    public void setYear(long year) {
+        this.year.set(year);
+    }
+
+    public void setYear(int year) {
+        this.year.set(year);
+    }
+
+    public Timestamp getDate() {
+        return date.get();
+    }
+
+    public ObjectProperty<Timestamp> dateProperty() {
+        return date;
+    }
+
+    public void setDate(Timestamp date) {
         this.date.set(date);
-    }
-
-    public void setDateUnix(Timestamp dateUnix) {
-        this.dateUnix.set(dateUnix);
-    }
-
-    public void setBatch(String batch) {
-        this.batch.set(batch);
-    }
-
-    public void setClassName(String className) {
-        this.className.set(className);
-    }
-
-    public void setSection(String section) {
-        this.section.set(section);
-    }
-
-    public void setLectureAttendance(ObservableMap<String, List<Map<String, Object>>> lectureAttendance) {
-        this.lectureAttendance.set(lectureAttendance);
     }
 
     public Timestamp getDateUnix() {
@@ -90,43 +117,19 @@ public class SectionAttendance {
         return dateUnix;
     }
 
-    public String getBatch() {
-        return batch.get();
+    public void setDateUnix(Timestamp dateUnix) {
+        this.dateUnix.set(dateUnix);
     }
 
-    public StringProperty batchProperty() {
-        return batch;
-    }
-
-    public String getClassName() {
-        return className.get();
-    }
-
-    public StringProperty classNameProperty() {
-        return className;
-    }
-
-    public String getSection() {
-        return section.get();
-    }
-
-    public StringProperty sectionProperty() {
-        return section;
-    }
-
-    public String getDate() {
-        return date.get();
-    }
-
-    public StringProperty dateProperty() {
-        return date;
-    }
-
-    public ObservableMap<String, List<Map<String, Object>>> getLectureAttendance() {
+    public ObservableList<Map<String, String>> getLectureAttendance() {
         return lectureAttendance.get();
     }
 
-    public MapProperty<String, List<Map<String, Object>>> lectureAttendanceProperty() {
+    public ListProperty<Map<String, String>> lectureAttendanceProperty() {
         return lectureAttendance;
+    }
+
+    public void setLectureAttendance(ObservableList<Map<String, String>> lectureAttendance) {
+        this.lectureAttendance.set(lectureAttendance);
     }
 }

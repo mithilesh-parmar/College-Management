@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import custom_view.SearchTextFieldController?>
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="course.CourseController"
+           stylesheets="@/styles/dark_metro_style.css"
+>
+
+
+    <VBox>
+
+
+        <BorderPane>
+            <left>
+                <Label id="headline" text="Courses"/>
+            </left>
+            <right>
+                <SearchTextFieldController fx:id="searchTextField"/>
+
+            </right>
+
+        </BorderPane>
+
+        <Button fx:id="addCourse" text="Add Course" defaultButton="true"
+                GridPane.columnIndex="0" GridPane.rowIndex="3"
+                GridPane.columnSpan="2" GridPane.rowSpan="1"
+                GridPane.halignment="CENTER"/>
+
+
+        <FlowPane fx:id="courseFlowPane"/>
+
+
+    </VBox>
+    <ProgressIndicator fx:id="progressIndicator"/>
+
+
+</StackPane>
+

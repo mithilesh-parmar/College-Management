@@ -1,13 +1,8 @@
 package custom_view.card_view;
 
-import custom_view.icon_button.IconButton;
-import custom_view.loading_image.LoadingImage;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -18,20 +13,20 @@ import java.util.ResourceBundle;
 public class AttendanceCard extends BorderPane
         implements Initializable {
 
-    private Label classLabel = new Label();
-    private Label sectionLabel = new Label();
-    private Label batchLabel = new Label();
+    private Label courseLabel = new Label();
+    private Label subjectLabel = new Label();
+    private Label yearLabel = new Label();
     private Label dateLabel = new Label();
     private Label unixDateLabel = new Label();
 
 
-    public AttendanceCard(String className, String section, String batch, String date, String unixDate) {
-        classLabel.setText(className);
-        sectionLabel.setText(section);
-        batchLabel.setText(batch);
+    public AttendanceCard(String course, String subject, String year, String date, String unixDate) {
+        courseLabel.setText(course);
+        subjectLabel.setText(subject);
+        yearLabel.setText(year);
         dateLabel.setText(date);
         unixDateLabel.setText(unixDate);
-        loadData(className, section, batch, date, unixDate);
+        loadData(course, subject, year, date, unixDate);
     }
 
 
@@ -56,9 +51,9 @@ public class AttendanceCard extends BorderPane
 
         setBorder(new Border(new BorderStroke(Color.BLACK,
                 BorderStrokeStyle.DOTTED, new CornerRadii(4), new BorderWidths(1))));
-        setLabelText(classLabel, className);
-        setLabelText(sectionLabel, section);
-        setLabelText(batchLabel, batch);
+        setLabelText(courseLabel, className);
+        setLabelText(subjectLabel, section);
+        setLabelText(yearLabel, batch);
         setLabelText(dateLabel, date);
         setLabelText(unixDateLabel, unixDate);
 
@@ -67,7 +62,7 @@ public class AttendanceCard extends BorderPane
 
         VBox centerArea = new VBox(2);
         centerArea.setAlignment(Pos.CENTER_LEFT);
-        centerArea.getChildren().addAll(classLabel, sectionLabel, batchLabel, dateLabel, unixDateLabel);
+        centerArea.getChildren().addAll(courseLabel, subjectLabel, yearLabel, dateLabel, unixDateLabel);
 
 
         setRight(centerArea);
