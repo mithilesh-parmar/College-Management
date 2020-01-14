@@ -39,7 +39,7 @@
     <ComboBox fx:id="yearComboBox" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
     <Label text="Lecture" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-    <SubjectLoadingComboBox fx:id="subjectLoadingComboBox" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+    <ComboBox fx:id="subjectComboBox" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
     <Label text="Date" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
     <DatePicker fx:id="attendanceDate" GridPane.columnIndex="1" GridPane.rowIndex="3"/>

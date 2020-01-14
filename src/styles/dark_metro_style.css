@@ -38,6 +38,40 @@
 -fx-background-color: white;
 }
 
+#chip{
+-fx-background-color: white;
+}
+
+#iconButton{
+  button_background_color: #cccccc;
+    background_pressed_color: #999999;
+
+    border_hover_color: #7a7a7a;
+
+    text_color: #111;
+    default_button_text_color: white;
+
+    focus_ring_border_color: derive(blue,90%);
+      -fx-background-radius: 10;
+        -fx-background-insets: 0;
+
+}
+#deleteButton{
+
+button_background_color: white;
+    background_pressed_color: #999999;
+
+    border_hover_color: #7a7a7a;
+
+    text_color: #111;
+    default_button_text_color: white;
+
+    focus_ring_border_color: derive(red,90%);
+      -fx-background-radius: 10;
+        -fx-background-insets: 0;
+
+}
+
 /* To be used in "background" Panes */
 .background{
     -fx-background-color: white;

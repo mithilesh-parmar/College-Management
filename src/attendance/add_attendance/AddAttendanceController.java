@@ -26,8 +26,9 @@ public class AddAttendanceController implements Initializable, AttendanceListene
     public Button submitButton;
     public DatePicker attendanceDate;
     public CourseLoadingComboBox courseLoadingComboBox;
-    public SubjectLoadingComboBox subjectLoadingComboBox;
+    //    public SubjectLoadingComboBox subjectLoadingComboBox;
     public ComboBox<Integer> yearComboBox;
+    public ComboBox<String> subjectComboBox;
 
     private AddAttendanceListener listener;
 
@@ -36,11 +37,12 @@ public class AddAttendanceController implements Initializable, AttendanceListene
     private BooleanProperty dataLoading = new SimpleBooleanProperty(false);
     private ObjectProperty<Course> selectedCourse = new SimpleObjectProperty<>();
     private ObjectProperty<Integer> selectedYear = new SimpleObjectProperty<>();
-    private ObjectProperty<Subject> selectedLecture = new SimpleObjectProperty<>();
+    private StringProperty selectedLecture = new SimpleStringProperty();
     private ObjectProperty<File> selectedFile = new SimpleObjectProperty<>();
     private ObjectProperty<LocalDate> selectedDate = new SimpleObjectProperty<>();
 
     private ListProperty<Integer> yearList = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private ListProperty<String> subjectList = new SimpleListProperty<>(FXCollections.observableArrayList());
 
     private BooleanProperty valid = new SimpleBooleanProperty(false);
 
@@ -48,11 +50,13 @@ public class AddAttendanceController implements Initializable, AttendanceListene
         this.listener = listener;
     }
 
+
     @Override
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         yearComboBox.itemsProperty().bind(yearList);
+        subjectComboBox.itemsProperty().bind(subjectList);
 
         attendanceDate.valueProperty().addListener((observableValue, localDate, t1) -> {
             selectedDate.set(t1);
@@ -67,6 +71,14 @@ public class AddAttendanceController implements Initializable, AttendanceListene
             checkReadyToSubmit();
         });
 
+        selectedYear.addListener((observableValue, integer, t1) -> {
+            if (selectedCourse.get() != null) {
+                subjectList.clear();
+                subjectList.addAll(selectedCourse.get().getSubjects().get(String.valueOf(t1)));
+            }
+        });
+
+
         yearComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, integer, t1) -> {
             selectedYear.set(t1);
             checkReadyToSubmit();
@@ -75,11 +87,11 @@ public class AddAttendanceController implements Initializable, AttendanceListene
             selectedCourse.set((Course) selectedItem);
             checkReadyToSubmit();
         });
-
-        subjectLoadingComboBox.setListener(selectedItem -> {
-            selectedLecture.set((Subject) selectedItem);
+        subjectComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, s, t1) -> {
+            selectedLecture.set(t1);
             checkReadyToSubmit();
         });
+
 
         addExcelSheet.textProperty().bind(buttonTitle);
 
@@ -88,6 +100,7 @@ public class AddAttendanceController implements Initializable, AttendanceListene
         submitButton.setOnAction(actionEvent -> uploadAttendance());
 
         submitButton.visibleProperty().bind(valid);
+        attendanceDate.setStyle("/styles/dark_metro_style.css");
     }
 
     private void uploadAttendance() {
@@ -105,7 +118,6 @@ public class AddAttendanceController implements Initializable, AttendanceListene
                                 selectedYear.get()
                         )
         ).start();
-
 
 
     }

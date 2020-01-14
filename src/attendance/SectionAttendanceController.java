@@ -51,7 +51,6 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
         attendanceFlowPane.setAlignment(Pos.CENTER_LEFT);
         firestoreUtility.setListener(this);
         firestoreUtility.getAttendance();
-
         searchTextField.setCallback(this);
         addAttendance.setId("menubutton");
         addAttendance.setOnAction(actionEvent -> loadEditView());

@@ -23,7 +23,7 @@ public class ExcelSheetUtility {
 
     private AttendanceListener listener;
 
-    public void processAttendanceSheet(File file, Course course, Subject subject, Date date, int year) {
+    public void processAttendanceSheet(File file, Course course, String subject, Date date, int year) {
         System.out.println("Processing sheet");
         try {
 
@@ -102,7 +102,7 @@ public class ExcelSheetUtility {
     }
 
     private void addStudentAttendanceData(
-            Subject subject,
+            String subject,
             Course course,
             int year,
             String admission_id,
@@ -126,7 +126,7 @@ public class ExcelSheetUtility {
             System.out.println(queryDocumentSnapshot.getData());
             HashMap<String, Object> lectureData = new HashMap<>();
             lectureData.put("date", date);
-            lectureData.put("lecture", subject.getName());
+            lectureData.put("lecture", subject);
             lectureData.put("present", present);
 //            write data to firestore
             ApiFuture<DocumentReference> attendance = queryDocumentSnapshot
@@ -139,10 +139,10 @@ public class ExcelSheetUtility {
 
     }
 
-    private void addAttendanceForSection(List<Map<String, Object>> lectureAttendance, Course course, Subject subject, Date date, int year) {
+    private void addAttendanceForSection(List<Map<String, Object>> lectureAttendance, Course course, String subject, Date date, int year) {
         Map<String, Object> json = new HashMap<>();
         json.put("course", course.getName());
-        json.put("subject", subject.getName());
+        json.put("subject", subject);
         json.put("date", date);
         json.put("date_unix", Timestamp.of(date));
         json.put("year", year);

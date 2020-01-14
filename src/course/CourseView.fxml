@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.*?>
 
 <?import custom_view.SearchTextFieldController?>
+<?import custom_view.chip_view.ChipView?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="course.CourseController"
@@ -17,10 +18,11 @@
     <VBox>
 
 
-        <BorderPane>
+        <BorderPane >
             <left>
                 <Label id="headline" text="Courses"/>
             </left>
+
             <right>
                 <SearchTextFieldController fx:id="searchTextField"/>
 

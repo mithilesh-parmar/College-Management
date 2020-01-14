@@ -48,8 +48,6 @@ public class DocumentController implements Initializable, DataChangeListener, Cl
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
 
 
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         searchTextField.setCallback(this);
