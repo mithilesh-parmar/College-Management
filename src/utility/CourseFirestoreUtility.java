@@ -5,6 +5,7 @@ import com.google.cloud.firestore.EventListener;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import custom_view.card_view.*;
+import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
 import javafx.application.Platform;
@@ -73,7 +74,6 @@ public class CourseFirestoreUtility {
                     "Name: " + course.getName(),
                     "Years: " + course.getYears().toString()
             );
-            createRotator(card).play();
 
             card.setCardListener(new CardListener() {
                 @Override
@@ -137,17 +137,5 @@ public class CourseFirestoreUtility {
         FirestoreConstants.courseCollectionReference.document(course.getId()).set(course.toJSON());
     }
 
-    private RotateTransition createRotator(CourseCard card) {
-        RotateTransition rotator = new RotateTransition(Duration.millis(1000), card);
-        rotator.setAxis(Rotate.Y_AXIS);
-        rotator.setFromAngle(0);
-        rotator.setToAngle(180);
-        rotator.setAutoReverse(true);
-        rotator.statusProperty().addListener((observableValue, status, t1) -> System.out.println(t1));
-        rotator.setInterpolator(Interpolator.EASE_OUT);
-        rotator.setCycleCount(1);
 
-
-        return rotator;
-    }
 }
