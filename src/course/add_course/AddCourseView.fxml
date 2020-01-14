@@ -20,7 +20,7 @@
         <ColumnConstraints minWidth="100" prefWidth="100"
                            maxWidth="Infinity" halignment="RIGHT">
         </ColumnConstraints>
-        <ColumnConstraints minWidth="200" prefWidth="500"
+        <ColumnConstraints minWidth="200" prefWidth="700"
                            maxWidth="Infinity" hgrow="ALWAYS">
         </ColumnConstraints>
     </columnConstraints>
@@ -43,11 +43,12 @@
     <ComboBox fx:id="yearsComboBox" prefHeight="40"
               GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
+
     <ListView fx:id="subjectListView" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
 
     <!-- Add Submit Button -->
-    <Button fx:id="submitButton" text="Update"
+    <Button fx:id="submitButton" text="Add"
             prefWidth="100" prefHeight="40" defaultButton="true"
             GridPane.columnIndex="0" GridPane.rowIndex="7"
             GridPane.columnSpan="2" GridPane.rowSpan="1"

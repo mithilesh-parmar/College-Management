@@ -12,7 +12,7 @@ public class Course {
     private StringProperty name, id;
     private ObjectProperty<Long> years;
 
-//    Subjects taught for each year
+    //    Subjects taught for each year
 //    1-> english,hindi,maths
 //    2-> digital c c++
 //    3-> etx tex
@@ -25,6 +25,7 @@ public class Course {
         this.subjects = new SimpleMapProperty<>(FXCollections.observableMap(subjects));
     }
 
+
     public static Course fromJSON(Map<String, Object> json) {
         return new Course(
                 (String) json.get("id"),
@@ -35,18 +36,22 @@ public class Course {
     }
 
 
+    public List<String> getSubjects(int year) {
+        return subjects.get(String.valueOf(year));
+    }
+
     public Map<String, Object> toJSON() {
         Map<String, Object> json = new HashMap<>();
         json.put("name", name.get());
         json.put("years", years.get());
         json.put("id", id.get());
-        json.put("subjects",subjects.get());
+        json.put("subjects", subjects.get());
         return json;
     }
 
     @Override
     public String toString() {
-        return name.get();
+        return name.get() + " " + subjects.get();
     }
 
     public Long getYears() {

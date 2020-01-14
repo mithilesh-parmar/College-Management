@@ -1,8 +1,10 @@
 package course;
 
 import com.google.cloud.firestore.QuerySnapshot;
+import course.add_course.AddCourseCallback;
 import course.add_course.AddCourseController;
 import custom_view.SearchTextFieldController;
+import custom_view.card_view.CourseCardListener;
 import custom_view.chip_view.Chip;
 import custom_view.chip_view.ChipView;
 import javafx.beans.property.BooleanProperty;
@@ -30,7 +32,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CourseController implements Initializable, DataChangeListener {
+public class CourseController implements Initializable, DataChangeListener, CourseCardListener {
     public SearchTextFieldController searchTextField;
     public Button addCourse;
     public FlowPane courseFlowPane;
@@ -48,8 +50,10 @@ public class CourseController implements Initializable, DataChangeListener {
         progressIndicator.visibleProperty().bind(dataLoading);
         firestoreUtility.setListener(this);
         firestoreUtility.getCourses();
-        courseFlowPane.getChildren().addAll(firestoreUtility.courseCards);
+        courseFlowPane.getChildren().setAll(firestoreUtility.courseCards);
         addCourse.setOnAction(actionEvent -> loadAddVew(null));
+        firestoreUtility.setCardListener(this);
+
     }
 
     private void loadAddVew(Course course) {
@@ -68,8 +72,21 @@ public class CourseController implements Initializable, DataChangeListener {
             parent = loader.load();
             Scene scene = new Scene(parent);
             stage.setScene(scene);
-//            AddCourseController controller = loader.getController();
+            AddCourseController controller = loader.getController();
+            if (course != null) controller.setCourse(course);
+            controller.setCallback(new AddCourseCallback() {
+                @Override
+                public void onCourseSubmit(Course course) {
+                    close(stage);
+                    firestoreUtility.addCourse(course);
+                }
 
+                @Override
+                public void onCourseUpdate(Course course) {
+                    close(stage);
+                    firestoreUtility.updateCourse(course);
+                }
+            });
 
             stage.showAndWait();
 
@@ -94,5 +111,11 @@ public class CourseController implements Initializable, DataChangeListener {
     @Override
     public void onError(Exception e) {
         dataLoading.set(false);
+    }
+
+    @Override
+    public void onCardClick(Course course) {
+        System.out.println(course);
+        loadAddVew(course);
     }
 }

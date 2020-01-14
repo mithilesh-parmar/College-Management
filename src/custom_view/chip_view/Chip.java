@@ -53,6 +53,9 @@ public class Chip extends HBox {
         setUpView();
     }
 
+    public String getTitle(){
+        return title.get();
+    }
 
     private void setUpView() {
         setAlignment(Pos.CENTER);

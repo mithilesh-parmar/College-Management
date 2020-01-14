@@ -1,12 +1,10 @@
 package utility;
 
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.EventListener;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
-import custom_view.card_view.AttendanceCard;
-import custom_view.card_view.Card;
-import custom_view.card_view.CardListener;
-import custom_view.card_view.CourseCard;
+import custom_view.card_view.*;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.MapProperty;
@@ -31,6 +29,7 @@ public class CourseFirestoreUtility {
     public ObservableList<Course> courses;
     public ListProperty<CourseCard> courseCards;
     public MapProperty<Course, CourseCard> courseCourseCardMapProperty;
+    private CourseCardListener cardListener;
 
     private EventListener<QuerySnapshot> courseDataListener = (snapshot, e) -> {
         if (e != null) {
@@ -55,6 +54,9 @@ public class CourseFirestoreUtility {
         this.listener = listener;
     }
 
+    public void setCardListener(CourseCardListener cardListener) {
+        this.cardListener = cardListener;
+    }
 
     private void parseCourseData(List<QueryDocumentSnapshot> data) {
         courses.clear();
@@ -67,6 +69,32 @@ public class CourseFirestoreUtility {
                     "Years: " + course.getYears().toString()
             );
 
+            card.setCardListener(new CardListener() {
+                @Override
+                public void onCardClick() {
+                    cardListener.onCardClick(course);
+                }
+
+                @Override
+                public void onDeleteButtonClick() {
+
+                }
+
+                @Override
+                public void onEditButtonClick() {
+
+                }
+
+                @Override
+                public void onNotificationButtonClick() {
+
+                }
+
+                @Override
+                public void onContextMenuRequested(MouseEvent event) {
+
+                }
+            });
 
             courses.add(course);
             courseCards.add(card);
@@ -91,5 +119,15 @@ public class CourseFirestoreUtility {
             instance = new CourseFirestoreUtility();
         }
         return instance;
+    }
+
+    public void addCourse(Course course) {
+        DocumentReference document = FirestoreConstants.courseCollectionReference.document();
+        course.setId(document.getId());
+        document.set(course.toJSON());
+    }
+
+    public void updateCourse(Course course) {
+        FirestoreConstants.courseCollectionReference.document(course.getId()).set(course.toJSON());
     }
 }

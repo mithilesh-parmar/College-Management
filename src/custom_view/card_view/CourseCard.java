@@ -15,6 +15,11 @@ public class CourseCard extends BorderPane implements Initializable {
 
     private Label titleLabel, subTitleLabel;
     private StringProperty title, subTitle;
+    private CardListener cardListener;
+
+    public void setCardListener(CardListener cardListener) {
+        this.cardListener = cardListener;
+    }
 
     public CourseCard(String title, String subTitle) {
         this.title = new SimpleStringProperty(title);
@@ -35,6 +40,10 @@ public class CourseCard extends BorderPane implements Initializable {
         setId("card");
 
         setStyle("/styles/dark_metro_style.css");
+
+        setOnMouseClicked(event -> {
+            if (cardListener != null) cardListener.onCardClick();
+        });
     }
 
     @Override
