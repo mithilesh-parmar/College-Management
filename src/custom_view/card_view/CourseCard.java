@@ -46,6 +46,9 @@ public class CourseCard extends BorderPane implements Initializable {
         });
     }
 
+    public void setMirrorLayout() {
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 

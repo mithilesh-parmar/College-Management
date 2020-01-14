@@ -110,6 +110,7 @@ public class AddCourseController implements Initializable {
     private void loadData(Course course) {
 
         System.out.println("Loading Data for " + course);
+        submitButton.setText("Update");
 
         selectedYears.set(course.getYears());
         courseName.set(course.getName());

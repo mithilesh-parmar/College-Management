@@ -5,6 +5,8 @@ import com.google.cloud.firestore.EventListener;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import custom_view.card_view.*;
+import javafx.animation.Interpolator;
+import javafx.animation.RotateTransition;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.MapProperty;
@@ -12,11 +14,14 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.transform.Rotate;
+import javafx.util.Duration;
 import listeners.DataChangeListener;
 import model.Course;
-import model.SectionAttendance;
-import model.Student;
+
 
 import java.util.List;
 
@@ -68,6 +73,7 @@ public class CourseFirestoreUtility {
                     "Name: " + course.getName(),
                     "Years: " + course.getYears().toString()
             );
+            createRotator(card).play();
 
             card.setCardListener(new CardListener() {
                 @Override
@@ -129,5 +135,19 @@ public class CourseFirestoreUtility {
 
     public void updateCourse(Course course) {
         FirestoreConstants.courseCollectionReference.document(course.getId()).set(course.toJSON());
+    }
+
+    private RotateTransition createRotator(CourseCard card) {
+        RotateTransition rotator = new RotateTransition(Duration.millis(1000), card);
+        rotator.setAxis(Rotate.Y_AXIS);
+        rotator.setFromAngle(0);
+        rotator.setToAngle(180);
+        rotator.setAutoReverse(true);
+        rotator.statusProperty().addListener((observableValue, status, t1) -> System.out.println(t1));
+        rotator.setInterpolator(Interpolator.EASE_OUT);
+        rotator.setCycleCount(1);
+
+
+        return rotator;
     }
 }

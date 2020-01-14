@@ -151,7 +151,9 @@ public class ChipView extends BorderPane {
         chips.clear();
         subjects.forEach(s -> {
             System.out.println("Adding new Chip: " + s);
-            chips.add(new Chip(s));
+            Chip chip = new Chip(s);
+            chip.setCallback(chip1 -> chips.remove(chip1));
+            chips.add(chip);
         });
     }
 }
