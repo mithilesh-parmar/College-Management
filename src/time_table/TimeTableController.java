@@ -1,13 +1,9 @@
 package time_table;
 
 import com.google.cloud.firestore.QuerySnapshot;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -16,24 +12,14 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.FileChooser;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
 import model.Lecture;
 import model.Section;
-import model.Student;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import students.detail_view.StudentDetailsController;
 import utility.SectionsFirestoreUtility;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -41,83 +27,84 @@ import java.util.ResourceBundle;
 public class TimeTableController implements Initializable, DataChangeListener {
 
 
-    public TableView<Lecture> timeTableForSection;
     public ListView<Section> sectionsListView;
-
-    public ToggleButton mondayToggleButton;
-    public ToggleButton tuesdayToggleButton;
-    public ToggleButton wednesdayToggleButton;
-    public ToggleButton thursdayToggleButton;
-    public ToggleButton saturdayToggleButton;
-    public ToggleButton fridayToggleButton;
-
-    public BorderPane mainView;
     public ProgressIndicator progressIndicator;
     public TextField searchTextField;
-    public Button addLectureButton;
 
-    private ToggleGroup dayChooser;
+    public TableView<Lecture> mondayTableView;
+    public TableView<Lecture> tuesdayTableView;
+    public TableView<Lecture> wednesdayTableView;
+    public TableView<Lecture> thursdayTableView;
+    public TableView<Lecture> fridayTableView;
+    public TableView<Lecture> saturdayTableView;
+
+    public Button addButton;
+    public FlowPane scheduleView;
+
+
     private BooleanProperty loadingData = new SimpleBooleanProperty(true);
     private SectionsFirestoreUtility firestoreUtility = SectionsFirestoreUtility.getInstance();
 
-    private Section previouslySelectedSection;
-    private Toggle previouslySelectedDayOfWeek;
+
+    private ObjectProperty<Section> selectedSection = new SimpleObjectProperty<>();
+    private BooleanProperty canViewSchedule = new SimpleBooleanProperty(false);
+    private IntegerProperty selectedDay = new SimpleIntegerProperty(0);
+
+    private ListProperty<Lecture> mondaySchedule = new SimpleListProperty<>(FXCollections.observableArrayList()),
+            tuesdaySchedule = new SimpleListProperty<>(FXCollections.observableArrayList()),
+            wednesdaySchedule = new SimpleListProperty<>(FXCollections.observableArrayList()),
+            thursdaySchedule = new SimpleListProperty<>(FXCollections.observableArrayList()),
+            fridaySchedule = new SimpleListProperty<>(FXCollections.observableArrayList()),
+            saturdaySchedule = new SimpleListProperty<>(FXCollections.observableArrayList());
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        setupToggleButtons();
-        mainView.getCenter().visibleProperty().bind(loadingData.not());
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> performSearch(oldValue, newValue));
         progressIndicator.visibleProperty().bind(loadingData);
 
-        dayChooser.selectedToggleProperty().addListener(this::changedDayForSection);
+        addButton.visibleProperty().bind(canViewSchedule);
+
+        mondayTableView.itemsProperty().bind(mondaySchedule);
+        tuesdayTableView.itemsProperty().bind(tuesdaySchedule);
+        wednesdayTableView.itemsProperty().bind(wednesdaySchedule);
+        thursdayTableView.itemsProperty().bind(thursdaySchedule);
+        fridayTableView.itemsProperty().bind(fridaySchedule);
+        saturdayTableView.itemsProperty().bind(saturdaySchedule);
+
 
         firestoreUtility.setListener(this);
         firestoreUtility.getSections();
 
+        addButton.setOnAction(actionEvent -> loadAddView());
 
-        sectionsListView.getSelectionModel().selectedItemProperty().addListener(this::changedSelectedSection);
+
+        sectionsListView.getSelectionModel().selectedItemProperty().addListener((observableValue, section, t1) -> {
+            selectedSection.set(t1);
+            checkCanViewSchedule();
+
+            mondaySchedule.setValue(t1.getClassSchedules().get("1"));
+            tuesdaySchedule.setValue(t1.getClassSchedules().get("2"));
+            wednesdaySchedule.setValue(t1.getClassSchedules().get("3"));
+            thursdaySchedule.setValue(t1.getClassSchedules().get("4"));
+            fridaySchedule.setValue(t1.getClassSchedules().get("5"));
+            saturdaySchedule.setValue(t1.getClassSchedules().get("6"));
+
+        });
         sectionsListView.getSelectionModel().selectFirst();
 
 
-        addLectureButton.setOnAction(actionEvent -> readFile());
-    }
+        scheduleView.visibleProperty().bind(canViewSchedule);
 
-    private void readFile() {
-        FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showOpenDialog(addLectureButton.getScene().getWindow());
-        try {
-            read(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InvalidFormatException e) {
-            e.printStackTrace();
-        }
 
     }
 
-    void read(File file) throws IOException, InvalidFormatException {
-        Workbook workbook = new XSSFWorkbook(file);
 
-        // Retrieving the number of sheets in the Workbook
-        System.out.println("Workbook has " + workbook.getNumberOfSheets() + " Sheets : ");
-
-
-        Sheet sheet = workbook.getSheetAt(0);
-        DataFormatter dataFormatter = new DataFormatter();
-        System.out.println("\n\nIterating over Rows and Columns using for-each loop\n");
-        for (Row row : sheet) {
-            for (Cell cell : row) {
-                String cellValue = dataFormatter.formatCellValue(cell);
-                System.out.print(cellValue + "\t");
-            }
-            System.out.println();
-        }
+    private void checkCanViewSchedule() {
+        canViewSchedule.set(selectedSection.get() != null);
     }
 
 
-    //    TODO add listener for addition of lecture
     private void loadAddView() {
 
 
@@ -135,6 +122,7 @@ public class TimeTableController implements Initializable, DataChangeListener {
             Scene scene = new Scene(parent);
             stage.setScene(scene);
             AddLectureController controller = loader.getController();
+            controller.setSection(selectedSection.get());
             controller.setListener(new LectureListener() {
                 @Override
                 public void onLectureAdded(Lecture lecture) {
@@ -142,8 +130,7 @@ public class TimeTableController implements Initializable, DataChangeListener {
                     loadingData.set(true);
                     firestoreUtility.addLecture(
                             lecture,
-                            dayChooser.getSelectedToggle().getUserData().toString(),
-                            sectionsListView.getSelectionModel().getSelectedItem()
+                            selectedSection.get()
                     );
                 }
             });
@@ -158,66 +145,19 @@ public class TimeTableController implements Initializable, DataChangeListener {
 
     }
 
-//    TODO add delete and edit functionality for lecture
-
-//    TODO after adding a lecture select previous section and dayofweek
 
     @Override
     public void onDataLoaded(ObservableList data) {
         loadingData.set(false);
         sectionsListView.setItems(firestoreUtility.sections);
 
-        if (previouslySelectedSection != null) {
-            System.out.println("Selecting : " + previouslySelectedSection);
-            sectionsListView.getSelectionModel().select(previouslySelectedSection);
-            dayChooser.selectToggle(previouslySelectedDayOfWeek);
-
-            sectionsListView.getFocusModel().focus(sectionsListView.getItems().indexOf(previouslySelectedSection));
-
-        }
-
     }
 
     @Override
     public void onDataChange(QuerySnapshot data) {
-        System.out.println(getClass() + " onDataChange: selected section value: " + previouslySelectedSection);
-        previouslySelectedSection = sectionsListView.getSelectionModel().getSelectedItem();
-        previouslySelectedDayOfWeek = dayChooser.getSelectedToggle();
-        System.out.println(getClass() + " onDataChange: Setting selected section to: " + previouslySelectedSection);
         loadingData.set(true);
     }
 
-    private void changedDayForSection(ObservableValue<? extends Toggle> observableValue, Toggle toggle, Toggle t1) {
-        if (sectionsListView.getSelectionModel().getSelectedItem().getClassSchedules() != null)
-            timeTableForSection.setItems(
-                    sectionsListView
-                            .getSelectionModel()
-                            .getSelectedItem()
-                            .getClassSchedules()
-                            .get(observableValue.getValue().getUserData().toString())
-            );
-        else timeTableForSection.setItems(FXCollections.observableArrayList());
-    }
-
-
-    private void setupToggleButtons() {
-        mondayToggleButton.setUserData("1");
-        tuesdayToggleButton.setUserData("2");
-        wednesdayToggleButton.setUserData("3");
-        thursdayToggleButton.setUserData("4");
-        fridayToggleButton.setUserData("5");
-        saturdayToggleButton.setUserData("6");
-
-        dayChooser = new ToggleGroup();
-        dayChooser.getToggles().addAll(
-                mondayToggleButton,
-                tuesdayToggleButton,
-                wednesdayToggleButton,
-                thursdayToggleButton,
-                fridayToggleButton,
-                saturdayToggleButton
-        );
-    }
 
     @Override
     public void onError(Exception e) {
@@ -243,7 +183,7 @@ public class TimeTableController implements Initializable, DataChangeListener {
 
         ObservableList<Section> subList = FXCollections.observableArrayList();
         for (Section p : sectionsListView.getItems()) {
-            String text = p.getName().toUpperCase() + " " + p.getClassId().toUpperCase();
+            String text = p.getSectionName().toUpperCase() + " " + p.getClassName();
             // if the search text contains the manufacturer then add it to sublist
             if (text.contains(searchtext)) {
                 subList.add(p);
@@ -260,15 +200,5 @@ public class TimeTableController implements Initializable, DataChangeListener {
             sectionsListView.requestFocus();
     }
 
-
-    private void changedSelectedSection(ObservableValue<? extends Section> observableValue, Section section, Section t1) {
-
-
-        if (t1 != null && t1.getClassSchedules() != null && t1.getClassSchedules().containsKey("1")) {
-            timeTableForSection.setItems(t1.getClassSchedules().get("1"));
-            dayChooser.getToggles().get(0).setSelected(true);
-        }
-
-    }
 
 }

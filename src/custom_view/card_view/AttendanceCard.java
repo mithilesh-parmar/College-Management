@@ -8,12 +8,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import model.SectionAttendance;
+import utility.DateUtility;
 
 import java.text.SimpleDateFormat;
 
 public class AttendanceCard extends AnimatingCard {
-
-    private ObjectProperty<SectionAttendance> sectionAttendanceObjectProperty;
 
     private GridPane frontView;
     private GridPane rearView;
@@ -24,16 +23,14 @@ public class AttendanceCard extends AnimatingCard {
 
 
     public AttendanceCard(SectionAttendance sectionAttendance) {
-        this.sectionAttendanceObjectProperty = new SimpleObjectProperty<>(sectionAttendance);
         this.courseName = new SimpleStringProperty(sectionAttendance.getCourse());
         this.year = new SimpleStringProperty(String.valueOf(sectionAttendance.getYear()));
         this.totalPresent = sectionAttendance.presentStudentProperty();
         this.totalAbsent = sectionAttendance.absentStudentProperty();
         this.subject = new SimpleStringProperty(sectionAttendance.getSubject());
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy");
-        String date = sdf.format(sectionAttendance.getDate().toDate());
-        this.date = new SimpleStringProperty(date);
+
+        this.date = new SimpleStringProperty(DateUtility.timeStampToReadable(sectionAttendance.getDate()));
 
         frontView = new GridPane();
         rearView = new GridPane();
@@ -43,7 +40,6 @@ public class AttendanceCard extends AnimatingCard {
         setFrontView(frontView);
         setRearView(rearView);
         setShouldAnimate(true);
-
 
     }
 

@@ -22,8 +22,10 @@ import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import listeners.DataChangeListener;
 import model.Course;
+import model.Section;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseFirestoreUtility {
@@ -128,8 +130,29 @@ public class CourseFirestoreUtility {
 
     public void addCourse(Course course) {
         DocumentReference document = FirestoreConstants.courseCollectionReference.document();
+        List<Section> sections = new ArrayList<>();
+        course.getSubjects().forEach((sectionName, subjects) -> {
+            Section section = new Section(
+                    "",
+                    course.getName(),
+                    sectionName,
+                    FXCollections.observableHashMap(),
+                    subjects
+            );
+            sections.add(section);
+        });
+
+        System.out.println(sections);
+
+        sections.forEach(this::addSection);
         course.setId(document.getId());
         document.set(course.toJSON());
+    }
+
+    private void addSection(Section section) {
+        DocumentReference document = FirestoreConstants.sectionsCollectionReference.document();
+        section.setId(document.getId());
+        document.set(section.toJSON());
     }
 
     public void updateCourse(Course course) {

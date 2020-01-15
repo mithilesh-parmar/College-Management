@@ -15,8 +15,10 @@ public abstract class AnimatingCard extends StackPane {
     private Node rearView;
     private BooleanProperty ready = new SimpleBooleanProperty(false);
     private BooleanProperty shouldAnimate = new SimpleBooleanProperty(false);
+    private BooleanProperty frontViewVisible = new SimpleBooleanProperty(true);
 
     AnimatingCard() {
+
         setOnMouseEntered(event -> showRearView());
         setOnMouseExited(event -> showFrontView());
         ready.addListener((observableValue, aBoolean, t1) -> {
@@ -32,10 +34,14 @@ public abstract class AnimatingCard extends StackPane {
     abstract void initRearView();
 
 
-
-
     void setFrontView(Node frontView) {
         this.frontView = frontView;
+        this.frontView.visibleProperty().bind(frontViewVisible);
+        this.frontView.opacityProperty().addListener((observableValue, number, t1) -> {
+            if (t1.doubleValue() < 0.5) {
+                frontViewVisible.set(false);
+            } else frontViewVisible.set(true);
+        });
         checkIfReady();
     }
 

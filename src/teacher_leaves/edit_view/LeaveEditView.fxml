@@ -39,7 +39,7 @@
            GridPane.rowIndex="2">
     </Label>
     <!-- Add Email Text Field -->
-    <TextField fx:id="startDateTextField" prefHeight="40"
+    <DatePicker fx:id="startDatePicker" prefHeight="40"
                GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
 
@@ -48,7 +48,7 @@
            GridPane.rowIndex="3">
     </Label>
     <!-- Add Email Text Field -->
-    <TextField fx:id="endDateTextField" prefHeight="40"
+    <DatePicker fx:id="endDatePicker" prefHeight="40"
                GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
 

@@ -10,6 +10,7 @@ import model.Course;
 import utility.FirestoreConstants;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,22 +56,25 @@ public class CourseTest {
 
         Course MBA = new Course("", "MBA", (long) 2, mbaSubjects);
 
-        DocumentReference bbaDocument = FirestoreConstants.courseCollectionReference.document();
-        BBA.setId(bbaDocument.getId());
-        bbaDocument.set(BBA.toJSON());
+        List<Course> courses = new ArrayList<>();
+        courses.add(MBA);
+        courses.add(BBA);
+        courses.add(B_Tech);
 
-        System.out.println(bbaDocument.listCollections());
+        courses.forEach(course -> {
+            for (int i = 1; i <= course.getYears(); i++) {
+                DocumentReference document = FirestoreConstants.sectionsCollectionReference.document();
+                Map<String, Object> map = new HashMap<>();
+                map.put("name", i);
+                map.put("class_id", course.getName());
+                map.put("subjects", course.getSubjects(i));
+                map.put("id", document.getId());
+                document.set(map);
+                System.out.println(document.listCollections());
 
-        DocumentReference mbaDocument = FirestoreConstants.courseCollectionReference.document();
-        MBA.setId(mbaDocument.getId());
-        mbaDocument.set(MBA.toJSON());
-        System.out.println(mbaDocument.listCollections());
+            }
+        });
 
-        DocumentReference bTechDocument = FirestoreConstants.courseCollectionReference.document();
-        B_Tech.setId(bTechDocument.getId());
-        bTechDocument.set(B_Tech.toJSON());
-
-        System.out.println(bTechDocument.listCollections());
 
     }
 }

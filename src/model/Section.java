@@ -5,7 +5,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
-import java.sql.Time;
 import java.util.*;
 
 
@@ -29,22 +28,53 @@ Time Table
  */
 
 
+/*
+class id - course name
+name - year
+ */
+
 public class Section {
 
-    private StringProperty classId = new SimpleStringProperty(),
-            name = new SimpleStringProperty();
-
+    private StringProperty className = new SimpleStringProperty(),
+            sectionName = new SimpleStringProperty(), id = new SimpleStringProperty();
+    private ListProperty<String> subjects = new SimpleListProperty<>();
     private MapProperty<String, ObservableList<Lecture>> classSchedules = new SimpleMapProperty<>();
 
-    public Section(String classId, String name, ObservableMap<String, ObservableList<Lecture>> classSchedules) {
-        setClassId(classId);
-        setName(name);
+    public Section(String id, String className, String sectionName, ObservableMap<String, ObservableList<Lecture>> classSchedules, List<String> subjects) {
+        setId(id);
+        setClassName(className);
+        setSectionName(sectionName);
+        setSubjects(FXCollections.observableList(subjects));
         setClassSchedules(FXCollections.observableMap(classSchedules));
     }
 
+    public String getId() {
+        return id.get();
+    }
 
-    public void addLecture(Lecture lecture, String dayOfWeek) {
+    public StringProperty idProperty() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id.set(id);
+    }
+
+    public ObservableList<String> getSubjects() {
+        return subjects.get();
+    }
+
+    public ListProperty<String> subjectsProperty() {
+        return subjects;
+    }
+
+    public void setSubjects(ObservableList<String> subjects) {
+        this.subjects.set(subjects);
+    }
+
+    public void addLecture(Lecture lecture) {
+
+        String dayOfWeek = lecture.getDayOfWeek();
 //        if there's an entry for a particular day
         if (classSchedules.containsKey(dayOfWeek)) {
 
@@ -67,8 +97,10 @@ public class Section {
 
     public Map<String, Object> toJSON() {
         Map<String, Object> json = new HashMap<>();
-        json.put("class_id", classId.get());
-        json.put("name", name.get());
+        json.put("class_id", className.get());
+        json.put("name", sectionName.get());
+        json.put("subjects", subjects.get());
+        json.put("id", id.get());
 
 
         Map<String, List<Lecture>> listMap = new HashMap<>();
@@ -118,39 +150,41 @@ public class Section {
 
 
         return new Section(
+                (String) json.get("id"),
                 (String) json.get("class_id"),
-                (String) json.get("name"),
-                FXCollections.observableMap(classSchedule)
+                String.valueOf(json.get("name")),
+                FXCollections.observableMap(classSchedule),
+                FXCollections.observableList((List<String>) json.get("subjects"))
         );
     }
 
     @Override
     public String toString() {
-        return name.get();
+        return sectionName.get() + "-" + className.get();
     }
 
-    public String getClassId() {
-        return classId.get();
+    public String getClassName() {
+        return className.get();
     }
 
-    public StringProperty classIdProperty() {
-        return classId;
+    public StringProperty classNameProperty() {
+        return className;
     }
 
-    public void setClassId(String classId) {
-        this.classId.set(classId);
+    public void setClassName(String className) {
+        this.className.set(className);
     }
 
-    public String getName() {
-        return name.get();
+    public String getSectionName() {
+        return sectionName.get();
     }
 
-    public StringProperty nameProperty() {
-        return name;
+    public StringProperty sectionNameProperty() {
+        return sectionName;
     }
 
-    public void setName(String name) {
-        this.name.set(name);
+    public void setSectionName(String sectionName) {
+        this.sectionName.set(sectionName);
     }
 
 

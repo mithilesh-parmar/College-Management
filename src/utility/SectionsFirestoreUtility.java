@@ -1,36 +1,25 @@
 package utility;
 
-import com.google.cloud.firestore.EventListener;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import listeners.DataChangeListener;
 import model.Lecture;
 import model.Section;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class SectionsFirestoreUtility {
 
     private DataChangeListener listener;
     private static SectionsFirestoreUtility instance;
-
-
     public ObservableList<Section> sections = FXCollections.observableArrayList();
 
     public ObservableList<String> days = FXCollections.observableArrayList();
 
-    private Task uploadTask = new Task() {
-
-        @Override
-        protected Object call() throws Exception {
-
-            return null;
-        }
-    };
 
     private SectionsFirestoreUtility() {
         getDays();
@@ -83,11 +72,35 @@ public class SectionsFirestoreUtility {
 
     }
 
-    public void addLecture(Lecture lecture, String dayOfWeek, Section section) {
-        System.out.println(lecture+""+dayOfWeek+""+section);
-        section.addLecture(lecture, dayOfWeek);
-        System.out.println(section.toJSON());
-        new Thread(() -> FirestoreConstants.sectionsClassScheduleCollectionReference.document(section.getName()).set(section.toJSON())).start();
+    public void addLecture(Lecture lecture, Section section) {
+//        System.out.println(lecture + "" + lecture.getDayOfWeek() + "" + section);
+        section.addLecture(lecture);
+//        System.out.println(section.toJSON());
+
+        Query query = FirestoreConstants
+                .sectionsCollectionReference
+                .whereEqualTo("name", section.getSectionName())
+                .whereEqualTo("class_id", section.getClassName());
+        System.out.println("Section name " + section.getSectionName() + " class id " + section.getClassName());
+        new Thread(() -> {
+            try {
+                query.get().get().forEach(queryDocumentSnapshot -> {
+                    System.out.println("Found: " + queryDocumentSnapshot.getData());
+
+
+//            write data to firestore
+                    ApiFuture<WriteResult> attendance = queryDocumentSnapshot
+                            .getReference()
+                            .set(section.toJSON());
+
+
+                });
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+//        new Thread(() -> FirestoreConstants.sectionsClassScheduleCollectionReference.document(section.getName()).set(section.toJSON())).start();
 
     }
 

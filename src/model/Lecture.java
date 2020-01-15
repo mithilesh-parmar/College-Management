@@ -10,29 +10,44 @@ public class Lecture {
 
     private StringProperty name = new SimpleStringProperty(),
             startTime = new SimpleStringProperty(),
-            endTime = new SimpleStringProperty();
+            endTime = new SimpleStringProperty(),
+            dayOfWeek = new SimpleStringProperty();
 
-    public Lecture(String name, String endTime, String startTime) {
+
+    public Lecture(String name, String endTime, String startTime, String dayOfWeek) {
         setStartTime(startTime);
         setEndTime(endTime);
         setName(name);
+        setDayOfWeek(dayOfWeek);
+    }
+
+    public String getDayOfWeek() {
+        return dayOfWeek.get();
+    }
+
+    public StringProperty dayOfWeekProperty() {
+        return dayOfWeek;
+    }
+
+    public void setDayOfWeek(String dayOfWeek) {
+        this.dayOfWeek.set(dayOfWeek);
     }
 
     public static Lecture fromJSON(Map<String, Object> json) {
         return new Lecture(
                 (String) json.get("sub_name"),
                 (String) json.get("end_time"),
-                (String) json.get("start_time")
+                (String) json.get("start_time"),
+                (String) json.get("day_of_week")
         );
     }
 
     public Map<String, Object> toJSON() {
-//        TODO add json converter
         Map<String, Object> json = new HashMap<>();
         json.put("sub_name", name.get());
         json.put("start_time", startTime.get());
         json.put("end_time", endTime.get());
-
+        json.put("day_of_week", dayOfWeek.get());
         return json;
     }
 

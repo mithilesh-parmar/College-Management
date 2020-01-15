@@ -3,21 +3,19 @@ package utility;
 import com.google.cloud.firestore.EventListener;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
-import custom_view.card_view.Card;
 import custom_view.card_view.CardListener;
+import custom_view.card_view.LeaveCard;
+import custom_view.card_view.LeaveCardListener;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.scene.input.MouseEvent;
 import listeners.DataChangeListener;
 import model.Leave;
-import teacher_leaves.LeavesCardListener;
 
 import java.util.List;
 
@@ -25,15 +23,15 @@ public class TeacherLeavesUtility {
 
     private static TeacherLeavesUtility instance;
 
-    public ListProperty<Card> teacherLeavesCards;
-    public ListProperty<Card> approvedLeavesCards;
-    public ListProperty<Card> declinedLeavesCards;
-    public ListProperty<Card> pendingLeavesCards;
+    public ListProperty<LeaveCard> teacherLeavesCards;
+    public ListProperty<LeaveCard> approvedLeavesCards;
+    public ListProperty<LeaveCard> declinedLeavesCards;
+    public ListProperty<LeaveCard> pendingLeavesCards;
 
     public ObservableList<Leave> teacherLeaves;
     private DataChangeListener listener;
-    public MapProperty<Leave, Card> teacherLeaveCardMapProperty;
-    private LeavesCardListener cardListener;
+    public MapProperty<Leave, LeaveCard> teacherLeaveCardMapProperty;
+    private LeaveCardListener cardListener;
 
     private EventListener<QuerySnapshot> teacherDataListener = (snapshot, e) -> {
         if (e != null) {
@@ -74,7 +72,11 @@ public class TeacherLeavesUtility {
         this.listener = listener;
     }
 
-    public void setCardListener(LeavesCardListener cardListener) {
+    public LeaveCardListener getCardListener() {
+        return cardListener;
+    }
+
+    public void setCardListener(LeaveCardListener cardListener) {
         this.cardListener = cardListener;
     }
 
@@ -97,36 +99,10 @@ public class TeacherLeavesUtility {
         declinedLeavesCards.clear();
         for (QueryDocumentSnapshot document : data) {
             Leave leave = Leave.fromJSON(document.getData());
-            Card card = new Card(leave.getTeacherName(), leave.getReason(), "", false);
+            LeaveCard card = new LeaveCard(leave);
 
-            if (cardListener != null) {
-                card.setListener(new CardListener() {
-                    @Override
-                    public void onCardClick() {
-                        cardListener.onCardClick(leave);
-                    }
+            card.setListener(cardListener);
 
-                    @Override
-                    public void onDeleteButtonClick() {
-
-                    }
-
-                    @Override
-                    public void onEditButtonClick() {
-
-                    }
-
-                    @Override
-                    public void onNotificationButtonClick() {
-
-                    }
-
-                    @Override
-                    public void onContextMenuRequested(MouseEvent event) {
-                        cardListener.onContextMenuRequested(leave, event);
-                    }
-                });
-            }
             teacherLeaves.add(leave);
             teacherLeavesCards.add(card);
             if (leave.getStatus() == 0) {
@@ -141,6 +117,7 @@ public class TeacherLeavesUtility {
     }
 
     public void updateLeave(Leave updatedLeave) {
+        System.out.println("Updating leave: " + updatedLeave.toJSON());
         FirestoreConstants.teacherLeavesCollectionReference.document(updatedLeave.getId()).set(updatedLeave.toJSON());
     }
 

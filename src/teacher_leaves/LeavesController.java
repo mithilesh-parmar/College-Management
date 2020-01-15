@@ -3,6 +3,8 @@ package teacher_leaves;
 import com.google.cloud.firestore.QuerySnapshot;
 import custom_view.SearchTextFieldController;
 import custom_view.card_view.Card;
+import custom_view.card_view.LeaveCard;
+import custom_view.card_view.LeaveCardListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -34,7 +36,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class LeavesController implements Initializable, SearchCallback, DataChangeListener, LeavesCardListener {
+public class LeavesController implements Initializable, SearchCallback, DataChangeListener, LeaveCardListener {
     public SearchTextFieldController searchTextField;
     public FlowPane teacherLeavesFlowPane;
     public ProgressIndicator progressIndicator;
@@ -48,6 +50,25 @@ public class LeavesController implements Initializable, SearchCallback, DataChan
     private MenuItem declineMenuButton = new MenuItem("Decline");
     private MenuItem editMenuButton = new MenuItem("Edit");
     private MenuItem cancelMenuButton = new MenuItem("Cancel");
+
+    private final int ACCEPT = 1, DECLINE = 2;
+
+    @Override
+    public void onClick(Leave leave) {
+        loadEditView(leave);
+    }
+
+    @Override
+    public void onAcceptAction(Leave leave) {
+        leave.setStatus(ACCEPT);
+        firestoreUtility.updateLeave(leave);
+    }
+
+    @Override
+    public void onDeclineAction(Leave leave) {
+        leave.setStatus(DECLINE);
+        firestoreUtility.updateLeave(leave);
+    }
 
     enum Filter {
 
@@ -161,6 +182,7 @@ public class LeavesController implements Initializable, SearchCallback, DataChan
                 @Override
                 public void onEdit(Leave leave) {
                     close(stage);
+                    dataLoading.set(true);
                     firestoreUtility.updateLeave(leave);
                 }
             });
@@ -174,26 +196,26 @@ public class LeavesController implements Initializable, SearchCallback, DataChan
 
     }
 
-    @Override
-    public void onContextMenuRequested(Leave leave, MouseEvent event) {
-
-        acceptMenuButton.setOnAction(actionEvent -> {
-            leave.setStatus(1);
-            firestoreUtility.updateLeave(leave);
-        });
-        declineMenuButton.setOnAction(actionEvent -> {
-            leave.setStatus(2);
-            firestoreUtility.updateLeave(leave);
-        });
-        editMenuButton.setOnAction(actionEvent -> loadEditView(leave));
-        cancelMenuButton.setOnAction(actionEvent -> teacherLeaveContextMenu.hide());
-        teacherLeaveContextMenu.show(teacherLeavesFlowPane, event.getScreenX(), event.getScreenY());
-    }
-
-    @Override
-    public void onCardClick(Leave leave) {
-        loadEditView(leave);
-    }
+//    @Override
+//    public void onContextMenuRequested(Leave leave, MouseEvent event) {
+//
+//        acceptMenuButton.setOnAction(actionEvent -> {
+//            leave.setStatus(1);
+//            firestoreUtility.updateLeave(leave);
+//        });
+//        declineMenuButton.setOnAction(actionEvent -> {
+//            leave.setStatus(2);
+//            firestoreUtility.updateLeave(leave);
+//        });
+//        editMenuButton.setOnAction(actionEvent -> loadEditView(leave));
+//        cancelMenuButton.setOnAction(actionEvent -> teacherLeaveContextMenu.hide());
+//        teacherLeaveContextMenu.show(teacherLeavesFlowPane, event.getScreenX(), event.getScreenY());
+//    }
+//
+//    @Override
+//    public void onCardClick(Leave leave) {
+//        loadEditView(leave);
+//    }
 
 
     @Override
@@ -208,7 +230,7 @@ public class LeavesController implements Initializable, SearchCallback, DataChan
         // convert the searched text to uppercase
         String searchtext = newValue.toUpperCase();
 
-        ObservableList<Card> subList = FXCollections.observableArrayList();
+        ObservableList<LeaveCard> subList = FXCollections.observableArrayList();
         for (Leave p : firestoreUtility.teacherLeaves) {
             String text =
                     p.getTeacherName().toUpperCase() + " "
