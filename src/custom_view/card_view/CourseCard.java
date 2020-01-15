@@ -15,14 +15,12 @@ import model.Course;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CourseCard extends AnimatingCard implements Initializable {
+public class CourseCard extends AnimatingCard {
 
-    private Label titleLabel, subTitleLabel;
     private StringProperty title, subTitle;
     private CardListener cardListener;
     private GridPane frontView = new GridPane();
     private BorderPane rearView = new BorderPane();
-    private Course course;
 
     public void setCardListener(CardListener cardListener) {
         this.cardListener = cardListener;
@@ -33,38 +31,36 @@ public class CourseCard extends AnimatingCard implements Initializable {
         this.title = new SimpleStringProperty(course.getName());
         this.subTitle = new SimpleStringProperty(course.getYears().toString());
 
-        setUpFrontView();
-        setUpRearView();
+        initFrontView();
+        initRearView();
         setFrontView(frontView);
         setRearView(rearView);
     }
 
-    private void setUpRearView() {
+    void initRearView() {
 
     }
 
     public void setCourse(Course course) {
-        this.course = course;
 
         this.title = new SimpleStringProperty(course.getName());
         this.subTitle = new SimpleStringProperty(course.getYears().toString());
 
-        setUpFrontView();
-        setUpRearView();
+        initFrontView();
+        initRearView();
         setFrontView(frontView);
         setRearView(rearView);
     }
 
-    private void setUpFrontView() {
-        titleLabel = new Label(title.get());
-        subTitleLabel = new Label(subTitle.get());
+    void initFrontView() {
+        Label titleLabel = new Label(title.get());
+        Label subTitleLabel = new Label(subTitle.get());
         titleLabel.textProperty().bind(this.title);
         subTitleLabel.textProperty().bind(this.subTitle);
 
 
         ColumnConstraints columnConstraints = new ColumnConstraints();
         columnConstraints.setMinWidth(100);
-//        columnConstraints.setPrefWidth(200);
         columnConstraints.setHalignment(HPos.LEFT);
 
         frontView.setPadding(new Insets(8));
@@ -101,8 +97,4 @@ public class CourseCard extends AnimatingCard implements Initializable {
     }
 
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-    }
 }

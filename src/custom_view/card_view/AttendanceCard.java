@@ -1,85 +1,135 @@
 package custom_view.card_view;
 
-import javafx.fxml.Initializable;
+import javafx.beans.property.*;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import model.SectionAttendance;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.text.SimpleDateFormat;
 
-public class AttendanceCard extends BorderPane
-        implements Initializable {
+public class AttendanceCard extends AnimatingCard {
 
-    private Label courseLabel = new Label();
-    private Label subjectLabel = new Label();
-    private Label yearLabel = new Label();
-    private Label dateLabel = new Label();
-    private Label unixDateLabel = new Label();
+    private ObjectProperty<SectionAttendance> sectionAttendanceObjectProperty;
+
+    private GridPane frontView;
+    private GridPane rearView;
+
+    private StringProperty courseName, year, date, subject;
+    private IntegerProperty totalPresent, totalAbsent;
+    private CardListener cardListener;
 
 
-    public AttendanceCard(String course, String subject, String year, String date, String unixDate) {
-        courseLabel.setText(course);
-        subjectLabel.setText(subject);
-        yearLabel.setText(year);
-        dateLabel.setText(date);
-        unixDateLabel.setText(unixDate);
-        loadData(course, subject, year, date, unixDate);
+    public AttendanceCard(SectionAttendance sectionAttendance) {
+        this.sectionAttendanceObjectProperty = new SimpleObjectProperty<>(sectionAttendance);
+        this.courseName = new SimpleStringProperty(sectionAttendance.getCourse());
+        this.year = new SimpleStringProperty(String.valueOf(sectionAttendance.getYear()));
+        this.totalPresent = sectionAttendance.presentStudentProperty();
+        this.totalAbsent = sectionAttendance.absentStudentProperty();
+        this.subject = new SimpleStringProperty(sectionAttendance.getSubject());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy");
+        String date = sdf.format(sectionAttendance.getDate().toDate());
+        this.date = new SimpleStringProperty(date);
+
+        frontView = new GridPane();
+        rearView = new GridPane();
+
+        initFrontView();
+        initRearView();
+        setFrontView(frontView);
+        setRearView(rearView);
+        setShouldAnimate(true);
+
+
     }
 
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    void initFrontView() {
+        Label courseNameLabel = new Label(courseName.get());
+        Label yearLabel = new Label(year.get());
+        Label dateLabel = new Label(date.get());
+
+        courseNameLabel.textProperty().bind(this.courseName);
+        yearLabel.textProperty().bind(this.year);
 
 
-    }
+        ColumnConstraints columnConstraints = new ColumnConstraints();
+        columnConstraints.setMinWidth(100);
+        columnConstraints.setHalignment(HPos.LEFT);
+
+        frontView.setPadding(new Insets(8));
+
+        frontView.getColumnConstraints()
+                .addAll(columnConstraints, columnConstraints);
+
+        frontView.add(new Label("Course: "), 0, 0);
+        frontView.add(courseNameLabel, 1, 0);
+
+        frontView.add(new Label("Year: "), 0, 1);
+        frontView.add(yearLabel, 1, 1);
+
+        frontView.add(new Label("Date: "), 0, 2);
+        frontView.add(dateLabel, 1, 2);
 
 
-    public void setListener(AttendanceCardListener listener) {
-
-        setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) listener.onCardClick();
-        });
-
-    }
-
-    private void loadData(String className, String section, String batch, String date, String unixDate) {
-        setPadding(new Insets(10));
+        frontView.setHgap(4);
+        frontView.setVgap(4);
+        frontView.setAlignment(Pos.CENTER_LEFT);
 
 
-        setBorder(new Border(new BorderStroke(Color.BLACK,
-                BorderStrokeStyle.DOTTED, new CornerRadii(4), new BorderWidths(1))));
-        setLabelText(courseLabel, className);
-        setLabelText(subjectLabel, section);
-        setLabelText(yearLabel, batch);
-        setLabelText(dateLabel, date);
-        setLabelText(unixDateLabel, unixDate);
-
-
-
-
-        VBox centerArea = new VBox(2);
-        centerArea.setAlignment(Pos.CENTER_LEFT);
-        centerArea.getChildren().addAll(courseLabel, subjectLabel, yearLabel, dateLabel, unixDateLabel);
-
-
-        setRight(centerArea);
-
-
+        setBorder(new Border(new BorderStroke(Color.SLATEGREY,
+                BorderStrokeStyle.SOLID, new CornerRadii(8), new BorderWidths(1))));
+        setPadding(new Insets(14));
         setId("card");
 
         setStyle("/styles/dark_metro_style.css");
 
+        setOnMouseClicked(event -> {
+            if (cardListener == null) return;
+            if (event.getClickCount() == 2)
+                cardListener.onCardClick();
+        });
 
     }
 
+    @Override
+    void initRearView() {
+        Label subjectNameLabel = new Label(courseName.get());
+        Label totalPresentLabel = new Label(year.get());
+        Label totalAbsentLabel = new Label(date.get());
 
-    private void setLabelText(Label label, String text) {
+        subjectNameLabel.textProperty().bind(this.subject);
+        totalPresentLabel.textProperty().bind(this.totalPresent.asString());
+        totalAbsentLabel.textProperty().bind(this.totalAbsent.asString());
 
-        label.setText(text);
-        label.setPadding(new Insets(0, 14, 0, 14));
+        ColumnConstraints columnConstraints = new ColumnConstraints();
+        columnConstraints.setMinWidth(100);
+        columnConstraints.setHalignment(HPos.LEFT);
+
+        rearView.setPadding(new Insets(8));
+
+        rearView.getColumnConstraints()
+                .addAll(columnConstraints, columnConstraints);
+
+        rearView.add(new Label("Subject: "), 0, 0);
+        rearView.add(subjectNameLabel, 1, 0);
+
+        rearView.add(new Label("Total Present: "), 0, 1);
+        rearView.add(totalPresentLabel, 1, 1);
+
+        rearView.add(new Label("Total Absent: "), 0, 2);
+        rearView.add(totalAbsentLabel, 1, 2);
+
+
+        rearView.setHgap(4);
+        rearView.setVgap(4);
+        rearView.setAlignment(Pos.CENTER_LEFT);
+
     }
 
 }

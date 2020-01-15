@@ -17,6 +17,8 @@ public class SectionAttendance {
     private ObjectProperty<Timestamp> date, dateUnix;
     private ListProperty<Map<String, String>> lectureAttendance;
 
+    private IntegerProperty presentStudent, absentStudent;
+
 
     public SectionAttendance(String course,
                              String subject,
@@ -30,6 +32,9 @@ public class SectionAttendance {
         this.date = new SimpleObjectProperty<>(date);
         this.dateUnix = new SimpleObjectProperty<>(dateUnix);
         this.lectureAttendance = new SimpleListProperty<>(FXCollections.observableArrayList(lectureAttendance));
+        this.presentStudent = new SimpleIntegerProperty();
+        this.absentStudent = new SimpleIntegerProperty();
+        getAttendanceSummary();
     }
 
 
@@ -54,6 +59,38 @@ public class SectionAttendance {
         json.put("date_unix", dateUnix.get());
         json.put("lecture_attendance", lectureAttendance.get());
         return json;
+    }
+
+    private void getAttendanceSummary() {
+        lectureAttendance.forEach(student -> {
+            boolean isPresent = student.get("present").toUpperCase().equals("P");
+            if (isPresent) presentStudent.set(presentStudent.get() + 1);
+            else absentStudent.set(absentStudent.get() + 1);
+        });
+    }
+
+    public int getPresentStudent() {
+        return presentStudent.get();
+    }
+
+    public IntegerProperty presentStudentProperty() {
+        return presentStudent;
+    }
+
+    public void setPresentStudent(int presentStudent) {
+        this.presentStudent.set(presentStudent);
+    }
+
+    public int getAbsentStudent() {
+        return absentStudent.get();
+    }
+
+    public IntegerProperty absentStudentProperty() {
+        return absentStudent;
+    }
+
+    public void setAbsentStudent(int absentStudent) {
+        this.absentStudent.set(absentStudent);
     }
 
     public String getCourse() {

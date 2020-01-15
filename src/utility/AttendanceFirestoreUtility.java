@@ -75,19 +75,9 @@ public class AttendanceFirestoreUtility {
                 System.out.println(document.getData());
                 SectionAttendance item = SectionAttendance.fromJSON(document.getData());
 
-                AttendanceCard card = new AttendanceCard(
-                        item.getCourse(),
-                        item.getSubject(),
-                        String.valueOf(item.getYear()),
-                        item.getDate().toDate().toString(),
-                        item.getDateUnix().toString()
-                );
+                AttendanceCard card = new AttendanceCard(item);
 
-                if (cardListener != null) {
-                    card.setListener(() -> {
-                        cardListener.onCardClick(item);
-                    });
-                }
+
 
                 sectionAttendances.add(item);
                 attendanceCards.add(card);

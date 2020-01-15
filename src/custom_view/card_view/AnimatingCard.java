@@ -27,9 +27,12 @@ public abstract class AnimatingCard extends StackPane {
         });
     }
 
-    public Node getFrontView() {
-        return frontView;
-    }
+    abstract void initFrontView();
+
+    abstract void initRearView();
+
+
+
 
     void setFrontView(Node frontView) {
         this.frontView = frontView;
@@ -40,9 +43,6 @@ public abstract class AnimatingCard extends StackPane {
         this.shouldAnimate.set(shouldAnimate);
     }
 
-    public Node getRearView() {
-        return rearView;
-    }
 
     void setRearView(Node rearView) {
         this.rearView = rearView;
