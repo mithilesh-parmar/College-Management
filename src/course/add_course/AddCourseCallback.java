@@ -11,4 +11,6 @@ public interface AddCourseCallback {
     default void close(Stage stage) {
         stage.close();
     }
+
+    void onCourseDelete(Course course);
 }

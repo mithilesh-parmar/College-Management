@@ -14,6 +14,7 @@ public abstract class AnimatingCard extends StackPane {
     private Node frontView;
     private Node rearView;
     private BooleanProperty ready = new SimpleBooleanProperty(false);
+    private BooleanProperty shouldAnimate = new SimpleBooleanProperty(false);
 
     AnimatingCard() {
         setOnMouseEntered(event -> showRearView());
@@ -35,6 +36,10 @@ public abstract class AnimatingCard extends StackPane {
         checkIfReady();
     }
 
+    public void setShouldAnimate(boolean shouldAnimate) {
+        this.shouldAnimate.set(shouldAnimate);
+    }
+
     public Node getRearView() {
         return rearView;
     }
@@ -49,14 +54,14 @@ public abstract class AnimatingCard extends StackPane {
     }
 
     private void showFrontView() {
-        if (frontView == null || rearView == null) return;
+        if (frontView == null || rearView == null || !shouldAnimate.get()) return;
         createTransition(frontView, frontView.getOpacity(), 1.0).play();
         createTransition(rearView, rearView.getOpacity(), 0.0).play();
     }
 
 
     private void showRearView() {
-        if (frontView == null || rearView == null) return;
+        if (frontView == null || rearView == null || !shouldAnimate.get()) return;
         createTransition(rearView, rearView.getOpacity(), 1.0).play();
         createTransition(frontView, frontView.getOpacity(), 0.0).play();
     }

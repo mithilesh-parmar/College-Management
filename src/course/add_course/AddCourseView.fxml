@@ -50,12 +50,22 @@
     <!-- Add Submit Button -->
     <Button fx:id="submitButton" text="Add"
             prefWidth="100" prefHeight="40" defaultButton="true"
-            GridPane.columnIndex="0" GridPane.rowIndex="7"
-            GridPane.columnSpan="2" GridPane.rowSpan="1"
+            GridPane.columnIndex="2" GridPane.rowIndex="7"
+            GridPane.columnSpan="1" GridPane.rowSpan="1"
             GridPane.halignment="CENTER"
     >
         <GridPane.margin>
-            <Insets top="20" bottom="20"/>
+            <Insets topRightBottomLeft="4"/>
+        </GridPane.margin>
+    </Button>
+    <Button fx:id="deleteButton" text="Delete Course"
+            prefWidth="100" prefHeight="40"
+            GridPane.columnIndex="3" GridPane.rowIndex="7"
+            GridPane.columnSpan="1" GridPane.rowSpan="1"
+            GridPane.halignment="CENTER"
+    >
+        <GridPane.margin>
+            <Insets topRightBottomLeft="4"/>
         </GridPane.margin>
     </Button>
 </GridPane>

@@ -25,8 +25,10 @@ public class AddCourseController implements Initializable {
 
     private final int MAX_YEARS = 5;
     public ListView<ChipView> subjectListView;
+    public Button deleteButton;
     private ListProperty<Long> yearsList = new SimpleListProperty<>(FXCollections.observableArrayList());
     private BooleanProperty canSubmit = new SimpleBooleanProperty(true);
+    private BooleanProperty canDelete = new SimpleBooleanProperty(false);
     private ListProperty<ChipView> chipViews = new SimpleListProperty<>(FXCollections.observableArrayList());
 
     private StringProperty courseName = new SimpleStringProperty();
@@ -37,14 +39,14 @@ public class AddCourseController implements Initializable {
     private Course course;
     private AddCourseCallback callback;
 
+
     public void setCallback(AddCourseCallback callback) {
         this.callback = callback;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-
+        deleteButton.visibleProperty().bind(canDelete);
 //        Years comboBox
         for (int i = 1; i <= MAX_YEARS; i++) {
             yearsList.get().add((long) i);
@@ -66,10 +68,18 @@ public class AddCourseController implements Initializable {
 
         submitButton.visibleProperty().bind(canSubmit);
 
+        deleteButton.setOnAction(actionEvent -> onDeleteAction());
     }
 
-    private void onSubmitAction() {
-        if (callback == null) return;
+    private void onDeleteAction() {
+        if (callback == null || course == null) return;
+        processSubjectsFromView();
+        callback.onCourseDelete(
+                course
+        );
+    }
+
+    private void processSubjectsFromView() {
         chipViews.forEach(chipView -> {
             String yearName = chipView.getTitle();
             subjects.get().put(yearName, new ArrayList<>());
@@ -78,6 +88,12 @@ public class AddCourseController implements Initializable {
                 subjects.get().get(yearName).add(name);
             });
         });
+    }
+
+    private void onSubmitAction() {
+        if (callback == null) return;
+
+        processSubjectsFromView();
 
 
         if (course == null)
@@ -105,6 +121,7 @@ public class AddCourseController implements Initializable {
     public void setCourse(Course course) {
         this.course = course;
         loadData(course);
+        canDelete.set(true);
     }
 
     private void loadData(Course course) {

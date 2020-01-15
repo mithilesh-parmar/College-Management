@@ -71,8 +71,7 @@ public class CourseFirestoreUtility {
             Course course = Course.fromJSON(document.getData());
 
             CourseCard card = new CourseCard(
-                    "Name: " + course.getName(),
-                    "Years: " + course.getYears().toString()
+                    course
             );
 
             card.setCardListener(new CardListener() {
@@ -138,4 +137,7 @@ public class CourseFirestoreUtility {
     }
 
 
+    public void deleteCourse(Course course) {
+        FirestoreConstants.courseCollectionReference.document(course.getId()).delete();
+    }
 }
