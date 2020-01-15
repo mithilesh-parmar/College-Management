@@ -78,12 +78,14 @@ public class CourseController implements Initializable, DataChangeListener, Cour
                 @Override
                 public void onCourseSubmit(Course course) {
                     close(stage);
+                    dataLoading.set(true);
                     firestoreUtility.addCourse(course);
                 }
 
                 @Override
                 public void onCourseUpdate(Course course) {
                     close(stage);
+                    dataLoading.set(true);
                     firestoreUtility.updateCourse(course);
                 }
             });

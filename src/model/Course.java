@@ -51,7 +51,7 @@ public class Course {
 
     @Override
     public String toString() {
-        return name.get() + " " + subjects.get();
+        return name.get() ;
     }
 
     public Long getYears() {
