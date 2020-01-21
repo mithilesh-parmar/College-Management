@@ -136,7 +136,7 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
 
         ObservableList<AttendanceCard> subList = FXCollections.observableArrayList();
         for (SectionAttendance p : firestoreUtility.sectionAttendances) {
-            String text = p.getCourse().toUpperCase() + " " + p.getSubject() + " " + String.valueOf(p.getYear()).toUpperCase();
+            String text = p.getClassName().toUpperCase() + " " + p.getSubject() + " " + String.valueOf(p.getSectionName()).toUpperCase();
             // if the search text contains the manufacturer then add it to sublist
             if (text.contains(searchtext)) {
                 subList.add(firestoreUtility.sectionAttendanceCardMapProperty.get(p));

@@ -11,8 +11,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
@@ -23,6 +25,7 @@ import utility.SectionsFirestoreUtility;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.Flow;
 
 public class TimeTableController implements Initializable, DataChangeListener {
 
@@ -57,8 +60,19 @@ public class TimeTableController implements Initializable, DataChangeListener {
             fridaySchedule = new SimpleListProperty<>(FXCollections.observableArrayList()),
             saturdaySchedule = new SimpleListProperty<>(FXCollections.observableArrayList());
 
+    public TimeTableController() {
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+
+        scrollPane.setPannable(true);
+
 
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> performSearch(oldValue, newValue));
         progressIndicator.visibleProperty().bind(loadingData);
@@ -96,7 +110,9 @@ public class TimeTableController implements Initializable, DataChangeListener {
 
         scheduleView.visibleProperty().bind(canViewSchedule);
 
-
+        canViewSchedule.addListener((observableValue, aBoolean, t1) -> {
+            if (t1) scrollPane.setContent(scheduleView);
+        });
     }
 
 

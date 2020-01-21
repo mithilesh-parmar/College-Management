@@ -1,8 +1,10 @@
 package custom_view.loading_combobox.batches;
 
+import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.EventListener;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
+import custom_view.loading_combobox.LoadingComboBox;
 import custom_view.loading_combobox.LoadingComboBoxListener;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -15,75 +17,33 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.StackPane;
 import model.Batch;
+import model.ClassItem;
 import utility.FirestoreConstants;
 
 import java.util.List;
 
-public class BatchLoadingComboBox extends StackPane {
-
-    private ListProperty<Batch> batchList = new SimpleListProperty<>();
-
-    private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
+public class BatchLoadingComboBox extends LoadingComboBox {
 
 
-    private LoadingComboBoxListener listener;
+    @Override
+    public CollectionReference getCollectionReference() {
+        return FirestoreConstants.batchCollectionReference;
+    }
 
-    private EventListener<QuerySnapshot> classDataListener = (snapshot, e) -> {
-        if (e != null) {
-            System.err.println("Listen failed: " + e);
-            return;
+
+
+    @Override
+    public void parseData(List<QueryDocumentSnapshot> documents) {
+        System.out.println("Parsing data");
+        ObservableList<Object> objectObservableList = FXCollections.observableArrayList();
+        ListProperty<Object> objects = comboBoxObjectListPropertyProperty();
+        if (objects != null) objects.clear();
+        for (QueryDocumentSnapshot document : documents)
+            objectObservableList.add(Batch.fromJSON(document.getData()));
+        if (objects != null) {
+            objects.set(objectObservableList);
         }
-        if (snapshot != null && !snapshot.isEmpty()) {
-            Platform.runLater(() -> {
-                parseBatchData(snapshot.getDocuments());
-            });
-        } else {
-            System.out.print("Current data: null");
-
-        }
-    };
-
-    public void setListener(LoadingComboBoxListener listener) {
-        this.listener = listener;
+        setOriginalList(objects);
+        dataLoadingProperty().set(false);
     }
-
-    public BatchLoadingComboBox() {
-
-        ProgressIndicator progressIndicator = new ProgressIndicator();
-        progressIndicator.visibleProperty().bind(dataLoading);
-        ComboBox<Batch> batchComboBox = new ComboBox<>();
-
-
-        getChildren().addAll(batchComboBox, progressIndicator);
-
-
-        batchComboBox.itemsProperty().bind(batchList);
-
-        loadSections();
-
-        batchComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, section, t1) -> {
-            if (listener != null) listener.onItemSelected(t1);
-        });
-
-    }
-
-
-    private void loadSections() {
-        dataLoading.set(true);
-        if (batchList.size() > 0) return;
-        FirestoreConstants.batchCollectionReference.addSnapshotListener(classDataListener);
-    }
-
-    private void parseBatchData(List<QueryDocumentSnapshot> data) {
-        ObservableList<Batch> sectionObservableList = FXCollections.observableArrayList();
-        if (batchList != null) batchList.clear();
-        for (QueryDocumentSnapshot document : data)
-            sectionObservableList.add(Batch.fromJSON(document.getData()));
-
-        if (batchList != null) {
-            batchList.set(sectionObservableList);
-        }
-        dataLoading.set(false);
-    }
-
 }

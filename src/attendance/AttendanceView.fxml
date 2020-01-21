@@ -10,7 +10,6 @@
 <?import custom_view.SearchTextFieldController?>
 <?import javafx.scene.image.ImageView?>
 <?import custom_view.loading_combobox.section.SectionLoadingComboBox?>
-<?import custom_view.loading_combobox.classes.ClassLoadingComboBox?>
 <?import custom_view.loading_combobox.batches.BatchLoadingComboBox?>
 <?import javafx.geometry.Insets?>
 <StackPane xmlns="http://javafx.com/javafx"

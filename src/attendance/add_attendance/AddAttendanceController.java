@@ -1,14 +1,16 @@
 package attendance.add_attendance;
 
-import custom_view.loading_combobox.course.CourseLoadingComboBox;
-import custom_view.loading_combobox.subject.SubjectLoadingComboBox;
+import custom_view.loading_combobox.batches.BatchLoadingComboBox;
+import custom_view.loading_combobox.course.ClassLoadingComboBox;
+import custom_view.loading_combobox.section.SectionLoadingComboBox;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
+import model.ClassItem;
 import model.Course;
-import model.Subject;
+import model.Section;
 import utility.AttendanceListener;
 import utility.ExcelSheetUtility;
 
@@ -25,23 +27,25 @@ public class AddAttendanceController implements Initializable, AttendanceListene
     public Button addExcelSheet;
     public Button submitButton;
     public DatePicker attendanceDate;
-    public CourseLoadingComboBox courseLoadingComboBox;
-    //    public SubjectLoadingComboBox subjectLoadingComboBox;
-    public ComboBox<Integer> yearComboBox;
+    public ClassLoadingComboBox classComboBox;
+
     public ComboBox<String> subjectComboBox;
+    public SectionLoadingComboBox sectionComboBox;
+    public BatchLoadingComboBox batchComboBox;
 
     private AddAttendanceListener listener;
 
     private StringProperty buttonTitle = new SimpleStringProperty("Upload Excel Sheet");
 
     private BooleanProperty dataLoading = new SimpleBooleanProperty(false);
-    private ObjectProperty<Course> selectedCourse = new SimpleObjectProperty<>();
-    private ObjectProperty<Integer> selectedYear = new SimpleObjectProperty<>();
+    private StringProperty selectedClassName = new SimpleStringProperty();
+    private ObjectProperty<Section> selectedSection = new SimpleObjectProperty<>();
     private StringProperty selectedLecture = new SimpleStringProperty();
     private ObjectProperty<File> selectedFile = new SimpleObjectProperty<>();
     private ObjectProperty<LocalDate> selectedDate = new SimpleObjectProperty<>();
+    private StringProperty selectedBatch = new SimpleStringProperty();
 
-    private ListProperty<Integer> yearList = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private ListProperty<String> yearList = new SimpleListProperty<>(FXCollections.observableArrayList());
     private ListProperty<String> subjectList = new SimpleListProperty<>(FXCollections.observableArrayList());
 
     private BooleanProperty valid = new SimpleBooleanProperty(false);
@@ -55,36 +59,34 @@ public class AddAttendanceController implements Initializable, AttendanceListene
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        yearComboBox.itemsProperty().bind(yearList);
+
         subjectComboBox.itemsProperty().bind(subjectList);
 
-        attendanceDate.valueProperty().addListener((observableValue, localDate, t1) -> {
-            selectedDate.set(t1);
+        batchComboBox.setListener(selctedItem -> {
+            selectedBatch.set(String.valueOf(selctedItem));
             checkReadyToSubmit();
         });
 
-        selectedCourse.addListener((observableValue, course, t1) -> {
-            yearList.clear();
-            for (int i = 1; i <= t1.getYears(); i++) {
-                yearList.get().add(i);
-            }
+
+        selectedClassName.addListener((observableValue, s, t1) -> {
+            System.out.println("Showing Sections for: " + t1);
+            sectionComboBox.showItemFor(t1);
             checkReadyToSubmit();
         });
 
-        selectedYear.addListener((observableValue, integer, t1) -> {
-            if (selectedCourse.get() != null) {
-                subjectList.clear();
-                subjectList.addAll(selectedCourse.get().getSubjects().get(String.valueOf(t1)));
-            }
-        });
-
-
-        yearComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, integer, t1) -> {
-            selectedYear.set(t1);
+        selectedSection.addListener((observableValue, s, t1) -> {
+            subjectList.get().setAll(t1.getSubjects());
             checkReadyToSubmit();
         });
-        courseLoadingComboBox.setListener(selectedItem -> {
-            selectedCourse.set((Course) selectedItem);
+
+        sectionComboBox.setListener(selctedItem -> {
+            selectedSection.set(((Section) selctedItem));
+            checkReadyToSubmit();
+        });
+
+
+        classComboBox.setListener(selectedItem -> {
+            selectedClassName.set(((ClassItem) selectedItem).getName());
             checkReadyToSubmit();
         });
         subjectComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, s, t1) -> {
@@ -100,7 +102,11 @@ public class AddAttendanceController implements Initializable, AttendanceListene
         submitButton.setOnAction(actionEvent -> uploadAttendance());
 
         submitButton.visibleProperty().bind(valid);
-        attendanceDate.setStyle("/styles/dark_metro_style.css");
+
+        attendanceDate.valueProperty().addListener((observableValue, localDate, t1) -> {
+            selectedDate.set(t1);
+            checkReadyToSubmit();
+        });
     }
 
     private void uploadAttendance() {
@@ -112,10 +118,11 @@ public class AddAttendanceController implements Initializable, AttendanceListene
                 () -> sheetUtility
                         .processAttendanceSheet(
                                 selectedFile.get(),
-                                selectedCourse.get(),
+                                selectedClassName.get(),
                                 selectedLecture.get(),
                                 Date.from(selectedDate.get().atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                                selectedYear.get()
+                                selectedSection.get().getSectionName(),
+                                selectedBatch.get()
                         )
         ).start();
 
@@ -132,14 +139,27 @@ public class AddAttendanceController implements Initializable, AttendanceListene
 
 
     private void checkReadyToSubmit() {
-        valid.set(
-                (selectedYear.get() != null
-                        && selectedLecture.get() != null
-                        && selectedCourse.get() != null
-                        && selectedFile.get() != null
-                        && selectedDate.get() != null
-                )
+
+        boolean sectionSelected = selectedSection.get() != null,
+                lectureSelected = selectedLecture.get() != null,
+                classNameSelected = selectedClassName.get() != null,
+                fileSelected = selectedFile.get() != null,
+                dateSelected = selectedDate.get() != null,
+                batchSelected = selectedBatch.get() != null;
+
+        System.out.println("\nSection: " + sectionSelected + " - " + selectedSection.get()
+                + "\nlecture: " + lectureSelected + " - " + selectedLecture.get()
+                + "\nclass: " + classNameSelected + " - " + selectedClassName.get()
+                + "\nfile: " + fileSelected + " - " + selectedFile.get()
+                + "\ndate: " + dateSelected + " - " + selectedDate.get()
+                + "\nbatch: " + batchSelected + " - " + selectedBatch.get()
         );
+
+
+        valid.set(
+                (sectionSelected && lectureSelected && classNameSelected && fileSelected && dateSelected && batchSelected)
+        );
+        System.out.println(valid);
     }
 
     @Override

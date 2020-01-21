@@ -33,6 +33,8 @@ public class SubjectLoadingComboBox extends LoadingComboBox {
         if (objects != null) {
             objects.set(objectObservableList);
         }
+        setOriginalList(objects);
+
         dataLoadingProperty().set(false);
     }
 }

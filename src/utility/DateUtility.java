@@ -2,6 +2,7 @@ package utility;
 
 
 import com.google.cloud.Timestamp;
+import javafx.beans.property.SimpleListProperty;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -14,6 +15,11 @@ public abstract class DateUtility {
     public static String timeStampToReadable(Timestamp timestamp) {
         SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy");
         return sdf.format(timestamp.toDate());
+    }
+
+    public static String dateToStringForFirestore(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd, EEEE");
+        return sdf.format(date);
     }
 
     public static Date localDateToDate(LocalDate localDate) {

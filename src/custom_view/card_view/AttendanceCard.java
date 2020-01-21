@@ -8,9 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import model.SectionAttendance;
-import utility.DateUtility;
-
-import java.text.SimpleDateFormat;
 
 public class AttendanceCard extends AnimatingCard {
 
@@ -23,24 +20,19 @@ public class AttendanceCard extends AnimatingCard {
 
 
     public AttendanceCard(SectionAttendance sectionAttendance) {
-        this.courseName = new SimpleStringProperty(sectionAttendance.getCourse());
-        this.year = new SimpleStringProperty(String.valueOf(sectionAttendance.getYear()));
+        this.courseName = new SimpleStringProperty(sectionAttendance.getClassName());
+        this.year = new SimpleStringProperty(sectionAttendance.getSectionName());
         this.totalPresent = sectionAttendance.presentStudentProperty();
         this.totalAbsent = sectionAttendance.absentStudentProperty();
         this.subject = new SimpleStringProperty(sectionAttendance.getSubject());
-
-
-        this.date = new SimpleStringProperty(DateUtility.timeStampToReadable(sectionAttendance.getDate()));
-
+        this.date = new SimpleStringProperty(sectionAttendance.getDate());
         frontView = new GridPane();
         rearView = new GridPane();
-
         initFrontView();
         initRearView();
         setFrontView(frontView);
         setRearView(rearView);
         setShouldAnimate(true);
-
     }
 
 
@@ -109,8 +101,7 @@ public class AttendanceCard extends AnimatingCard {
 
         rearView.setPadding(new Insets(8));
 
-        rearView.getColumnConstraints()
-                .addAll(columnConstraints, columnConstraints);
+        rearView.getColumnConstraints().addAll(columnConstraints, columnConstraints);
 
         rearView.add(new Label("Subject: "), 0, 0);
         rearView.add(subjectNameLabel, 1, 0);

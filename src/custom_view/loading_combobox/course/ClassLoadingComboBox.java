@@ -4,23 +4,35 @@ import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import custom_view.loading_combobox.LoadingComboBox;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import model.ClassItem;
 import model.Course;
 import utility.FirestoreConstants;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class CourseLoadingComboBox extends LoadingComboBox {
+public class ClassLoadingComboBox extends LoadingComboBox {
 
-    public CourseLoadingComboBox() {
+    public ClassLoadingComboBox() {
 
     }
 
+    public void showItemFor(String filter) {
+        dataLoadingProperty().set(true);
+        List<Object> collect = comboBoxObjectListPropertyProperty()
+                .get()
+                .stream()
+                .filter(o -> ((ClassItem) o).getName().toUpperCase().contains(filter.toUpperCase()))
+                .collect(Collectors.toList());
+        setFilteredList(FXCollections.observableArrayList(collect));
+    }
 
     @Override
     public CollectionReference getCollectionReference() {
-        return FirestoreConstants.courseCollectionReference;
+        return FirestoreConstants.classCollectionReference;
     }
 
     @Override
@@ -30,10 +42,12 @@ public class CourseLoadingComboBox extends LoadingComboBox {
         ListProperty<Object> objects = comboBoxObjectListPropertyProperty();
         if (objects != null) objects.clear();
         for (QueryDocumentSnapshot document : documents)
-            objectObservableList.add(Course.fromJSON(document.getData()));
+            objectObservableList.add(ClassItem.fromJSON(document.getData()));
         if (objects != null) {
             objects.set(objectObservableList);
         }
+        setOriginalList(objects);
+
         dataLoadingProperty().set(false);
     }
 

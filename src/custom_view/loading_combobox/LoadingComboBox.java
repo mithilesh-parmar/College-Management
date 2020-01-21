@@ -9,6 +9,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ProgressIndicator;
@@ -20,6 +21,7 @@ public abstract class LoadingComboBox extends StackPane {
 
 
     private ListProperty<Object> comboBoxObjectListProperty = new SimpleListProperty<>();
+    private ListProperty<Object> filteredList = new SimpleListProperty<>();
 
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
 
@@ -38,7 +40,7 @@ public abstract class LoadingComboBox extends StackPane {
         }
     };
     private LoadingComboBoxListener listener;
-
+    private ComboBox<Object> comboBox;
 
     public void setListener(LoadingComboBoxListener listener) {
         this.listener = listener;
@@ -48,18 +50,28 @@ public abstract class LoadingComboBox extends StackPane {
 
         ProgressIndicator progressIndicator = new ProgressIndicator();
         progressIndicator.visibleProperty().bind(dataLoading);
-        ComboBox<Object> comboBox = new ComboBox<>();
 
+        comboBox = new ComboBox<>();
 
         getChildren().addAll(comboBox, progressIndicator);
         getCollectionReference().addSnapshotListener(dataListener);
 
-        comboBox.itemsProperty().bind(comboBoxObjectListProperty);
+//        comboBox.itemsProperty().bind(comboBoxObjectListProperty);
 
         comboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, section, t1) -> {
             if (listener != null) listener.onItemSelected(t1);
         });
 
+    }
+
+    public void setFilteredList(ObservableList<Object> filteredList) {
+        this.filteredList.set(filteredList);
+        comboBox.setItems(filteredList);
+
+    }
+
+    public void setOriginalList(ObservableList<Object> list){
+        comboBox.setItems(list);
     }
 
     protected void setEventListener(EventListener<QuerySnapshot> eventListener) {

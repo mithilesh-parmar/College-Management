@@ -5,31 +5,31 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class SectionAttendance {
-    private StringProperty course, subject;
-    private LongProperty year;
-    private ObjectProperty<Timestamp> date, dateUnix;
+    private StringProperty className, subject, date, sectionName;
+    private ObjectProperty<Timestamp> dateUnix;
     private ListProperty<Map<String, String>> lectureAttendance;
 
     private IntegerProperty presentStudent, absentStudent;
 
 
-    public SectionAttendance(String course,
+    public SectionAttendance(String className,
                              String subject,
-                             Long year,
-                             Timestamp date,
+                             String section,
+                             String date,
                              Timestamp dateUnix,
                              List<Map<String, String>> lectureAttendance) {
-        this.course = new SimpleStringProperty(course);
+        this.className = new SimpleStringProperty(className);
         this.subject = new SimpleStringProperty(subject);
-        this.year = new SimpleLongProperty(year);
-        this.date = new SimpleObjectProperty<>(date);
+        this.sectionName = new SimpleStringProperty(section);
+
+
+        this.date = new SimpleStringProperty(date);
         this.dateUnix = new SimpleObjectProperty<>(dateUnix);
         this.lectureAttendance = new SimpleListProperty<>(FXCollections.observableArrayList(lectureAttendance));
         this.presentStudent = new SimpleIntegerProperty();
@@ -40,10 +40,10 @@ public class SectionAttendance {
 
     public static SectionAttendance fromJSON(Map<String, Object> json) {
         return new SectionAttendance(
-                (String) json.get("course"),
+                (String) json.get("class_name"),
                 (String) json.get("subject"),
-                (Long) json.get("year"),
-                (Timestamp) json.get("date"),
+                (String) json.get("section"),
+                (String) json.get("date"),
                 (Timestamp) json.get("date_unix"),
                 (List<Map<String, String>>) json.get("lecture_attendance")
 
@@ -52,9 +52,9 @@ public class SectionAttendance {
 
     public Map<String, Object> toJSON() {
         Map<String, Object> json = new HashMap<>();
-        json.put("course", course.get());
+        json.put("class_name", className.get());
         json.put("subject", subject.get());
-        json.put("year", year.get());
+        json.put("section", sectionName.get());
         json.put("date", date.get());
         json.put("date_unix", dateUnix.get());
         json.put("lecture_attendance", lectureAttendance.get());
@@ -93,16 +93,16 @@ public class SectionAttendance {
         this.absentStudent.set(absentStudent);
     }
 
-    public String getCourse() {
-        return course.get();
+    public String getClassName() {
+        return className.get();
     }
 
-    public StringProperty courseProperty() {
-        return course;
+    public StringProperty classNameProperty() {
+        return className;
     }
 
-    public void setCourse(String course) {
-        this.course.set(course);
+    public void setClassName(String className) {
+        this.className.set(className);
     }
 
     public String getSubject() {
@@ -117,32 +117,27 @@ public class SectionAttendance {
         this.subject.set(subject);
     }
 
-
-    public long getYear() {
-        return year.get();
+    public String getSectionName() {
+        return sectionName.get();
     }
 
-    public LongProperty yearProperty() {
-        return year;
+    public StringProperty sectionNameProperty() {
+        return sectionName;
     }
 
-    public void setYear(long year) {
-        this.year.set(year);
+    public void setSectionName(String sectionName) {
+        this.sectionName.set(sectionName);
     }
 
-    public void setYear(int year) {
-        this.year.set(year);
-    }
-
-    public Timestamp getDate() {
+    public String getDate() {
         return date.get();
     }
 
-    public ObjectProperty<Timestamp> dateProperty() {
+    public StringProperty dateProperty() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(String date) {
         this.date.set(date);
     }
 

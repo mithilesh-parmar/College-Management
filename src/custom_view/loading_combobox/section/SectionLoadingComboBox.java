@@ -1,8 +1,10 @@
 package custom_view.loading_combobox.section;
 
+import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.EventListener;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
+import custom_view.loading_combobox.LoadingComboBox;
 import custom_view.loading_combobox.LoadingComboBoxListener;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -14,74 +16,48 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.StackPane;
+import model.ClassItem;
 import model.Section;
 import utility.FirestoreConstants;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class SectionLoadingComboBox extends StackPane {
+public class SectionLoadingComboBox extends LoadingComboBox {
 
+    private ListProperty<Object> sections =
+            new SimpleListProperty<>(FXCollections.observableArrayList());
 
-    private ListProperty<Section> sectionsList = new SimpleListProperty<>();
-
-    private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
-
-
-    private LoadingComboBoxListener listener;
-
-    private EventListener<QuerySnapshot> sectionsDataListener = (snapshot, e) -> {
-        if (e != null) {
-            System.err.println("Listen failed: " + e);
-            return;
-        }
-        if (snapshot != null && !snapshot.isEmpty()) {
-            Platform.runLater(() -> {
-                parseSectionsData(snapshot.getDocuments());
-            });
-        } else {
-            System.out.print("Current data: null");
-
-        }
-    };
-
-    public void setListener(LoadingComboBoxListener listener) {
-        this.listener = listener;
+    public void showItemFor(String filter) {
+        System.out.println(filter);
+        dataLoadingProperty().set(true);
+        List<Object> collect = sections
+                .get()
+                .stream()
+                .filter(o -> ((Section) o).getClassName().toUpperCase().contains(filter.toUpperCase()))
+                .collect(Collectors.toList());
+        setFilteredList(FXCollections.observableArrayList(collect));
+        dataLoadingProperty().set(false);
     }
 
-    public SectionLoadingComboBox() {
-
-        ProgressIndicator progressIndicator = new ProgressIndicator();
-        progressIndicator.visibleProperty().bind(dataLoading);
-        ComboBox<Section> sectionComboBox = new ComboBox<>();
-
-
-        getChildren().addAll(sectionComboBox, progressIndicator);
-
-
-        sectionComboBox.itemsProperty().bind(sectionsList);
-
-        loadSections();
-
-        sectionComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, section, t1) -> {
-            if (listener != null) listener.onItemSelected(t1);
-        });
-
+    @Override
+    public CollectionReference getCollectionReference() {
+        return FirestoreConstants.sectionsCollectionReference;
     }
 
-
-    private void loadSections() {
-        dataLoading.set(true);
-        FirestoreConstants.sectionsCollectionReference.addSnapshotListener(sectionsDataListener);
-    }
-
-    private void parseSectionsData(List<QueryDocumentSnapshot> data) {
-        ObservableList<Section> sectionObservableList = FXCollections.observableArrayList();
-        if (sectionsList != null) sectionsList.clear();
-        for (QueryDocumentSnapshot document : data) sectionObservableList.add(Section.fromJSON(document.getData()));
-
-        if (sectionsList != null) {
-            sectionsList.set(sectionObservableList);
+    @Override
+    public void parseData(List<QueryDocumentSnapshot> documents) {
+        System.out.println("Parsing data");
+        ObservableList<Object> objectObservableList = FXCollections.observableArrayList();
+        ListProperty<Object> objects = comboBoxObjectListPropertyProperty();
+        if (objects != null) objects.clear();
+        for (QueryDocumentSnapshot document : documents)
+            objectObservableList.add(Section.fromJSON(document.getData()));
+        if (objects != null) {
+            objects.set(objectObservableList);
+            sections.set(objectObservableList);
         }
-        dataLoading.set(false);
+        setOriginalList(objects);
+        dataLoadingProperty().set(false);
     }
 }

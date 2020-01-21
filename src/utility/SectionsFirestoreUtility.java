@@ -88,7 +88,7 @@ public class SectionsFirestoreUtility {
                     System.out.println("Found: " + queryDocumentSnapshot.getData());
 
 
-//            write data to firestore
+//                  write data to firestore
                     ApiFuture<WriteResult> attendance = queryDocumentSnapshot
                             .getReference()
                             .set(section.toJSON());

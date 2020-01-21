@@ -6,15 +6,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import custom_view.loading_combobox.classes.ClassLoadingComboBox?>
+
 <?import custom_view.loading_combobox.section.SectionLoadingComboBox?>
 <?import javafx.geometry.Insets?>
+
+<?import custom_view.loading_combobox.course.ClassLoadingComboBox?>
 <?import custom_view.loading_combobox.batches.BatchLoadingComboBox?>
-<?import javafx.scene.text.Text?>
-
-
-<?import custom_view.loading_combobox.course.CourseLoadingComboBox?>
-<?import custom_view.loading_combobox.subject.SubjectLoadingComboBox?>
 <GridPane xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml"
           fx:controller="attendance.add_attendance.AddAttendanceController"
@@ -32,26 +29,32 @@
                            maxWidth="Infinity" hgrow="ALWAYS" halignment="CENTER">
         </ColumnConstraints>
     </columnConstraints>
-    <Label text="Course" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-    <CourseLoadingComboBox fx:id="courseLoadingComboBox" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-    <Label text="Year" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-    <ComboBox fx:id="yearComboBox" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-    <Label text="Lecture" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-    <ComboBox fx:id="subjectComboBox" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+    <Label text="Batch" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+    <BatchLoadingComboBox fx:id="batchComboBox" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-    <Label text="Date" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-    <DatePicker fx:id="attendanceDate" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
-    <Label text="Sheet" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+    <Label text="Class" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+    <ClassLoadingComboBox fx:id="classComboBox" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+    <Label text="Section" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+    <SectionLoadingComboBox fx:id="sectionComboBox" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+    <Label text="Lecture" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+    <ComboBox fx:id="subjectComboBox" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+    <Label text="Date" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+    <DatePicker fx:id="attendanceDate" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+    <Label text="Sheet" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
     <Button fx:id="addExcelSheet" text="Select Excel Sheet"
-            GridPane.columnIndex="1" GridPane.rowIndex="4"
+            GridPane.columnIndex="1" GridPane.rowIndex="5"
             GridPane.columnSpan="2" GridPane.rowSpan="1"
             GridPane.halignment="CENTER"/>
 
     <Button fx:id="submitButton" text="Submit"
-            GridPane.columnIndex="0" GridPane.rowIndex="5"
+            GridPane.columnIndex="0" GridPane.rowIndex="6"
             GridPane.columnSpan="2" GridPane.rowSpan="1"
             GridPane.halignment="CENTER"/>
 
