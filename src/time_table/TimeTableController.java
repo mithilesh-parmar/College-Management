@@ -11,12 +11,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import listeners.DataChangeListener;
 import model.Lecture;
 import model.Section;
@@ -42,7 +40,7 @@ public class TimeTableController implements Initializable, DataChangeListener {
     public TableView<Lecture> saturdayTableView;
 
     public Button addButton;
-    public FlowPane scheduleView;
+    public ListView scheduleView;
 
 
     private BooleanProperty loadingData = new SimpleBooleanProperty(true);
@@ -66,6 +64,7 @@ public class TimeTableController implements Initializable, DataChangeListener {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        sectionsListView.setCellFactory(sectionListView -> new SectionListCell());
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
@@ -216,5 +215,30 @@ public class TimeTableController implements Initializable, DataChangeListener {
             sectionsListView.requestFocus();
     }
 
+    private class SectionListCell extends ListCell<Section> {
 
+        private final Label classNameLabel = new Label();
+        private final Label sectionNameLabel = new Label();
+        private VBox vBox = new VBox(5);
+
+        SectionListCell() {
+//            setStyle("/styles/dark_metro_style.css");
+            // Add listeners here...
+        }
+
+        @Override
+        public void updateItem(Section obj, boolean empty) {
+            super.updateItem(obj, empty);
+            if (empty) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                classNameLabel.setText("Class: " + obj.getClassName());
+
+                sectionNameLabel.setText("Section: " + obj.getSectionName());
+                vBox.getChildren().setAll(classNameLabel, sectionNameLabel);
+                setGraphic(vBox);
+            }
+        }
+    }
 }
