@@ -7,11 +7,14 @@ import custom_view.card_view.Card;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -47,6 +50,7 @@ public class TeacherController implements Initializable,
     public ProgressIndicator progressIndicator;
     public SearchTextFieldController searchField;
     public FlowPane teacherFlowPane;
+    public ScrollPane scroll;
 
     private ContextMenu tableContextMenu = new ContextMenu();
     private MenuItem pushNotificationMenuButton = new MenuItem("Push Notification");
@@ -64,11 +68,19 @@ public class TeacherController implements Initializable,
 
         teacherFlowPane.setHgap(10);
         teacherFlowPane.setVgap(10);
-        teacherFlowPane.setAlignment(Pos.CENTER_LEFT);
+        teacherFlowPane.setAlignment(Pos.TOP_LEFT);
         tableContextMenu.setHideOnEscape(true);
         tableContextMenu.setAutoHide(true);
         teacherFlowPane.setPadding(new Insets(10));
 
+        scroll.setContent(teacherFlowPane);
+        scroll.viewportBoundsProperty().addListener(new ChangeListener<Bounds>() {
+            @Override
+            public void changed(ObservableValue<? extends Bounds> ov, Bounds oldBounds, Bounds bounds) {
+                teacherFlowPane.setPrefWidth(bounds.getWidth());
+                teacherFlowPane.setPrefHeight(bounds.getHeight());
+            }
+        });
 
         teacherFlowPane.getChildren().addAll(firestoreUtility.teacherCards);
 

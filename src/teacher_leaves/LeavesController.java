@@ -13,14 +13,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
@@ -41,6 +39,7 @@ public class LeavesController implements Initializable, SearchCallback, DataChan
     public FlowPane teacherLeavesFlowPane;
     public ProgressIndicator progressIndicator;
     public ComboBox<Filter> filterComboBox;
+    public ScrollPane scrollPane;
 
     private TeacherLeavesUtility firestoreUtility = TeacherLeavesUtility.getInstance();
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
@@ -92,9 +91,20 @@ public class LeavesController implements Initializable, SearchCallback, DataChan
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+
         teacherLeavesFlowPane.setHgap(10);
         teacherLeavesFlowPane.setVgap(10);
-        teacherLeavesFlowPane.setAlignment(Pos.CENTER_LEFT);
+        teacherLeavesFlowPane.setAlignment(Pos.TOP_LEFT);
+
+
+        scrollPane.viewportBoundsProperty().addListener(new ChangeListener<Bounds>() {
+            @Override
+            public void changed(ObservableValue<? extends Bounds> ov, Bounds oldBounds, Bounds bounds) {
+                teacherLeavesFlowPane.setPrefWidth(bounds.getWidth());
+                teacherLeavesFlowPane.setPrefHeight(bounds.getHeight());
+            }
+        });
+
         teacherLeaveContextMenu.setHideOnEscape(true);
         teacherLeaveContextMenu.setAutoHide(true);
         teacherLeavesFlowPane.setPadding(new Insets(10));

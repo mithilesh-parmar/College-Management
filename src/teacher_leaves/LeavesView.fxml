@@ -29,8 +29,11 @@
 
         <ComboBox fx:id="filterComboBox"/>
 
-        <FlowPane fx:id="teacherLeavesFlowPane"/>
+        <ScrollPane  fx:id="scrollPane" VBox.vgrow="ALWAYS">
 
+            <FlowPane fx:id="teacherLeavesFlowPane"  />
+
+        </ScrollPane>
 
     </VBox>
     <ProgressIndicator fx:id="progressIndicator"/>

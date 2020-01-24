@@ -39,7 +39,11 @@
                 GridPane.halignment="CENTER"/>
 
 
-        <FlowPane fx:id="attendanceFlowPane"/>
+        <ScrollPane fx:id="scrollPane" VBox.vgrow="ALWAYS">
+
+            <FlowPane fx:id="attendanceFlowPane"/>
+
+        </ScrollPane>
 
 
     </VBox>

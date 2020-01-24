@@ -215,7 +215,7 @@ public class TimeTableController implements Initializable, DataChangeListener {
             sectionsListView.requestFocus();
     }
 
-    private class SectionListCell extends ListCell<Section> {
+    private static class SectionListCell extends ListCell<Section> {
 
         private final Label classNameLabel = new Label();
         private final Label sectionNameLabel = new Label();

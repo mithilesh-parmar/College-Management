@@ -7,16 +7,20 @@ import custom_view.SearchTextFieldController;
 import custom_view.card_view.AttendanceCard;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -37,6 +41,7 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
     public FlowPane attendanceFlowPane;
     public ProgressIndicator progressIndicator;
     public Button addAttendance;
+    public ScrollPane scrollPane;
 
     private AttendanceFirestoreUtility firestoreUtility = AttendanceFirestoreUtility.getInstance();
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
@@ -44,11 +49,22 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        scrollPane.setContent(attendanceFlowPane);
+        scrollPane.viewportBoundsProperty().addListener(new ChangeListener<Bounds>() {
+            @Override
+            public void changed(ObservableValue<? extends Bounds> ov, Bounds oldBounds, Bounds bounds) {
+                attendanceFlowPane.setPrefWidth(bounds.getWidth());
+                attendanceFlowPane.setPrefHeight(bounds.getHeight());
+            }
+        });
+
+
         progressIndicator.visibleProperty().bind(dataLoading);
         attendanceFlowPane.setHgap(10);
         attendanceFlowPane.setVgap(10);
         attendanceFlowPane.setPadding(new Insets(16));
-        attendanceFlowPane.setAlignment(Pos.CENTER_LEFT);
+        attendanceFlowPane.setAlignment(Pos.TOP_LEFT);
         firestoreUtility.setListener(this);
         firestoreUtility.getAttendance();
         searchTextField.setCallback(this);

@@ -31,8 +31,10 @@
                 </HBox>
             </right>
         </BorderPane>
+        <ScrollPane fx:id="scroll" VBox.vgrow="ALWAYS">
+            <FlowPane fx:id="teacherFlowPane"/>
+        </ScrollPane>
 
-        <FlowPane fx:id="teacherFlowPane"/>
 
         <!--                <TableView fx:id="teacherTable" VBox.vgrow="ALWAYS" >-->
         <!--                    <columnResizePolicy>-->

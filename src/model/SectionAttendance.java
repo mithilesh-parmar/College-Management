@@ -13,7 +13,7 @@ import java.util.Map;
 public class SectionAttendance {
     private StringProperty className, subject, date, sectionName;
     private ObjectProperty<Timestamp> dateUnix;
-    private ListProperty<Map<String, String>> lectureAttendance;
+    private ListProperty<Map<String, Object>> lectureAttendance;
 
     private IntegerProperty presentStudent, absentStudent;
 
@@ -23,7 +23,7 @@ public class SectionAttendance {
                              String section,
                              String date,
                              Timestamp dateUnix,
-                             List<Map<String, String>> lectureAttendance) {
+                             List<Map<String, Object>> lectureAttendance) {
         this.className = new SimpleStringProperty(className);
         this.subject = new SimpleStringProperty(subject);
         this.sectionName = new SimpleStringProperty(section);
@@ -45,7 +45,7 @@ public class SectionAttendance {
                 (String) json.get("section"),
                 (String) json.get("date"),
                 (Timestamp) json.get("date_unix"),
-                (List<Map<String, String>>) json.get("lecture_attendance")
+                (List<Map<String, Object>>) json.get("lecture_attendance")
 
         );
     }
@@ -63,7 +63,9 @@ public class SectionAttendance {
 
     private void getAttendanceSummary() {
         lectureAttendance.forEach(student -> {
-            boolean isPresent = student.get("present").toUpperCase().equals("P");
+//            System.out.println(student.get("present"));
+            boolean isPresent = (boolean) student.get("present");
+
             if (isPresent) presentStudent.set(presentStudent.get() + 1);
             else absentStudent.set(absentStudent.get() + 1);
         });
@@ -153,15 +155,16 @@ public class SectionAttendance {
         this.dateUnix.set(dateUnix);
     }
 
-    public ObservableList<Map<String, String>> getLectureAttendance() {
+
+    public ObservableList<Map<String, Object>> getLectureAttendance() {
         return lectureAttendance.get();
     }
 
-    public ListProperty<Map<String, String>> lectureAttendanceProperty() {
+    public ListProperty<Map<String, Object>> lectureAttendanceProperty() {
         return lectureAttendance;
     }
 
-    public void setLectureAttendance(ObservableList<Map<String, String>> lectureAttendance) {
+    public void setLectureAttendance(ObservableList<Map<String, Object>> lectureAttendance) {
         this.lectureAttendance.set(lectureAttendance);
     }
 }

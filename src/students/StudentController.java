@@ -42,6 +42,8 @@ public class StudentController implements Initializable, DataChangeListener, Sea
     public ProgressIndicator progressIndicator;
     public SearchTextFieldController searchTextField;
     public FlowPane studentFlowPane;
+    public ScrollPane scroll;
+
     private StudentFirestoreUtility firestoreUtility = StudentFirestoreUtility.getInstance();
     private BooleanProperty loadingData = new SimpleBooleanProperty(true);
     private ContextMenu tableContextMenu = new ContextMenu();
@@ -60,21 +62,14 @@ public class StudentController implements Initializable, DataChangeListener, Sea
 
         Menu menu = new Menu("Notifications");
 
-        final ScrollPane scroll = new ScrollPane();
-
-        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);    // Horizontal scroll bar
-        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);    // Vertical scroll bar
         scroll.setContent(studentFlowPane);
-        scroll.viewportBoundsProperty().addListener(new ChangeListener<Bounds>() {
-            @Override
-            public void changed(ObservableValue<? extends Bounds> ov, Bounds oldBounds, Bounds bounds) {
-                studentFlowPane.setPrefWidth(bounds.getWidth());
-                studentFlowPane.setPrefHeight(bounds.getHeight());
-            }
+        scroll.viewportBoundsProperty().addListener((ov, oldBounds, bounds) -> {
+            studentFlowPane.setPrefWidth(bounds.getWidth());
+            studentFlowPane.setPrefHeight(bounds.getHeight());
         });
         studentFlowPane.setHgap(10);
         studentFlowPane.setVgap(10);
-        studentFlowPane.setAlignment(Pos.CENTER_LEFT);
+        studentFlowPane.setAlignment(Pos.TOP_LEFT);
 
 
         studentFlowPane.setPadding(new Insets(10));
@@ -131,7 +126,6 @@ public class StudentController implements Initializable, DataChangeListener, Sea
 
 
     private void loadEditView(Student student) {
-
 
         FXMLLoader loader;
         loader = new FXMLLoader(getClass().getResource("/students/detail_view/StudentDetailView.fxml"));

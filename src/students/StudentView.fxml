@@ -23,7 +23,10 @@
             </right>
         </BorderPane>
 
-        <FlowPane fx:id="studentFlowPane" />
+        <ScrollPane fx:id="scroll" VBox.vgrow="ALWAYS">
+            <FlowPane fx:id="studentFlowPane" />
+        </ScrollPane>
+
 
         <!--                <TableView fx:id="studentTable"  >-->
         <!--                    <columnResizePolicy>-->
