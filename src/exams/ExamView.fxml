@@ -6,9 +6,32 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="exams.ExamController"
-            prefHeight="400.0" prefWidth="600.0">
+<?import custom_view.SearchTextFieldController?>
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="exams.ExamController"
+           stylesheets="@/styles/dark_metro_style.css"
+>
 
-</AnchorPane>
+
+    <VBox>
+
+        <BorderPane>
+            <left>
+                <Label id="headline" text="Exams"/>
+            </left>
+            <right>
+                <SearchTextFieldController fx:id="searchTextField"/>
+            </right>
+        </BorderPane>
+
+        <ScrollPane fx:id="scroll" VBox.vgrow="ALWAYS">
+            <FlowPane fx:id="examFlowPane"/>
+        </ScrollPane>
+
+
+    </VBox>
+    <ProgressIndicator fx:id="progressIndicator"/>
+
+
+</StackPane>

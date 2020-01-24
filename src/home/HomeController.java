@@ -82,6 +82,7 @@ public class HomeController implements Initializable {
         menuList.add(new Menu("Teacher Leaves", "/teacher_leaves/LeavesView.fxml", ""));
         menuList.add(new Menu("Attendance", "/attendance/AttendanceView.fxml", ""));
         menuList.add(new Menu("Documents", "/documents/DocumentView.fxml", ""));
+        menuList.add(new Menu("Exams", "/exams/ExamView.fxml", ""));
 //        menuList.add(new Menu("Course", "/course/CourseView.fxml", ""));
     }
 }

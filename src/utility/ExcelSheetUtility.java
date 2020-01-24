@@ -45,7 +45,7 @@ public class ExcelSheetUtility {
                    {present:true,student_id:657,lecture:Hindi}
                    ]
          */
-//            Map<String, List<Map<String, Object>>> lectureAttendance = new HashMap<>();
+
 
             List<Map<String, Object>> lectureAttendance = new ArrayList<>();
 
@@ -53,24 +53,14 @@ public class ExcelSheetUtility {
             for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
 //            sheet name contains the subject name
                 Sheet sheet = workbook.getSheetAt(i);
-//            subject name with empty arraylist
-//                lectureAttendance.put(subject.getName(), new ArrayList<>());
+
 
                 for (Row row : sheet) {
-//                add map of student data to that particular subject
+
                     DataFormatter dataFormatter = new DataFormatter();
                     String present = dataFormatter.formatCellValue(row.getCell(1));
                     String admission_id = dataFormatter.formatCellValue(row.getCell(0));
-//                    lectureAttendance.get(subject.getName()).add(getStudentAttendanceMap(present, admission_id));
-//                    lectureAttendance.add(getStudentAttendanceMap(present, admission_id));
 
-//                Add student attendance to firestore
-//                    addStudentAttendanceData(
-//                            sheet.getSheetName(),
-//                            admission_id,
-//                            Timestamp.now().toString(),
-//                            present.toUpperCase().equals("P")
-//                    );
                     Map<String, Object> studentMap = addStudentAttendanceData(
                             subject,
                             className,
@@ -87,13 +77,9 @@ public class ExcelSheetUtility {
 
 
                 }
-//            removing first column {contains student id - present} it is the header
-//                lectureAttendance.get(subject.getName()).remove(0);
-//                lectureAttendance.remove(0);
 
             }
 
-//        System.out.println(lectureAttendance);
             addAttendanceForSection(lectureAttendance, className, subject, date, year, batch);
         } catch (IOException | ExecutionException | InterruptedException | InvalidFormatException e) {
 
@@ -168,19 +154,6 @@ public class ExcelSheetUtility {
         if (add.isDone() && listener != null) listener.onAttendanceUploadFinish();
 
     }
-
-//    private void addAttendanceForSection(Map<String, List<Map<String, Object>>> lectureAttendance, Course course, Subject subject, Date date, int year) {
-//        Map<String, Object> json = new HashMap<>();
-//        json.put("course", course.getName());
-//        json.put("subject", subject.getName());
-//        json.put("date", date);
-//        json.put("date_unix", Timestamp.of(date));
-//        json.put("year", year);
-//        json.put("lecture_attendance", lectureAttendance);
-//        ApiFuture<DocumentReference> add = FirestoreConstants.sectionAttendanceCollectionReference.add(json);
-//        if (add.isDone() && listener != null) listener.onAttendanceUploadFinish();
-//
-//    }
 
 
     public void setListener(AttendanceListener listener) {

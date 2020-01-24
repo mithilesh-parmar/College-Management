@@ -93,6 +93,7 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
                 @Override
                 public void onUploadStart() {
                     close(stage);
+                    dataLoading.set(true);
                     System.out.println("Upload Started .....");
                 }
             });
