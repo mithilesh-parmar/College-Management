@@ -11,18 +11,27 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import listeners.DataChangeListener;
 import model.Exam;
 import model.Leave;
+import teacher_leaves.edit_view.LeaveEditController;
+import teacher_leaves.edit_view.LeaveEditListener;
 import utility.ExamFirestoreUtility;
 import utility.SearchCallback;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -32,6 +41,7 @@ public class ExamController implements Initializable, DataChangeListener, Search
     public FlowPane examFlowPane;
     public SearchTextFieldController searchTextField;
     public ProgressIndicator progressIndicator;
+    public Button addButton;
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
     private ExamFirestoreUtility firestoreUtility = ExamFirestoreUtility.getInstance();
 
@@ -50,6 +60,7 @@ public class ExamController implements Initializable, DataChangeListener, Search
             }
         });
 
+        addButton.setOnAction(actionEvent -> loadEditView(null));
         examFlowPane.getChildren().addAll(firestoreUtility.examCards);
 
         progressIndicator.visibleProperty().bind(dataLoading);
@@ -57,6 +68,31 @@ public class ExamController implements Initializable, DataChangeListener, Search
         firestoreUtility.setExamCardListener(this);
         firestoreUtility.getExams();
         searchTextField.setCallback(this);
+    }
+
+    private void loadEditView(Exam exam) {
+        FXMLLoader loader;
+        loader = new FXMLLoader(getClass().getResource("/exams/add_exam/AddExamView.fxml"));
+        final Stage stage = new Stage();
+        Parent parent = null;
+        try {
+
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Add Exam Details");
+
+            parent = loader.load();
+            Scene scene = new Scene(parent);
+            stage.setScene(scene);
+
+
+            stage.showAndWait();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override

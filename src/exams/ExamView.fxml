@@ -25,6 +25,8 @@
             </right>
         </BorderPane>
 
+        <Button fx:id="addButton" defaultButton="true" text="Add Exam"/>
+
         <ScrollPane fx:id="scroll" VBox.vgrow="ALWAYS">
             <FlowPane fx:id="examFlowPane"/>
         </ScrollPane>

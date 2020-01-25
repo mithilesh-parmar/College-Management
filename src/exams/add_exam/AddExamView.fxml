@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<?import javafx.geometry.Insets?>
+<?import custom_view.loading_combobox.batches.BatchLoadingComboBox?>
+<?import custom_view.loading_combobox.course.ClassLoadingComboBox?>
+<?import custom_view.loading_combobox.section.SectionLoadingComboBox?>
+
+<ScrollPane fx:controller="exams.add_exam.AddExamController"
+            xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@/styles/dark_metro_style.css"
+>
+    <GridPane alignment="CENTER_LEFT"
+              hgap="10" vgap="10">
+
+
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
+        <columnConstraints>
+            <ColumnConstraints minWidth="100" prefWidth="100"
+                               maxWidth="Infinity" halignment="RIGHT">
+            </ColumnConstraints>
+            <ColumnConstraints minWidth="200" prefWidth="700"
+                               maxWidth="Infinity" hgrow="ALWAYS">
+            </ColumnConstraints>
+        </columnConstraints>
+
+
+        <!-- Add Name Label -->
+        <Label text="Exam Name : " GridPane.columnIndex="0"
+               GridPane.rowIndex="1">
+        </Label>
+        <!-- Add Name Text Field -->
+        <TextField fx:id="examNameTextField" prefHeight="40"
+                   GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+
+        <!-- Add Email Label -->
+        <Label text="Batch : " GridPane.columnIndex="0"
+               GridPane.rowIndex="2">
+        </Label>
+        <!-- Add Email Text Field -->
+        <BatchLoadingComboBox fx:id="batchComboBox" prefHeight="40"
+                              GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+
+        <!-- Add Email Label -->
+        <Label text="Class : " GridPane.columnIndex="0"
+               GridPane.rowIndex="3">
+        </Label>
+        <!-- Add Email Text Field -->
+        <ClassLoadingComboBox fx:id="classNameComboBoc" prefHeight="40"
+                              GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+
+        <!-- Add Email Label -->
+        <Label text="Section : " GridPane.columnIndex="0"
+               GridPane.rowIndex="4">
+        </Label>
+        <!-- Add Email Text Field -->
+        <SectionLoadingComboBox fx:id="sectionComboBox" prefHeight="40"
+                                GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+        <!-- Add Email Label -->
+        <Label text="Date : " GridPane.columnIndex="0"
+               GridPane.rowIndex="5">
+        </Label>
+        <!-- Add Email Text Field -->
+        <DatePicker fx:id="datePicker" prefHeight="40"
+                    GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+
+        <!-- Add Email Label -->
+        <Label text="Subjects : " GridPane.columnIndex="0"
+               GridPane.rowIndex="6">
+        </Label>
+        <!-- Add Email Text Field -->
+        <ListView fx:id="listView"
+                  GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+
+        <!-- Add Submit Button -->
+        <Button fx:id="submitButton" text="Update"
+                prefWidth="100" prefHeight="40" defaultButton="true"
+                GridPane.columnIndex="0" GridPane.rowIndex="8"
+                GridPane.columnSpan="2" GridPane.rowSpan="1"
+                GridPane.halignment="CENTER"
+        >
+            <GridPane.margin>
+                <Insets top="20" right="0" bottom="20" left="0"/>
+            </GridPane.margin>
+        </Button>
+    </GridPane>
+</ScrollPane>
+
+

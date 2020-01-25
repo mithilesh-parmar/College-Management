@@ -5,7 +5,9 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import utility.DateUtility;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,10 @@ public class Exam {
         this.time = new SimpleStringProperty(time);
         this.date = new SimpleObjectProperty<>(date);
         this.subjects = new SimpleMapProperty<>(FXCollections.observableMap(subjects));
+    }
+
+    public Exam() {
+
     }
 
     public static Exam fromJSON(Map<String, Object> json) {
@@ -148,5 +154,9 @@ public class Exam {
 
     public void setSubjects(ObservableMap<String, String> subjects) {
         this.subjects.set(subjects);
+    }
+
+    public void setDate(LocalDate t1) {
+        setDate(Timestamp.of(DateUtility.localDateToDate(t1)));
     }
 }
