@@ -8,22 +8,22 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TableView;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import listeners.DataChangeListener;
-import model.ClassItem;
-import model.Result;
-import model.Section;
+import model.*;
 import utility.ResultFirestoreUtility;
 
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ResultController implements Initializable, DataChangeListener {
+
     public TableView<Result> resultTable;
     public BatchLoadingComboBox batchComboBox;
     public SectionLoadingComboBox sectionComboBox;
@@ -34,7 +34,6 @@ public class ResultController implements Initializable, DataChangeListener {
     public Button clearButton;
 
     private ResultFirestoreUtility firestoreUtility = ResultFirestoreUtility.getInstance();
-
     private StringProperty selectedClassName = new SimpleStringProperty();
     private StringProperty selectedBatch = new SimpleStringProperty();
     private ObjectProperty<Section> selectedSection = new SimpleObjectProperty<>();
@@ -48,6 +47,10 @@ public class ResultController implements Initializable, DataChangeListener {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         firestoreUtility.getResults();
         submitButton.disableProperty().bind(canSubmit.not());
+        clearButton.disableProperty().bind(canSubmit.not());
+        resultTable.getSelectionModel().selectedItemProperty().addListener((observableValue, result, t1) -> {
+            viewMarksForExam(t1);
+        });
         loadData();
         progressIndicator.visibleProperty().bind(dataLoading);
         resultTable.itemsProperty().bind(results);
@@ -73,14 +76,63 @@ public class ResultController implements Initializable, DataChangeListener {
         });
 
 
-        submitButton.setOnAction(actionEvent -> {
-            loadData();
+        submitButton.setOnAction(actionEvent -> loadData());
 
-        });
+        clearButton.setOnAction(actionEvent -> clearFilters());
 
-        clearButton.setOnAction(actionEvent -> {
-            clearFilters();
-        });
+    }
+
+    public ResultController() {
+    }
+
+    private void viewMarksForExam(Result result) {
+
+        Stage primaryStage = new Stage();
+
+        ObservableList<SubjectScore> scores = FXCollections.observableArrayList();
+
+        TableView tableView = new TableView();
+
+
+        TableColumn<String, String> column1 = new TableColumn<>("Subject");
+        column1.setCellValueFactory(new PropertyValueFactory<>("subjectName"));
+
+
+        TableColumn<String, String> column2 = new TableColumn<>("Theory");
+        column2.setCellValueFactory(new PropertyValueFactory<>("theoryMarks"));
+
+        TableColumn<String, String> column3 = new TableColumn<>("Practical");
+        column3.setCellValueFactory(new PropertyValueFactory<>("practicalMarks"));
+
+        TableColumn<String, String> column4 = new TableColumn<>("Pass");
+        column4.setCellValueFactory(new PropertyValueFactory<>("pass"));
+
+
+        tableView.getColumns().addAll(column1, column2, column3, column4);
+
+
+        for (Map.Entry entry : result.getSubjects().entrySet()) {
+            HashMap map = (HashMap) entry.getValue();
+
+            scores.add(
+                    new SubjectScore(
+                            (String) entry.getKey(),
+                            (long) map.get("th_mark"),
+                            (long) map.get("pr_mark"),
+                            (boolean) map.get("pass") ? "Pass" : "Fail"
+                    )
+            );
+        }
+
+        tableView.setItems(scores);
+
+        VBox vbox = new VBox(tableView);
+
+        Scene scene = new Scene(vbox);
+
+        primaryStage.setScene(scene);
+
+        primaryStage.show();
 
     }
 
@@ -101,13 +153,17 @@ public class ResultController implements Initializable, DataChangeListener {
                 classNameSelected = selectedClassName.get() != null && !selectedClassName.get().isEmpty(),
                 batchSelected = selectedBatch.get() != null && !selectedBatch.get().isEmpty();
         canSubmit.set((sectionSelected && classNameSelected && batchSelected));
-
     }
 
     private void clearFilters() {
         classComboBox.reset();
         batchComboBox.reset();
         sectionComboBox.reset();
+        setAllData();
+    }
+
+    private void setAllData() {
+        results.setAll(firestoreUtility.results);
     }
 
     @Override
@@ -124,5 +180,82 @@ public class ResultController implements Initializable, DataChangeListener {
     @Override
     public void onError(Exception e) {
         dataLoading.set(false);
+    }
+
+    public class SubjectScore {
+        private String subjectName, pass;
+        private long theoryMarks, practicalMarks;
+
+        public SubjectScore(String subjectName, long theoryMarks, long practicalMarks, String pass) {
+            this.subjectName = subjectName;
+            this.theoryMarks = theoryMarks;
+            this.practicalMarks = practicalMarks;
+            this.pass = pass;
+        }
+
+        public String getSubjectName() {
+            return subjectName;
+        }
+
+        public void setSubjectName(String subjectName) {
+            this.subjectName = subjectName;
+        }
+
+
+        public Long getTheoryMarks() {
+            return theoryMarks;
+        }
+
+        public void setTheoryMarks(Long theoryMarks) {
+            this.theoryMarks = theoryMarks;
+        }
+
+        public Long getPracticalMarks() {
+            return practicalMarks;
+        }
+
+        public void setPracticalMarks(Long practicalMarks) {
+            this.practicalMarks = practicalMarks;
+        }
+
+        public String getPass() {
+            return pass;
+        }
+
+        public void setPass(String pass) {
+            this.pass = pass;
+        }
+    }
+
+    private static class ScoreListCell extends ListCell<SubjectScore> {
+
+        private final Label subjectName = new Label();
+        private final Label theoryMarks = new Label();
+        private final Label practicalMarks = new Label();
+        private final Label pass = new Label();
+        private VBox vBox = new VBox(5);
+        private HBox hBox = new HBox(5);
+
+
+        @Override
+        public void updateItem(SubjectScore obj, boolean empty) {
+            super.updateItem(obj, empty);
+            if (empty) {
+                setText(null);
+                setGraphic(null);
+            } else {
+
+                subjectName.setText(obj.getSubjectName());
+
+                theoryMarks.setText("Theory: " + obj.getTheoryMarks());
+                practicalMarks.setText("Practical: " + obj.getPracticalMarks());
+                pass.setText(obj.getPass());
+
+                vBox.getChildren().addAll(theoryMarks, practicalMarks, pass);
+
+                hBox.getChildren().addAll(subjectName, vBox);
+                setGraphic(hBox);
+            }
+        }
     }
 }

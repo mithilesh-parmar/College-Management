@@ -32,13 +32,15 @@
         </BorderPane>
 
 
-        <HBox spacing="15" fx:id="filterView">
+        <HBox spacing="15" fx:id="filterView" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="8" bottom="4" left="16" right="16"/>
+            </padding>
             <Label text="Batch"/>
             <BatchLoadingComboBox fx:id="batchComboBox"/>
 
             <Label text="Class"/>
             <ClassLoadingComboBox fx:id="classComboBox"/>
-
 
             <Label text="Section"/>
             <SectionLoadingComboBox fx:id="sectionComboBox"/>

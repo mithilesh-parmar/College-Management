@@ -82,8 +82,6 @@ public class Result {
     }
 
 
-
-
     public StringProperty batchProperty() {
         return batch;
     }
