@@ -4,16 +4,15 @@ import com.google.cloud.firestore.QuerySnapshot;
 import custom_view.SearchTextFieldController;
 import custom_view.card_view.ExamCard;
 import custom_view.card_view.ExamCardListener;
-import custom_view.card_view.LeaveCard;
+import exams.add_exam.AddExamCallback;
+import exams.add_exam.AddExamController;
+import result.ResultController;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -25,10 +24,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
 import model.Exam;
-import model.Leave;
-import teacher_leaves.edit_view.LeaveEditController;
-import teacher_leaves.edit_view.LeaveEditListener;
 import utility.ExamFirestoreUtility;
+import utility.ResultFirestoreUtility;
 import utility.SearchCallback;
 
 import java.io.IOException;
@@ -44,6 +41,7 @@ public class ExamController implements Initializable, DataChangeListener, Search
     public Button addButton;
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
     private ExamFirestoreUtility firestoreUtility = ExamFirestoreUtility.getInstance();
+    private ResultFirestoreUtility resultFirestoreUtility = ResultFirestoreUtility.getInstance();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -52,16 +50,14 @@ public class ExamController implements Initializable, DataChangeListener, Search
         examFlowPane.setAlignment(Pos.TOP_LEFT);
 
         scroll.setContent(examFlowPane);
-        scroll.viewportBoundsProperty().addListener(new ChangeListener<Bounds>() {
-            @Override
-            public void changed(ObservableValue<? extends Bounds> ov, Bounds oldBounds, Bounds bounds) {
-                examFlowPane.setPrefWidth(bounds.getWidth());
-                examFlowPane.setPrefHeight(bounds.getHeight());
-            }
+        scroll.viewportBoundsProperty().addListener((ov, oldBounds, bounds) -> {
+            examFlowPane.setPrefWidth(bounds.getWidth());
+            examFlowPane.setPrefHeight(bounds.getHeight());
         });
 
         addButton.setOnAction(actionEvent -> loadEditView(null));
         examFlowPane.getChildren().addAll(firestoreUtility.examCards);
+
 
         progressIndicator.visibleProperty().bind(dataLoading);
         firestoreUtility.setListener(this);
@@ -76,14 +72,25 @@ public class ExamController implements Initializable, DataChangeListener, Search
         final Stage stage = new Stage();
         Parent parent = null;
         try {
-
-
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Add Exam Details");
 
             parent = loader.load();
             Scene scene = new Scene(parent);
             stage.setScene(scene);
+
+            AddExamController controller = loader.getController();
+
+            if (exam != null)
+                controller.setExam(exam);
+            controller.setListener(new AddExamCallback() {
+                @Override
+                public void onAddExam(Exam exam) {
+                    close(stage);
+                    dataLoading.set(true);
+                    firestoreUtility.addExam(exam);
+                }
+            });
 
 
             stage.showAndWait();
@@ -115,7 +122,34 @@ public class ExamController implements Initializable, DataChangeListener, Search
     @Override
     public void onClick(Exam exam) {
 
+        loadEditView(exam);
 
+    }
+
+    @Override
+    public void onResultClick(Exam exam) {
+        FXMLLoader loader;
+        loader = new FXMLLoader(getClass().getResource("/result/ResultView.fxml"));
+        final Stage stage = new Stage();
+        Parent parent = null;
+        try {
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Results");
+
+            parent = loader.load();
+            Scene scene = new Scene(parent);
+            stage.setScene(scene);
+
+            ResultController controller = loader.getController();
+
+//            controller.setExam(exam);
+
+            stage.showAndWait();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

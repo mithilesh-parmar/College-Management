@@ -76,4 +76,9 @@ public class FirestoreConstants {
             .collection("colleges")
             .document("GKevzOMWBqbFtPezdLzF")
             .collection("exams");
+    public final static CollectionReference resultCollectionReference = FirestoreClient
+            .getFirestore()
+            .collection("colleges")
+            .document("GKevzOMWBqbFtPezdLzF")
+            .collection("results");;
 }

@@ -1,5 +1,6 @@
 package utility;
 
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.EventListener;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
@@ -98,4 +99,9 @@ public class ExamFirestoreUtility {
         }
     }
 
+    public void addExam(Exam exam) {
+        DocumentReference document = FirestoreConstants.examsCollectionReference.document();
+        exam.setId(document.getId());
+        document.set(exam.toJSON());
+    }
 }

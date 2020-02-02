@@ -4,4 +4,6 @@ import model.Exam;
 
 public interface ExamCardListener {
     void onClick(Exam exam);
+
+    void onResultClick(Exam exam);
 }

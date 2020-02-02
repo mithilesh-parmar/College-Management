@@ -28,7 +28,9 @@ public class ExamCard extends AnimatingCard {
 
         this.title = new SimpleStringProperty(exam.getName());
         this.subTitle = new SimpleStringProperty(exam.getClassName());
-        this.date = new SimpleStringProperty(DateUtility.timeStampToReadable(exam.getDate()));
+
+        this.date = new SimpleStringProperty(exam.getDate() == null ? "Not Specified" : DateUtility.timeStampToReadable(exam.getDate()));
+
         this.time = new SimpleStringProperty(exam.getTime());
         frontView = new GridPane();
         rearView = new GridPane();
@@ -97,8 +99,11 @@ public class ExamCard extends AnimatingCard {
 
 
         Button editButton = new Button("Edit");
-        editButton.setDefaultButton(true);
         editButton.setOnAction(actionEvent -> listener.onClick(exam));
+
+        Button viewResultButton = new Button("View Result");
+        viewResultButton.setDefaultButton(true);
+        viewResultButton.setOnAction(actionEvent -> listener.onResultClick(exam));
 
         dateLabel.textProperty().bind(this.date);
         timeLabel.textProperty().bind(this.time);
@@ -120,6 +125,7 @@ public class ExamCard extends AnimatingCard {
         rearView.add(new Label("Time: "), 0, 1);
         rearView.add(timeLabel, 1, 1);
 
+        rearView.add(viewResultButton, 0, 2, 2, 2);
         rearView.add(editButton, 1, 2, 2, 2);
 
 

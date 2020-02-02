@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<?import javafx.geometry.Insets?>
+<?import custom_view.SearchTextFieldController?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import custom_view.loading_combobox.batches.BatchLoadingComboBox?>
+<?import custom_view.loading_combobox.section.SectionLoadingComboBox?>
+<?import custom_view.loading_combobox.course.ClassLoadingComboBox?>
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="result.ResultController"
+           stylesheets="@/styles/dark_metro_style.css"
+>
+
+
+    <VBox>
+
+        <BorderPane>
+            <left>
+                <Label id="headline" text="Results"/>
+            </left>
+            <right>
+                <SearchTextFieldController fx:id="searchTextField"/>
+            </right>
+        </BorderPane>
+
+
+        <HBox spacing="15" fx:id="filterView">
+            <Label text="Batch"/>
+            <BatchLoadingComboBox fx:id="batchComboBox"/>
+
+            <Label text="Class"/>
+            <ClassLoadingComboBox fx:id="classComboBox"/>
+
+
+            <Label text="Section"/>
+            <SectionLoadingComboBox fx:id="sectionComboBox"/>
+
+
+            <Button fx:id="submitButton" text="Submit"/>
+            <Button fx:id="clearButton" text="Clear"/>
+
+
+        </HBox>
+
+        <TableView fx:id="resultTable" VBox.vgrow="ALWAYS">
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+            <columns>
+
+                <TableColumn text="Batch">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="batch"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn text="Class">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="className"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn text="Exam">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="examName"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn text="Section">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="section"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn text="Student">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="student"/>
+                    </cellValueFactory>
+                </TableColumn>
+            </columns>
+
+        </TableView>
+
+
+    </VBox>
+    <ProgressIndicator fx:id="progressIndicator"/>
+
+
+</StackPane>
+
+
+

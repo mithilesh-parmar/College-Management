@@ -160,7 +160,7 @@ public class Section {
 
     @Override
     public String toString() {
-        return sectionName.get() + "-" + className.get();
+        return sectionName.get();
     }
 
     public String getClassName() {

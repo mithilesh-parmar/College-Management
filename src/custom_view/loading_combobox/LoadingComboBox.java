@@ -25,6 +25,8 @@ public abstract class LoadingComboBox extends StackPane {
 
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
 
+    private Object value;
+
     EventListener<QuerySnapshot> dataListener = (snapshot, e) -> {
         if (e != null) {
             System.err.println("Listen failed: " + e);
@@ -42,6 +44,13 @@ public abstract class LoadingComboBox extends StackPane {
     private LoadingComboBoxListener listener;
     private ComboBox<Object> comboBox;
 
+    public void setValue(Object value) {
+        this.value = value;
+        dataLoading.set(false);
+        comboBox.setValue(value);
+        comboBox.setDisable(true);
+    }
+
     public void setListener(LoadingComboBoxListener listener) {
         this.listener = listener;
     }
@@ -53,10 +62,9 @@ public abstract class LoadingComboBox extends StackPane {
 
         comboBox = new ComboBox<>();
 
+
         getChildren().addAll(comboBox, progressIndicator);
         getCollectionReference().addSnapshotListener(dataListener);
-
-//        comboBox.itemsProperty().bind(comboBoxObjectListProperty);
 
         comboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, section, t1) -> {
             if (listener != null) listener.onItemSelected(t1);
@@ -70,7 +78,11 @@ public abstract class LoadingComboBox extends StackPane {
 
     }
 
-    public void setOriginalList(ObservableList<Object> list){
+    public void reset() {
+        comboBox.getSelectionModel().clearSelection();
+    }
+
+    public void setOriginalList(ObservableList<Object> list) {
         comboBox.setItems(list);
     }
 

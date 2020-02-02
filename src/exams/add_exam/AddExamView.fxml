@@ -69,11 +69,11 @@
                                 GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
         <!-- Add Email Label -->
-        <Label text="Date : " GridPane.columnIndex="0"
+        <Label text="Time : " GridPane.columnIndex="0"
                GridPane.rowIndex="5">
         </Label>
         <!-- Add Email Text Field -->
-        <DatePicker fx:id="datePicker" prefHeight="40"
+        <TextField fx:id="timeTextField" prefHeight="40"
                     GridPane.columnIndex="1" GridPane.rowIndex="5"/>
 
 
@@ -82,7 +82,7 @@
                GridPane.rowIndex="6">
         </Label>
         <!-- Add Email Text Field -->
-        <ListView fx:id="listView"
+        <ListView fx:id="subjectListView"
                   GridPane.columnIndex="1" GridPane.rowIndex="6"/>
 
 

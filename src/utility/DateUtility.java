@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleListProperty;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public abstract class DateUtility {
@@ -39,4 +40,12 @@ public abstract class DateUtility {
         return LocalDate.ofInstant(date.toInstant(), ZoneId.systemDefault());
     }
 
+    public static LocalDate readableStringToLocalDate(String time) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd, EEEE");
+        return LocalDate.parse(time, dateTimeFormatter);
+    }
+
+    public static String dateToStringForFirestore(LocalDate date) {
+        return dateToStringForFirestore(localDateToDate(date));
+    }
 }

@@ -8,16 +8,19 @@ import javafx.collections.ObservableMap;
 import utility.DateUtility;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Exam {
-    private StringProperty batch, className, name, section, dateReadable, time;
+    private StringProperty batch, className, name, section, dateReadable, time, id;
     private ObjectProperty<Timestamp> date;
-    private MapProperty<String, String> subjects;
+    private ListProperty<SubjectExam> subjects;
 
-    public Exam(String batch, String className, String name, String section, String dateReadable, String time, Timestamp date, Map<String, String> subjects) {
+
+    public Exam(String id, String batch, String className, String name, String section, String dateReadable, String time, Timestamp date, List<SubjectExam> subjects) {
+        this.id = new SimpleStringProperty(id);
         this.batch = new SimpleStringProperty(batch);
         this.className = new SimpleStringProperty(className);
         this.name = new SimpleStringProperty(name);
@@ -25,15 +28,36 @@ public class Exam {
         this.dateReadable = new SimpleStringProperty(dateReadable);
         this.time = new SimpleStringProperty(time);
         this.date = new SimpleObjectProperty<>(date);
-        this.subjects = new SimpleMapProperty<>(FXCollections.observableMap(subjects));
+        this.subjects = new SimpleListProperty<>(FXCollections.observableArrayList(subjects));
     }
 
     public Exam() {
 
     }
 
+    public String getId() {
+        return id.get();
+    }
+
+    public StringProperty idProperty() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id.set(id);
+    }
+
     public static Exam fromJSON(Map<String, Object> json) {
+
+        Map<String, String> subjectData = (Map<String, String>) json.get("subjects");
+
+        List<SubjectExam> examList = new ArrayList<>();
+        subjectData.forEach((subject, time) -> {
+            examList.add(new SubjectExam(subject, DateUtility.readableStringToLocalDate(time)));
+        });
+
         return new Exam(
+                "",
                 (String) json.get("batch"),
                 (String) json.get("class_name"),
                 (String) json.get("name"),
@@ -41,13 +65,18 @@ public class Exam {
                 (String) json.get("start_date_string"),
                 (String) json.get("time"),
                 (Timestamp) json.get("start_date"),
-                (Map<String, String>) json.get("subjects")
+                examList
 
         );
     }
 
     public Map<String, Object> toJSON() {
+        Map<String, String> examSubjectsWithTime = new HashMap<>();
+        subjects.forEach(subjectExam -> {
+            examSubjectsWithTime.put(subjectExam.getName(), DateUtility.dateToStringForFirestore(subjectExam.getDate()));
+        });
         Map<String, Object> json = new HashMap<>();
+        json.put("id", id.get());
         json.put("batch", batch.get());
         json.put("class_name", className.get());
         json.put("name", name.get());
@@ -55,9 +84,10 @@ public class Exam {
         json.put("start_date_string", dateReadable.get());
         json.put("time", time.get());
         json.put("start_date", date.get());
-        json.put("subjects", subjects.get());
+        json.put("subjects", examSubjectsWithTime);
         return json;
     }
+
 
     public String getBatch() {
         return batch.get();
@@ -144,19 +174,53 @@ public class Exam {
     }
 
 
-    public ObservableMap<String, String> getSubjects() {
+    public ObservableList<SubjectExam> getSubjects() {
         return subjects.get();
     }
 
-    public MapProperty<String, String> subjectsProperty() {
+    public ListProperty<SubjectExam> subjectsProperty() {
         return subjects;
     }
 
-    public void setSubjects(ObservableMap<String, String> subjects) {
+    public void setSubjects(ObservableList<SubjectExam> subjects) {
         this.subjects.set(subjects);
     }
 
     public void setDate(LocalDate t1) {
         setDate(Timestamp.of(DateUtility.localDateToDate(t1)));
+    }
+
+    public static class SubjectExam {
+        private StringProperty name;
+        private ObjectProperty<LocalDate> date;
+
+        public SubjectExam(String name, LocalDate date) {
+            this.name = new SimpleStringProperty(name);
+            this.date = new SimpleObjectProperty<>(date);
+        }
+
+        public String getName() {
+            return name.get();
+        }
+
+        public StringProperty nameProperty() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name.set(name);
+        }
+
+        public LocalDate getDate() {
+            return date.get();
+        }
+
+        public ObjectProperty<LocalDate> dateProperty() {
+            return date;
+        }
+
+        public void setDate(LocalDate date) {
+            this.date.set(date);
+        }
     }
 }
