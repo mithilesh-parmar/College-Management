@@ -26,7 +26,7 @@
                 </padding>
 
             </TextField>
-            <ListView fx:id="sectionsListView"/>
+            <ListView fx:id="sectionsListView" VBox.vgrow="ALWAYS"/>
         </VBox>
 
         <ProgressIndicator fx:id="progressIndicator"/>

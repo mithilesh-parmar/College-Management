@@ -8,8 +8,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>
-<?import custom_view.loading_combobox.section.SectionLoadingComboBox?>
-<?import custom_view.loading_combobox.course.ClassLoadingComboBox?>
 <?import custom_view.loading_combobox.batches.BatchLoadingComboBox?>
 <?import custom_view.loading_combobox.class_section_combobox.ClassSectionComboBox?>
 <GridPane fx:controller="students.detail_view.StudentDetailsController"
@@ -64,32 +62,20 @@
                           GridPane.columnIndex="1" GridPane.rowIndex="3" alignment="CENTER_LEFT"/>
 
 
-    <ClassSectionComboBox fx:id="classSectionComboBox" prefHeight="40" GridPane.columnIndex="1" GridPane.rowIndex="4"
-                          alignment="CENTER_LEFT"/>
-    <!--    <Label text="Class : " GridPane.columnIndex="0"-->
-    <!--           GridPane.rowIndex="4">-->
-    <!--    </Label>-->
-    <!--    <ClassLoadingComboBox fx:id="classLoadingComboBox" prefHeight="40"-->
-    <!--                          GridPane.columnIndex="1" GridPane.rowIndex="4" alignment="CENTER_LEFT"/>-->
-
-    <!--    <Label text="Section : " GridPane.columnIndex="0"-->
-    <!--           GridPane.rowIndex="5">-->
-    <!--    </Label>-->
-    <!--    <SectionLoadingComboBox fx:id="sectionComboBox" prefHeight="40"-->
-    <!--                            GridPane.columnIndex="1" GridPane.rowIndex="5" alignment="CENTER_LEFT"/>-->
-
+    <ClassSectionComboBox fx:id="classSectionComboBox" prefHeight="40"
+                          GridPane.columnIndex="1" GridPane.rowIndex="4" alignment="CENTER_LEFT"/>
 
     <Label text="Parent Number : " GridPane.columnIndex="0"
-           GridPane.rowIndex="6">
+           GridPane.rowIndex="5">
     </Label>
     <TextField fx:id="parentNumberTextField" prefHeight="40"
-               GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+               GridPane.columnIndex="1" GridPane.rowIndex="5"/>
 
     <Label text="Requested Remark : " GridPane.columnIndex="0"
-           GridPane.rowIndex="7">
+           GridPane.rowIndex="6">
     </Label>
     <TextField fx:id="requestedRemarkTextField" prefHeight="40"
-               GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+               GridPane.columnIndex="1" GridPane.rowIndex="6"/>
 
 
     <!-- Add Submit Button -->
