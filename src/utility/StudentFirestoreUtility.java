@@ -1,6 +1,8 @@
 package utility;
 
 import com.google.cloud.firestore.*;
+import com.google.cloud.storage.Blob;
+import constants.Constants;
 import custom_view.card_view.Card;
 import custom_view.card_view.CardListener;
 import javafx.application.Platform;
@@ -16,6 +18,7 @@ import model.Notification;
 import model.Student;
 import students.StudentCardListener;
 
+import java.io.File;
 import java.util.List;
 
 public class StudentFirestoreUtility {
@@ -27,6 +30,7 @@ public class StudentFirestoreUtility {
     public MapProperty<Student, Card> studentCardMapProperty;
     public ListProperty<Card> studentCards;
     private StudentCardListener cardListener;
+    private DocumentUploadListener documentUploadListener;
 
 
     private EventListener<QuerySnapshot> studentDataListener = (snapshot, e) -> {
@@ -62,6 +66,44 @@ public class StudentFirestoreUtility {
             }
         }
         return instance;
+    }
+
+
+    public void updateStudent(Student student, File profileImage) {
+
+        if (profileImage == null) {
+
+            System.out.println("No Profile Image Choosen uploading " + student.toJSON());
+            FirestoreConstants.studentCollectionReference.document(student.getID()).update(student.toJSON());
+            documentUploadListener.onSuccess(null);
+        } else {
+            CloudStorageUtility storageUtility = CloudStorageUtility.getInstance();
+
+            storageUtility.setListener(new DocumentUploadListener() {
+                @Override
+                public void onSuccess(Blob blob) {
+
+                    student.setProfilePictureURL(blob.getMediaLink());
+
+                    FirestoreConstants.studentCollectionReference.document(student.getID()).update(student.toJSON());
+                    documentUploadListener.onSuccess(blob);
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    documentUploadListener.onFailure(e);
+                }
+            });
+
+            new Thread(() -> storageUtility.uploadDocument(Constants.profileImageFolder, student.getNameWithoutSpaces(), profileImage, DocumentType.IMAGE.toString())).start();
+
+        }
+
+
+    }
+
+    public void setDocumentUploadListener(DocumentUploadListener documentUploadListener) {
+        this.documentUploadListener = documentUploadListener;
     }
 
     public void getAttendance(Student student, EventListener<QuerySnapshot> studentAttendanceListener) {
@@ -103,7 +145,7 @@ public class StudentFirestoreUtility {
         for (QueryDocumentSnapshot document : data) {
             Student student = Student.fromJSON(document.getData());
 
-            Card card = new Card(student.getName(), student.getEmail(), student.getProfilePictureURL(),true);
+            Card card = new Card(student.getName(), student.getEmail(), student.getProfilePictureURL(), true);
 
 
             if (cardListener != null) {
@@ -148,4 +190,5 @@ public class StudentFirestoreUtility {
     public void deleteStudent(Student student) {
         FirestoreConstants.studentCollectionReference.document(student.getID()).delete();
     }
+
 }

@@ -48,10 +48,8 @@ public class ResultController implements Initializable, DataChangeListener {
         firestoreUtility.getResults();
         submitButton.disableProperty().bind(canSubmit.not());
         clearButton.disableProperty().bind(canSubmit.not());
-        resultTable.getSelectionModel().selectedItemProperty().addListener((observableValue, result, t1) -> {
-            viewMarksForExam(t1);
-        });
-        loadData();
+        resultTable.getSelectionModel().selectedItemProperty().addListener((observableValue, result, t1) -> viewMarksForExam(t1));
+
         progressIndicator.visibleProperty().bind(dataLoading);
         resultTable.itemsProperty().bind(results);
         submitButton.setDefaultButton(true);
@@ -68,7 +66,6 @@ public class ResultController implements Initializable, DataChangeListener {
         classComboBox.setListener(selectedItem -> {
             selectedClassName.set(((ClassItem) selectedItem).getName());
             checkReadyToSubmit();
-
         });
         selectedClassName.addListener((observableValue, s, t1) -> {
             sectionComboBox.showItemFor(t1);
@@ -89,10 +86,12 @@ public class ResultController implements Initializable, DataChangeListener {
 
         Stage primaryStage = new Stage();
 
+        primaryStage.initOwner(submitButton.getScene().getWindow());
+
         ObservableList<SubjectScore> scores = FXCollections.observableArrayList();
 
         TableView tableView = new TableView();
-
+        tableView.setStyle("/styles/materail_style.css");
 
         TableColumn<String, String> column1 = new TableColumn<>("Subject");
         column1.setCellValueFactory(new PropertyValueFactory<>("subjectName"));
@@ -137,6 +136,12 @@ public class ResultController implements Initializable, DataChangeListener {
     }
 
     private void loadData() {
+        if (selectedSection.get() == null
+                && selectedClassName.get() == null
+                && selectedClassName.get().isEmpty()
+                && selectedBatch.get().isEmpty()
+                && selectedBatch.get() == null
+        ) return;
         results.setAll(firestoreUtility
                 .results
                 .stream()
@@ -227,35 +232,4 @@ public class ResultController implements Initializable, DataChangeListener {
         }
     }
 
-    private static class ScoreListCell extends ListCell<SubjectScore> {
-
-        private final Label subjectName = new Label();
-        private final Label theoryMarks = new Label();
-        private final Label practicalMarks = new Label();
-        private final Label pass = new Label();
-        private VBox vBox = new VBox(5);
-        private HBox hBox = new HBox(5);
-
-
-        @Override
-        public void updateItem(SubjectScore obj, boolean empty) {
-            super.updateItem(obj, empty);
-            if (empty) {
-                setText(null);
-                setGraphic(null);
-            } else {
-
-                subjectName.setText(obj.getSubjectName());
-
-                theoryMarks.setText("Theory: " + obj.getTheoryMarks());
-                practicalMarks.setText("Practical: " + obj.getPracticalMarks());
-                pass.setText(obj.getPass());
-
-                vBox.getChildren().addAll(theoryMarks, practicalMarks, pass);
-
-                hBox.getChildren().addAll(subjectName, vBox);
-                setGraphic(hBox);
-            }
-        }
-    }
 }

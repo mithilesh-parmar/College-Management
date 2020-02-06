@@ -132,14 +132,14 @@ public class CourseFirestoreUtility {
         DocumentReference document = FirestoreConstants.courseCollectionReference.document();
         List<Section> sections = new ArrayList<>();
         course.getSubjects().forEach((sectionName, subjects) -> {
-            Section section = new Section(
-                    "",
-                    course.getName(),
-                    sectionName,
-                    FXCollections.observableHashMap(),
-                    subjects
-            );
-            sections.add(section);
+//            Section section = new Section(
+//                    "",
+//                    course.getName(),
+//                    sectionName,
+//                    FXCollections.observableHashMap(),
+//                    subjects
+//            );
+            sections.add(null);
         });
 
         System.out.println(sections);

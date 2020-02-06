@@ -48,11 +48,10 @@ public class AddExamController implements Initializable {
         timeTextField.setText(exam.getTime());
         examNameTextField.setText(exam.getName());
         subjectList.setAll(exam.getSubjects());
-        batchComboBox.setValue(exam.getBatch());
-        classNameComboBoc.setValue(exam.getClassName());
-        sectionComboBox.setValue(exam.getSection());
+        batchComboBox.setValue(exam.getBatch(), true);
+        classNameComboBoc.setValue(exam.getClassName(), true);
+        sectionComboBox.setValue(exam.getSection(), true);
 
-//        submitButton.setVisible(true);
     }
 
     @Override

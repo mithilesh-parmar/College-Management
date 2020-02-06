@@ -17,13 +17,15 @@ public class Student {
             requestedRemark = new SimpleStringProperty(),
             name = new SimpleStringProperty(),
             className = new SimpleStringProperty(),
-            email = new SimpleStringProperty();
+            email = new SimpleStringProperty(),
+            batch = new SimpleStringProperty();
     private SimpleBooleanProperty
             requested = new SimpleBooleanProperty(),
             verified = new SimpleBooleanProperty(),
             profileCompleted = new SimpleBooleanProperty();
 
     public Student(String ID,
+                   String batch,
                    String address,
                    String profilePictureURL,
                    String section,
@@ -40,6 +42,7 @@ public class Student {
 
 
         setID(ID);
+        setBatch(batch);
         setAddress(address);
         setProfilePictureURL(profilePictureURL);
         setSection(section);
@@ -58,6 +61,7 @@ public class Student {
     public static Student fromJSON(Map<String, Object> json) {
         return new Student(
                 (String) json.get("id"),
+                json.containsKey("batch") ? (String) json.get("batch") : "Undefined",
                 (String) json.get("address"),
                 (String) json.get("pp_url"),
                 (String) json.get("section"),
@@ -89,6 +93,18 @@ public class Student {
         json.put("verified", verified.get());
         json.put("profile_completed", profileCompleted.get());
         return json;
+    }
+
+    public String getBatch() {
+        return batch.get();
+    }
+
+    public StringProperty batchProperty() {
+        return batch;
+    }
+
+    public void setBatch(String batch) {
+        this.batch.set(batch);
     }
 
     public String getID() {
@@ -250,5 +266,13 @@ public class Student {
     @Override
     public String toString() {
         return name.getValue() + "\t" + section.getValue();
+    }
+
+    public String getNameWithoutSpaces() {
+        String studentName = name.get();
+
+        studentName = studentName.replace(" ", "_");
+
+        return studentName;
     }
 }

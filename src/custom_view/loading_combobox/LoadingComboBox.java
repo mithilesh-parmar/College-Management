@@ -1,9 +1,6 @@
 package custom_view.loading_combobox;
 
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.EventListener;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.*;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
@@ -15,7 +12,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.StackPane;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public abstract class LoadingComboBox extends StackPane {
 
@@ -44,12 +44,13 @@ public abstract class LoadingComboBox extends StackPane {
     private LoadingComboBoxListener listener;
     private ComboBox<Object> comboBox;
 
-    public void setValue(Object value) {
+    public void setValue(Object value, boolean disable) {
         this.value = value;
         dataLoading.set(false);
         comboBox.setValue(value);
-        comboBox.setDisable(true);
+        comboBox.setDisable(disable);
     }
+
 
     public void setListener(LoadingComboBoxListener listener) {
         this.listener = listener;
@@ -72,10 +73,18 @@ public abstract class LoadingComboBox extends StackPane {
 
     }
 
+    public Object getSelectedItem() {
+        return comboBox.getSelectionModel().getSelectedItem();
+    }
+
     public void setFilteredList(ObservableList<Object> filteredList) {
         this.filteredList.set(filteredList);
         comboBox.setItems(filteredList);
 
+    }
+
+    public ComboBox<Object> getComboBox() {
+        return comboBox;
     }
 
     public void reset() {

@@ -125,7 +125,7 @@ public class ExamCard extends AnimatingCard {
         rearView.add(new Label("Time: "), 0, 1);
         rearView.add(timeLabel, 1, 1);
 
-        rearView.add(viewResultButton, 0, 2, 2, 2);
+//        rearView.add(viewResultButton, 0, 2, 2, 2);
         rearView.add(editButton, 1, 2, 2, 2);
 
 

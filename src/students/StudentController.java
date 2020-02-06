@@ -1,6 +1,7 @@
 package students;
 
 import com.google.cloud.firestore.*;
+import com.google.cloud.storage.Blob;
 import custom_view.SearchTextFieldController;
 import custom_view.fees_notification_view.FeesNotificationController;
 import custom_view.card_view.Card;
@@ -29,14 +30,17 @@ import model.Student;
 import custom_view.notification_view.NotificationsController;
 import students.attendance.AttendanceController;
 import students.detail_view.StudentDetailsController;
+import students.detail_view.StudentListener;
+import utility.DocumentUploadListener;
 import utility.SearchCallback;
 import utility.StudentFirestoreUtility;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class StudentController implements Initializable, DataChangeListener, SearchCallback, StudentCardListener {
+public class StudentController implements Initializable, DataChangeListener, SearchCallback, StudentCardListener, DocumentUploadListener {
 
 
     public ProgressIndicator progressIndicator;
@@ -99,6 +103,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
 
         firestoreUtility.setListener(this);
         firestoreUtility.setCardListener(this);
+        firestoreUtility.setDocumentUploadListener(this);
         firestoreUtility.getStudents();
         searchTextField.setCallback(this);
         progressIndicator.visibleProperty().bind(loadingData);
@@ -133,7 +138,6 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         Parent parent = null;
         try {
 
-
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Add Student Details");
 
@@ -143,27 +147,25 @@ public class StudentController implements Initializable, DataChangeListener, Sea
             StudentDetailsController controller = loader.getController();
 
             if (student != null) controller.setStudent(student);
+            controller.setListener(new StudentListener() {
+                @Override
+                public void onStudentSubmit(Student student, File profileImage) {
+                    close(stage);
+                    loadingData.set(true);
 
+                    firestoreUtility.updateStudent(student, profileImage);
+                }
 
-//
-//            controller.setListener(new TeacherListener() {
-//                @Override
-//                public void onTeacherSubmit(Teacher teacher, File profileImage) {
-//                    close(stage);
-//                    dataLoading.set(true);
-//                    Platform.runLater(() -> firestoreUtility.updateTeacherDetails(teacher, profileImage));
-//                }
-//
-//                @Override
-//                public void onTeacherEdit(Teacher teacher) {
-//                    close(stage);
-//                }
-//
-//                @Override
-//                public void onCancel() {
-//                    close(stage);
-//                }
-//            });
+                @Override
+                public void onStudentEdit(Student student) {
+
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+            });
 
             stage.showAndWait();
 
@@ -193,7 +195,6 @@ public class StudentController implements Initializable, DataChangeListener, Sea
             controller.setStudent(student);
 
             stage.showAndWait();
-
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -347,6 +348,16 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         cancelMenuButton.setOnAction(action -> tableContextMenu.hide());
 
         tableContextMenu.show(studentFlowPane, event.getScreenX(), event.getScreenY());
+    }
+
+    @Override
+    public void onSuccess(Blob blob) {
+        loadingData.set(false);
+    }
+
+    @Override
+    public void onFailure(Exception e) {
+        loadingData.set(false);
     }
 }
 

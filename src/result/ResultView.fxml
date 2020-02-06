@@ -26,9 +26,6 @@
             <left>
                 <Label id="headline" text="Results"/>
             </left>
-            <right>
-                <SearchTextFieldController fx:id="searchTextField"/>
-            </right>
         </BorderPane>
 
 

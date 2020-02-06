@@ -36,7 +36,7 @@
 
     <!--    <FlowPane fx:id="scheduleView" hgap="10" minWidth="300" orientation="VERTICAL" prefWidth="500" vgap="10">-->
 
-    <ListView fx:id="scheduleView" HBox.hgrow="ALWAYS">
+    <ListView fx:id="scheduleView" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
         <Button fx:id="addButton" defaultButton="true" text="Add Lecture" StackPane.alignment="BOTTOM_LEFT"/>
         <Label id="headline" text="Monday"/>
         <TableView fx:id="mondayTableView" HBox.hgrow="ALWAYS">

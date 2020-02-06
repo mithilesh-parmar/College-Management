@@ -4,11 +4,9 @@ import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import custom_view.loading_combobox.LoadingComboBox;
 import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.ClassItem;
-import model.Course;
 import utility.FirestoreConstants;
 
 import java.util.List;
@@ -28,6 +26,10 @@ public class ClassLoadingComboBox extends LoadingComboBox {
                 .filter(o -> ((ClassItem) o).getName().toUpperCase().contains(filter.toUpperCase()))
                 .collect(Collectors.toList());
         setFilteredList(FXCollections.observableArrayList(collect));
+    }
+
+    public ObservableList<Object> getItems(){
+        return comboBoxObjectListPropertyProperty().get();
     }
 
     @Override

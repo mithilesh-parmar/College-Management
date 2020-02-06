@@ -36,16 +36,39 @@ name - year
 public class Section {
 
     private StringProperty className = new SimpleStringProperty(),
+            classID = new SimpleStringProperty(),
             sectionName = new SimpleStringProperty(), id = new SimpleStringProperty();
     private ListProperty<String> subjects = new SimpleListProperty<>();
     private MapProperty<String, ObservableList<Lecture>> classSchedules = new SimpleMapProperty<>();
 
-    public Section(String id, String className, String sectionName, ObservableMap<String, ObservableList<Lecture>> classSchedules, List<String> subjects) {
+    public Section(String id, String className, String classId, String sectionName, ObservableMap<String, ObservableList<Lecture>> classSchedules, List<String> subjects) {
         setId(id);
+        setClassID(classId);
         setClassName(className);
         setSectionName(sectionName);
         setSubjects(FXCollections.observableList(subjects));
         setClassSchedules(FXCollections.observableMap(classSchedules));
+    }
+
+    public Section(String id, String sectionName, ClassItem classItem, ObservableMap<String, ObservableList<Lecture>> classSchedules, List<String> subjects) {
+        setId(id);
+        setClassID(classItem.getId());
+        setClassName(classItem.getName());
+        setSectionName(sectionName);
+        setSubjects(FXCollections.observableList(subjects));
+        setClassSchedules(FXCollections.observableMap(classSchedules));
+    }
+
+    public String getClassID() {
+        return classID.get();
+    }
+
+    public StringProperty classIDProperty() {
+        return classID;
+    }
+
+    public void setClassID(String classID) {
+        this.classID.set(classID);
     }
 
     public String getId() {
@@ -97,10 +120,11 @@ public class Section {
 
     public Map<String, Object> toJSON() {
         Map<String, Object> json = new HashMap<>();
-        json.put("class_id", className.get());
+        json.put("class_name", className.get());
         json.put("name", sectionName.get());
         json.put("subjects", subjects.get());
         json.put("id", id.get());
+        json.put("class_id", classID.get());
 
 
         Map<String, List<Lecture>> listMap = new HashMap<>();
@@ -151,6 +175,7 @@ public class Section {
 
         return new Section(
                 (String) json.get("id"),
+                (String) json.get("class_name"),
                 (String) json.get("class_id"),
                 String.valueOf(json.get("name")),
                 FXCollections.observableMap(classSchedule),
