@@ -19,6 +19,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.Section;
 
 
 import java.io.IOException;
@@ -31,6 +32,8 @@ public class ChipView extends BorderPane {
     private Button iconButton;
     private StringProperty title;
     private Label titleNode = new Label("Title");
+
+    private Section section;
 
     public ChipView(String title) {
         chips = new SimpleListProperty<>(FXCollections.observableArrayList());
@@ -133,8 +136,9 @@ public class ChipView extends BorderPane {
                 @Override
                 public void onChipAdded(Chip chip) {
                     close(stage);
-                    chip.setCallback(chip1 -> chips.remove(chip));
+                    chip.setCallback(chip1 -> removeSubject(chip1));
                     chips.get().add(chip);
+                    section.getSubjects().add(chip.getTitle());
                 }
             });
             stage.showAndWait();
@@ -147,12 +151,27 @@ public class ChipView extends BorderPane {
 
     }
 
+    public void setSection(Section section) {
+        this.section = section;
+        title.set(section.getSectionName());
+        setChips(section.getSubjects());
+    }
+
+    private void removeSubject(Chip chip) {
+        chips.remove(chip);
+        section.getSubjects().remove(chip.getTitle());
+    }
+
+    public Section getSection() {
+        return section;
+    }
+
     public void setChips(List<String> subjects) {
         chips.clear();
         subjects.forEach(s -> {
             System.out.println("Adding new Chip: " + s);
             Chip chip = new Chip(s);
-            chip.setCallback(chip1 -> chips.remove(chip1));
+            chip.setCallback(this::removeSubject);
             chips.add(chip);
         });
     }

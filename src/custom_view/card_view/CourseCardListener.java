@@ -1,7 +1,7 @@
 package custom_view.card_view;
 
-import model.Course;
+import model.ClassItem;
 
 public interface CourseCardListener {
-    void onCardClick(Course course);
+    void onCardClick(ClassItem course);
 }

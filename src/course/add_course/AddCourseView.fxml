@@ -8,65 +8,76 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ListView?>
-<GridPane fx:controller="course.add_course.AddCourseController"
-          xmlns:fx="http://javafx.com/fxml" alignment="center"
-          hgap="10" vgap="10"
+<?import javafx.scene.control.ProgressIndicator?>
+<StackPane fx:controller="course.add_course.AddCourseController"
+          xmlns:fx="http://javafx.com/fxml"
+
           stylesheets="@/styles/dark_metro_style.css"
 >
-    <padding>
-        <Insets top="40" right="40" bottom="40" left="40"/>
-    </padding>
-    <columnConstraints>
-        <ColumnConstraints minWidth="100" prefWidth="100"
-                           maxWidth="Infinity" halignment="RIGHT">
-        </ColumnConstraints>
-        <ColumnConstraints minWidth="200" prefWidth="700"
-                           maxWidth="Infinity" hgrow="ALWAYS">
-        </ColumnConstraints>
-    </columnConstraints>
+
+    <GridPane   alignment="center" hgap="10" vgap="10">
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
+        <columnConstraints>
+            <ColumnConstraints minWidth="100" prefWidth="100"
+                               maxWidth="Infinity" halignment="RIGHT">
+            </ColumnConstraints>
+            <ColumnConstraints minWidth="200" prefWidth="700"
+                               maxWidth="Infinity" hgrow="ALWAYS">
+            </ColumnConstraints>
+        </columnConstraints>
 
 
-    <!-- Add Name Label -->
-    <Label text="Course Name : " GridPane.columnIndex="0"
-           GridPane.rowIndex="1">
-    </Label>
-    <!-- Add Name Text Field -->
-    <TextField fx:id="courseNameTextField" prefHeight="40"
-               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <!-- Add Name Label -->
+        <Label text="Course Name : " GridPane.columnIndex="0"
+               GridPane.rowIndex="1">
+        </Label>
+        <!-- Add Name Text Field -->
+        <TextField fx:id="courseNameTextField" prefHeight="40"
+                   GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
 
-    <!-- Add Email Label -->
-    <Label text="Programme Years : " GridPane.columnIndex="0"
-           GridPane.rowIndex="2">
-    </Label>
-    <!-- Add Email Text Field -->
-    <ComboBox fx:id="yearsComboBox" prefHeight="40"
-              GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <!-- Add Email Label -->
+        <Label text="Years : " GridPane.columnIndex="0"
+               GridPane.rowIndex="2">
+        </Label>
+        <!-- Add Email Text Field -->
+        <ComboBox fx:id="yearsComboBox" prefHeight="40"
+                  GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
 
-    <ListView fx:id="subjectListView" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        <StackPane GridPane.columnIndex="1" GridPane.rowIndex="3">
 
 
-    <!-- Add Submit Button -->
-    <Button fx:id="submitButton" text="Add"
-            prefWidth="100" prefHeight="40" defaultButton="true"
-            GridPane.columnIndex="2" GridPane.rowIndex="7"
-            GridPane.columnSpan="1" GridPane.rowSpan="1"
-            GridPane.halignment="CENTER"
-    >
-        <GridPane.margin>
-            <Insets topRightBottomLeft="4"/>
-        </GridPane.margin>
-    </Button>
-    <Button fx:id="deleteButton" text="Delete Course"
-            prefWidth="100" prefHeight="40"
-            GridPane.columnIndex="3" GridPane.rowIndex="7"
-            GridPane.columnSpan="1" GridPane.rowSpan="1"
-            GridPane.halignment="CENTER"
-    >
-        <GridPane.margin>
-            <Insets topRightBottomLeft="4"/>
-        </GridPane.margin>
-    </Button>
-</GridPane>
+            <ListView fx:id="subjectListView"/>
+        </StackPane>
+
+
+        <!-- Add Submit Button -->
+        <Button fx:id="submitButton" text="Add"
+                prefWidth="100" prefHeight="40" defaultButton="true"
+                GridPane.columnIndex="2" GridPane.rowIndex="7"
+                GridPane.columnSpan="1" GridPane.rowSpan="1"
+                GridPane.halignment="CENTER"
+        >
+            <GridPane.margin>
+                <Insets topRightBottomLeft="4"/>
+            </GridPane.margin>
+        </Button>
+        <Button fx:id="deleteButton" text="Delete Course"
+                prefWidth="100" prefHeight="40"
+                GridPane.columnIndex="3" GridPane.rowIndex="7"
+                GridPane.columnSpan="1" GridPane.rowSpan="1"
+                GridPane.halignment="CENTER"
+        >
+            <GridPane.margin>
+                <Insets topRightBottomLeft="4"/>
+            </GridPane.margin>
+        </Button>
+    </GridPane>
+    <ProgressIndicator fx:id="progressIndicator"/>
+
+
+</StackPane>
 

@@ -5,11 +5,8 @@ import course.add_course.AddCourseCallback;
 import course.add_course.AddCourseController;
 import custom_view.SearchTextFieldController;
 import custom_view.card_view.CourseCardListener;
-import custom_view.chip_view.Chip;
-import custom_view.chip_view.ChipView;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,14 +15,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
+import model.ClassItem;
 import model.Course;
-import model.Student;
-import students.detail_view.StudentDetailsController;
 import utility.CourseFirestoreUtility;
 
 import java.io.IOException;
@@ -33,10 +28,12 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class CourseController implements Initializable, DataChangeListener, CourseCardListener {
+
     public SearchTextFieldController searchTextField;
     public Button addCourse;
     public FlowPane courseFlowPane;
     public ProgressIndicator progressIndicator;
+
 
     private CourseFirestoreUtility firestoreUtility = CourseFirestoreUtility.getInstance();
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
@@ -56,7 +53,7 @@ public class CourseController implements Initializable, DataChangeListener, Cour
 
     }
 
-    private void loadAddVew(Course course) {
+    private void loadAddVew(ClassItem course) {
 
 
         FXMLLoader loader;
@@ -73,7 +70,10 @@ public class CourseController implements Initializable, DataChangeListener, Cour
             Scene scene = new Scene(parent);
             stage.setScene(scene);
             AddCourseController controller = loader.getController();
-            if (course != null) controller.setCourse(course);
+            if (course != null) {
+
+                controller.setClassItem(course);
+            }
             controller.setCallback(new AddCourseCallback() {
                 @Override
                 public void onCourseSubmit(Course course) {
@@ -86,6 +86,12 @@ public class CourseController implements Initializable, DataChangeListener, Cour
                 public void onCourseUpdate(Course course) {
                     close(stage);
                     dataLoading.set(true);
+//                    System.out.println("Updated Course ");
+//                    System.out.println("Class: " + course.getClassItem().toJSON());
+//                    System.out.println("Sections: ");
+//                    course.getSections().forEach(section -> {
+//                        System.out.println(section.toJSON());
+//                    });
                     firestoreUtility.updateCourse(course);
                 }
 
@@ -93,13 +99,10 @@ public class CourseController implements Initializable, DataChangeListener, Cour
                 public void onCourseDelete(Course course) {
                     close(stage);
                     dataLoading.set(true);
-                    firestoreUtility.deleteCourse(course);
+//                    firestoreUtility.deleteCourse(course);
                 }
             });
-
             stage.showAndWait();
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -123,8 +126,8 @@ public class CourseController implements Initializable, DataChangeListener, Cour
     }
 
     @Override
-    public void onCardClick(Course course) {
-        System.out.println(course);
+    public void onCardClick(ClassItem course) {
+//        System.out.println(course);
         loadAddVew(course);
     }
 }

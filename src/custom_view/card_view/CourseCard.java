@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import model.ClassItem;
 import model.Course;
 
 import java.net.URL;
@@ -26,10 +27,10 @@ public class CourseCard extends AnimatingCard {
         this.cardListener = cardListener;
     }
 
-    public CourseCard(Course course) {
+    public CourseCard(ClassItem course) {
 
         this.title = new SimpleStringProperty(course.getName());
-        this.subTitle = new SimpleStringProperty(course.getYears().toString());
+        this.subTitle = new SimpleStringProperty(String.valueOf(course.getYears()));
 
         initFrontView();
         initRearView();
@@ -43,8 +44,8 @@ public class CourseCard extends AnimatingCard {
 
     public void setCourse(Course course) {
 
-        this.title = new SimpleStringProperty(course.getName());
-        this.subTitle = new SimpleStringProperty(course.getYears().toString());
+//        this.title = new SimpleStringProperty(course.getName());
+//        this.subTitle = new SimpleStringProperty(course.getYears().toString());
 
         initFrontView();
         initRearView();

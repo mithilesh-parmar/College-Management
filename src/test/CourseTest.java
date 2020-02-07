@@ -50,30 +50,30 @@ public class CourseTest {
         btechSubjects.put(String.valueOf(4), List.of("BTech Advanced Maths", "BTech Advanced Catering", "BTech Advanced Art of humanity", "BTech Advanced Computer Science"));
 
 
-        Course BBA = new Course("", "BBA", (long) 3, bbaSubjects);
-
-        Course B_Tech = new Course("", "B.Tech", (long) 4, btechSubjects);
-
-        Course MBA = new Course("", "MBA", (long) 2, mbaSubjects);
-
-        List<Course> courses = new ArrayList<>();
-        courses.add(MBA);
-        courses.add(BBA);
-        courses.add(B_Tech);
-
-        courses.forEach(course -> {
-            for (int i = 1; i <= course.getYears(); i++) {
-                DocumentReference document = FirestoreConstants.sectionsCollectionReference.document();
-                Map<String, Object> map = new HashMap<>();
-                map.put("name", i);
-                map.put("class_id", course.getName());
-                map.put("subjects", course.getSubjects(i));
-                map.put("id", document.getId());
-                document.set(map);
-                System.out.println(document.listCollections());
-
-            }
-        });
+//        Course BBA = new Course("", "BBA", (long) 3, bbaSubjects);
+//
+//        Course B_Tech = new Course("", "B.Tech", (long) 4, btechSubjects);
+//
+//        Course MBA = new Course("", "MBA", (long) 2, mbaSubjects);
+//
+//        List<Course> courses = new ArrayList<>();
+//        courses.add(MBA);
+//        courses.add(BBA);
+//        courses.add(B_Tech);
+//
+//        courses.forEach(course -> {
+//            for (int i = 1; i <= course.getYears(); i++) {
+//                DocumentReference document = FirestoreConstants.sectionsCollectionReference.document();
+//                Map<String, Object> map = new HashMap<>();
+//                map.put("name", i);
+//                map.put("class_id", course.getName());
+//                map.put("subjects", course.getSubjects(i));
+//                map.put("id", document.getId());
+//                document.set(map);
+//                System.out.println(document.listCollections());
+//
+//            }
+//        });
 
 
     }

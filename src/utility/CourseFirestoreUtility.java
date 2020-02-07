@@ -1,9 +1,6 @@
 package utility;
 
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.EventListener;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.*;
 import custom_view.card_view.*;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
@@ -21,12 +18,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import listeners.DataChangeListener;
+import model.ClassItem;
 import model.Course;
 import model.Section;
 
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class CourseFirestoreUtility {
 
@@ -34,9 +33,9 @@ public class CourseFirestoreUtility {
 
     private DataChangeListener listener;
 
-    public ObservableList<Course> courses;
+    public ObservableList<ClassItem> courses;
     public ListProperty<CourseCard> courseCards;
-    public MapProperty<Course, CourseCard> courseCourseCardMapProperty;
+    public MapProperty<ClassItem, CourseCard> courseCourseCardMapProperty;
     private CourseCardListener cardListener;
 
     private EventListener<QuerySnapshot> courseDataListener = (snapshot, e) -> {
@@ -70,16 +69,16 @@ public class CourseFirestoreUtility {
         courses.clear();
         courseCards.clear();
         for (QueryDocumentSnapshot document : data) {
-            Course course = Course.fromJSON(document.getData());
+            ClassItem classItem = ClassItem.fromJSON(document.getData());
 
             CourseCard card = new CourseCard(
-                    course
+                    classItem
             );
 
             card.setCardListener(new CardListener() {
                 @Override
                 public void onCardClick() {
-                    cardListener.onCardClick(course);
+                    cardListener.onCardClick(classItem);
                 }
 
                 @Override
@@ -103,9 +102,9 @@ public class CourseFirestoreUtility {
                 }
             });
 
-            courses.add(course);
+            courses.add(classItem);
             courseCards.add(card);
-            courseCourseCardMapProperty.put(course, card);
+            courseCourseCardMapProperty.put(classItem, card);
 
         }
     }
@@ -118,7 +117,7 @@ public class CourseFirestoreUtility {
 
     public void getCourses() {
         if (courses.size() > 0) listener.onDataLoaded(courses);
-        FirestoreConstants.courseCollectionReference.addSnapshotListener(courseDataListener);
+        FirestoreConstants.classCollectionReference.addSnapshotListener(courseDataListener);
     }
 
     public static CourseFirestoreUtility getInstance() {
@@ -129,38 +128,61 @@ public class CourseFirestoreUtility {
     }
 
     public void addCourse(Course course) {
-        DocumentReference document = FirestoreConstants.courseCollectionReference.document();
-        List<Section> sections = new ArrayList<>();
-        course.getSubjects().forEach((sectionName, subjects) -> {
-//            Section section = new Section(
-//                    "",
-//                    course.getName(),
-//                    sectionName,
-//                    FXCollections.observableHashMap(),
-//                    subjects
-//            );
-            sections.add(null);
-        });
+        DocumentReference document = FirestoreConstants.classCollectionReference.document();
+        List<Section> sections = course.getSections();
 
         System.out.println(sections);
 
-        sections.forEach(this::addSection);
-        course.setId(document.getId());
-        document.set(course.toJSON());
+        sections.forEach(section -> {
+            addSection(section, document.getId());
+        });
+
+        course.getClassItem().setId(document.getId());
+        document.set(course.getClassItem().toJSON());
     }
 
-    private void addSection(Section section) {
+    private void addSection(Section section, String classID) {
         DocumentReference document = FirestoreConstants.sectionsCollectionReference.document();
         section.setId(document.getId());
+        section.setClassID(classID);
         document.set(section.toJSON());
     }
 
     public void updateCourse(Course course) {
-        FirestoreConstants.courseCollectionReference.document(course.getId()).set(course.toJSON());
+        ClassItem classItem = course.getClassItem();
+        List<Section> sections = course.getSections();
+
+//        Update The Class
+        FirestoreConstants
+                .classCollectionReference
+                .document(classItem.getId())
+                .set(classItem.toJSON());
+
+//        Update The Sections
+        sections.forEach(section ->
+                FirestoreConstants
+                        .sectionsCollectionReference
+                        .document(section.getId())
+                        .set(section.toJSON()));
+
     }
 
 
     public void deleteCourse(Course course) {
-        FirestoreConstants.courseCollectionReference.document(course.getId()).delete();
+        String classID = course.getClassItem().getId();
+        FirestoreConstants.classCollectionReference.document(course.getClassItem().getId()).delete();
+        Query sectionsQuery = FirestoreConstants
+                .sectionsCollectionReference
+                .whereEqualTo("class_id", classID);
+        try {
+
+            sectionsQuery.get().get().forEach(queryDocumentSnapshot -> {
+                System.out.println("Deleting: " + queryDocumentSnapshot.getData());
+                queryDocumentSnapshot.getReference().delete();
+            });
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
     }
 }
