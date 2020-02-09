@@ -72,17 +72,6 @@ public class AddCourseController implements Initializable {
                 selectedFee.set(Long.parseLong(newValue));
             }
         });
-//        feeTextField.textProperty().addListener((observableValue, s, t1) -> {
-//            try {
-//
-//                long amount = Long.parseLong(t1);
-//                selectedFee.set(amount);
-//            } catch (Exception e) {
-//                feeTextField.setText(e.getMessage());
-//                canSubmit.set(false);
-//                e.printStackTrace();
-//            }
-//        });
 //        Years comboBox
         for (int i = 1; i <= MAX_YEARS; i++) {
             yearsList.get().add((long) i);

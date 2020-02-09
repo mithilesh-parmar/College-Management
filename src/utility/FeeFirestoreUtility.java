@@ -69,6 +69,8 @@ public class FeeFirestoreUtility {
     }
 
     public ObservableList<Fee> getFeesForStudent(String studentID) {
+        System.out.println(fees);
+        System.out.println("Filtering for: " + studentID);
         return
                 FXCollections.observableArrayList(
                         fees.stream()
@@ -88,9 +90,10 @@ public class FeeFirestoreUtility {
     }
 
 
-    public void addEvent(Fee event) {
-
-
+    public void addFee(Fee fee) {
+        DocumentReference document = FirestoreConstants.feeCollectionReference.document();
+        fee.setId(document.getId());
+        document.set(fee.toJSON());
     }
 
     public void updateEvent(Fee updatedEvent) {

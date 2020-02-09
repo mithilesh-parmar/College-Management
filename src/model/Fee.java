@@ -11,9 +11,11 @@ public class Fee {
     public enum Type {
         ADMISSION_FEE("Admission_Fee"), FINE("FINE");
         private String name;
+
         Type(String name) {
             this.name = name;
         }
+
         @Override
         public String toString() {
             return name;
@@ -87,7 +89,7 @@ public class Fee {
     }
 
     public String getStudentID() {
-        return studentID.get();
+        return studentID.get() == null ? "" : studentID.get();
     }
 
     public StringProperty studentIDProperty() {

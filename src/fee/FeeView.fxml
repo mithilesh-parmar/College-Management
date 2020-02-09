@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -12,6 +10,7 @@
            fx:controller="fee.FeeController">
 
     <ProgressIndicator fx:id="progressIndicator"/>
+
     <VBox>
         <Button fx:id="addButton" text="Add" defaultButton="true"/>
         <TableView fx:id="feeTable" VBox.vgrow="ALWAYS">

@@ -28,6 +28,7 @@ import custom_view.notification_view.NotificationsController;
 import students.attendance.AttendanceController;
 import students.detail_view.StudentDetailsController;
 import students.detail_view.StudentListener;
+import students.fee_view.StudentFeeController;
 import utility.DocumentUploadListener;
 import utility.SearchCallback;
 import utility.StudentFirestoreUtility;
@@ -48,7 +49,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
     private StudentFirestoreUtility firestoreUtility = StudentFirestoreUtility.getInstance();
     private BooleanProperty loadingData = new SimpleBooleanProperty(true);
     private ContextMenu tableContextMenu = new ContextMenu();
-    private MenuItem attendanceMenuButton = new MenuItem("attendance");
+    private MenuItem attendanceMenuButton = new MenuItem("Attendance");
     private MenuItem feesMenuButton = new MenuItem("Fees");
     private MenuItem feesNotificationMenuButton = new MenuItem("Fees Notification");
     private MenuItem pushNotificationMenuButton = new MenuItem("Push Notification");
@@ -76,7 +77,6 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         studentFlowPane.setPadding(new Insets(10));
 
 
-
         studentFlowPane.getChildren().addAll(firestoreUtility.studentCards);
 
         menu.getItems().addAll(feesNotificationMenuButton, pushNotificationMenuButton);
@@ -92,10 +92,6 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         );
 
 
-        attendanceMenuButton.setOnAction(actionEvent -> {
-            System.out.println(actionEvent.getSource());
-        });
-
         tableContextMenu.setHideOnEscape(true);
         tableContextMenu.setAutoHide(true);
 
@@ -106,6 +102,31 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         searchTextField.setCallback(this);
         progressIndicator.visibleProperty().bind(loadingData);
 
+    }
+
+    private void loadFeeView(Student student) {
+
+        FXMLLoader loader;
+        loader = new FXMLLoader(getClass().getResource("/students/fee_view/StudentFeeView.fxml"));
+        final Stage stage = new Stage();
+        Parent parent = null;
+        try {
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Add Student Details");
+
+            parent = loader.load();
+            Scene scene = new Scene(parent);
+            stage.setScene(scene);
+            StudentFeeController controller = loader.getController();
+            if (student != null)
+                controller.setStudent(student);
+            stage.showAndWait();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -338,13 +359,12 @@ public class StudentController implements Initializable, DataChangeListener, Sea
     public void onContextMenuRequested(Student student, MouseEvent event) {
 
         attendanceMenuButton.setOnAction(actionEvent -> loadAttendanceView(student));
-
+        feesMenuButton.setOnAction(actionEvent -> loadFeeView(student));
         feesNotificationMenuButton.setOnAction(actionEvent -> loadFeeNotificationsView(student));
         pushNotificationMenuButton.setOnAction(actionEvent -> loadNotificationsView(student));
         deleteMenuButton.setOnAction(actionEvent -> showConfirmationAlert(student));
         editMenuButton.setOnAction(actionEvent -> loadEditView(student));
         cancelMenuButton.setOnAction(action -> tableContextMenu.hide());
-
         tableContextMenu.show(studentFlowPane, event.getScreenX(), event.getScreenY());
     }
 

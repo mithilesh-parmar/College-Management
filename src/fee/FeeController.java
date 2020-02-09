@@ -2,7 +2,7 @@ package fee;
 
 import com.google.cloud.firestore.QuerySnapshot;
 import fee.add_fee.AddFeeController;
-import javafx.application.Platform;
+import fee.add_fee.AddFeeListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
@@ -17,12 +17,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
 import model.Fee;
-import model.Teacher;
-import teachers.TeacherDetailViewListener;
-import teachers.add_teacher.AddTeacherController;
 import utility.FeeFirestoreUtility;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -60,8 +56,14 @@ public class FeeController implements Initializable, DataChangeListener {
             Scene scene = new Scene(parent);
             stage.setScene(scene);
             AddFeeController controller = loader.getController();
-
-
+            controller.setListener(new AddFeeListener() {
+                @Override
+                public void onFeeSubmit(Fee fee) {
+                    close(stage);
+                    dataLoading.set(true);
+                    firestoreUtility.addFee(fee);
+                }
+            });
             stage.showAndWait();
 
 

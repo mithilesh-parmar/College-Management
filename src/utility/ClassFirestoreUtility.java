@@ -10,6 +10,8 @@ import model.Lecture;
 import model.Section;
 
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class ClassFirestoreUtility {
 
@@ -58,6 +60,14 @@ public class ClassFirestoreUtility {
 
     }
 
+    public ClassItem getClassItem(String className) {
+        List<ClassItem> collect = classes
+                .stream()
+                .filter(classItem -> classItem.getName().matches(className))
+                .collect(Collectors.toList());
+        if (collect.size() > 0) return collect.get(0);
+        return null;
+    }
 
     public void setListener(DataChangeListener listener) {
         this.listener = listener;
