@@ -49,7 +49,6 @@ public class TimeTableController implements Initializable, DataChangeListener {
 
     private ObjectProperty<Section> selectedSection = new SimpleObjectProperty<>();
     private BooleanProperty canViewSchedule = new SimpleBooleanProperty(false);
-    private IntegerProperty selectedDay = new SimpleIntegerProperty(0);
 
     private ListProperty<Lecture> mondaySchedule = new SimpleListProperty<>(FXCollections.observableArrayList()),
             tuesdaySchedule = new SimpleListProperty<>(FXCollections.observableArrayList()),
@@ -104,7 +103,7 @@ public class TimeTableController implements Initializable, DataChangeListener {
             saturdaySchedule.setValue(t1.getClassSchedules().get("6"));
 
         });
-        sectionsListView.getSelectionModel().selectFirst();
+//        sectionsListView.getSelectionModel().selectFirst();
 
 
         scheduleView.visibleProperty().bind(canViewSchedule);

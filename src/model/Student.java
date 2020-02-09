@@ -1,15 +1,15 @@
 package model;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
+//Add fee logic
 public class Student {
     private StringProperty address = new SimpleStringProperty(),
             ID = new SimpleStringProperty(),
+            admissionID = new SimpleStringProperty(),
             profilePictureURL = new SimpleStringProperty(),
             section = new SimpleStringProperty(),
             token = new SimpleStringProperty(),
@@ -19,12 +19,16 @@ public class Student {
             className = new SimpleStringProperty(),
             email = new SimpleStringProperty(),
             batch = new SimpleStringProperty();
-    private SimpleBooleanProperty
+
+    private BooleanProperty
             requested = new SimpleBooleanProperty(),
             verified = new SimpleBooleanProperty(),
             profileCompleted = new SimpleBooleanProperty();
 
+    private LongProperty scholarship, amountDue, totalAmount;
+
     public Student(String ID,
+                   String admissionID,
                    String batch,
                    String address,
                    String profilePictureURL,
@@ -35,12 +39,14 @@ public class Student {
                    String name,
                    String className,
                    String email,
+                   long scholarship,
                    boolean requested,
                    boolean verified,
                    boolean profileCompleted
     ) {
 
 
+        setAdmissionID(admissionID);
         setID(ID);
         setBatch(batch);
         setAddress(address);
@@ -52,8 +58,10 @@ public class Student {
         setName(name);
         setClassName(className);
         setEmail(email);
+//        setScholarship(scholarship);
         setRequested(requested);
         setVerified(verified);
+//        setAmountDue(amountDue);
         setProfileCompleted(profileCompleted);
     }
 
@@ -61,6 +69,7 @@ public class Student {
     public static Student fromJSON(Map<String, Object> json) {
         return new Student(
                 (String) json.get("id"),
+                (String) json.get("admission_id"),
                 json.containsKey("batch") ? (String) json.get("batch") : "Undefined",
                 (String) json.get("address"),
                 (String) json.get("pp_url"),
@@ -71,6 +80,8 @@ public class Student {
                 (String) json.get("name"),
                 (String) json.get("class_name"),
                 (String) json.get("email"),
+                (long) json.get("scholarship"),
+//                (long) json.get("amount_due"),
                 (boolean) json.get("requested"),
                 (boolean) json.get("verified"),
                 (boolean) json.get("profile_completed")
@@ -92,7 +103,46 @@ public class Student {
         json.put("requested", requested.get());
         json.put("verified", verified.get());
         json.put("profile_completed", profileCompleted.get());
+        json.put("scholarship", scholarship.get());
+        json.put("admission_id", admissionID.get());
+//        json.put("amount_due", amountDue.get());
         return json;
+    }
+
+    public String getAdmissionID() {
+        return admissionID.get();
+    }
+
+    public StringProperty admissionIDProperty() {
+        return admissionID;
+    }
+
+    public void setAdmissionID(String admissionID) {
+        this.admissionID.set(admissionID);
+    }
+
+    public long getAmountDue() {
+        return amountDue.get();
+    }
+
+    public LongProperty amountDueProperty() {
+        return amountDue;
+    }
+
+    public void setAmountDue(long amountDue) {
+        this.amountDue.set(amountDue);
+    }
+
+    public long getScholarship() {
+        return scholarship.get();
+    }
+
+    public LongProperty scholarshipProperty() {
+        return scholarship;
+    }
+
+    public void setScholarship(long scholarship) {
+        this.scholarship.set(scholarship);
     }
 
     public String getBatch() {
@@ -231,7 +281,7 @@ public class Student {
         return requested.get();
     }
 
-    public SimpleBooleanProperty requestedProperty() {
+    public BooleanProperty requestedProperty() {
         return requested;
     }
 
@@ -243,7 +293,7 @@ public class Student {
         return verified.get();
     }
 
-    public SimpleBooleanProperty verifiedProperty() {
+    public BooleanProperty verifiedProperty() {
         return verified;
     }
 
@@ -255,7 +305,7 @@ public class Student {
         return profileCompleted.get();
     }
 
-    public SimpleBooleanProperty profileCompletedProperty() {
+    public BooleanProperty profileCompletedProperty() {
         return profileCompleted;
     }
 

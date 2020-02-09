@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import listeners.DataChangeListener;
+import model.ClassItem;
 import model.Lecture;
 import model.Section;
 

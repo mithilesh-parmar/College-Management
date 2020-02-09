@@ -80,5 +80,12 @@ public class FirestoreConstants {
             .getFirestore()
             .collection("colleges")
             .document("GKevzOMWBqbFtPezdLzF")
-            .collection("results");;
+            .collection("results");
+    ;
+    public final static CollectionReference feeCollectionReference = FirestoreClient
+            .getFirestore()
+            .collection("colleges")
+            .document("GKevzOMWBqbFtPezdLzF")
+            .collection("fees");
+    ;
 }

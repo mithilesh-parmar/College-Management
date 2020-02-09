@@ -38,6 +38,7 @@ public class CourseFirestoreUtility {
     public MapProperty<ClassItem, CourseCard> courseCourseCardMapProperty;
     private CourseCardListener cardListener;
 
+
     private EventListener<QuerySnapshot> courseDataListener = (snapshot, e) -> {
         if (e != null) {
             System.err.println("Listen failed: " + e);

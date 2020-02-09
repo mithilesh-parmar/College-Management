@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import custom_view.SearchTextFieldController?>
 
+<?import custom_view.class_section_accordion.ClassSectionTitledPane?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="students.StudentController"
@@ -13,7 +14,6 @@
 
 
     <VBox>
-
         <BorderPane>
             <left>
                 <Label id="headline" text="Students"/>

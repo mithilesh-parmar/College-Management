@@ -75,6 +75,7 @@ public class StudentDetailsController implements Initializable {
 
             listener.onStudentSubmit(new Student(
                     student.getID(),
+                    student.getAdmissionID(),
                     selectedBatch.get(),
                     student.getAddress(),
                     student.getProfilePictureURL(),
@@ -85,6 +86,7 @@ public class StudentDetailsController implements Initializable {
                     selectedName.get(),
                     selectedClassName.get(),
                     selectedEmail.get(),
+                    student.getScholarship(),
                     student.isRequested(),
                     student.isVerified(),
                     student.isProfileCompleted()

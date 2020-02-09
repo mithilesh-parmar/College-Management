@@ -4,6 +4,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import time_table.DAY;
 
 import java.util.*;
 
@@ -141,6 +142,10 @@ public class Section {
 
         json.put("time_table", listMap);
         return json;
+    }
+
+    public ObservableList<Lecture>  getLectures(DAY day) {
+        return classSchedules.get(day.toString());
     }
 
     public static Section fromJSON(Map<String, Object> json) {

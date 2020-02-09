@@ -30,6 +30,7 @@ public class AddCourseController implements Initializable {
     public ListView<ChipView> subjectListView;
     public Button deleteButton;
     public ProgressIndicator progressIndicator;
+    public TextField feeTextField;
     private ListProperty<Long> yearsList = new SimpleListProperty<>(FXCollections.observableArrayList());
     private BooleanProperty canSubmit = new SimpleBooleanProperty(true);
     private BooleanProperty canDelete = new SimpleBooleanProperty(false);
@@ -38,6 +39,7 @@ public class AddCourseController implements Initializable {
 
     private StringProperty courseName = new SimpleStringProperty();
     private LongProperty selectedYears = new SimpleLongProperty();
+    private LongProperty selectedFee = new SimpleLongProperty();
     private MapProperty<String, List<String>> subjects = new SimpleMapProperty<>(FXCollections.observableHashMap());
 
     //   This object is used when we display data of already present object
@@ -63,7 +65,24 @@ public class AddCourseController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         progressIndicator.visibleProperty().bind(loadingSections);
         deleteButton.visibleProperty().bind(canDelete);
-
+        feeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                feeTextField.setText(oldValue);
+            } else {
+                selectedFee.set(Long.parseLong(newValue));
+            }
+        });
+//        feeTextField.textProperty().addListener((observableValue, s, t1) -> {
+//            try {
+//
+//                long amount = Long.parseLong(t1);
+//                selectedFee.set(amount);
+//            } catch (Exception e) {
+//                feeTextField.setText(e.getMessage());
+//                canSubmit.set(false);
+//                e.printStackTrace();
+//            }
+//        });
 //        Years comboBox
         for (int i = 1; i <= MAX_YEARS; i++) {
             yearsList.get().add((long) i);
@@ -114,7 +133,7 @@ public class AddCourseController implements Initializable {
 
 
         if (classItem == null) {
-            ClassItem classItem = new ClassItem("", courseName.get(), selectedYears.get());
+            ClassItem classItem = new ClassItem("", courseName.get(), selectedYears.get(), selectedFee.get());
             List<Section> sections = new ArrayList<>();
             subjects.forEach((s, strings) -> {
                 sections.add(new Section("", courseName.get(), "", s, FXCollections.observableHashMap(), strings));
@@ -127,7 +146,7 @@ public class AddCourseController implements Initializable {
 
             callback.onCourseSubmit(course);
         } else {
-            ClassItem classItem = new ClassItem(this.classItem.getId(), courseName.get(), selectedYears.get());
+            ClassItem classItem = new ClassItem(this.classItem.getId(), courseName.get(), selectedYears.get(), selectedFee.get());
             List<Section> sections = FXCollections.observableArrayList();
             chipViews.forEach(chipView -> {
                 sections.add(chipView.getSection());
@@ -149,6 +168,7 @@ public class AddCourseController implements Initializable {
         this.classItem = course;
         yearsComboBox.setDisable(true);
         submitButton.setText("Update");
+        feeTextField.setText(String.valueOf(course.getFee()));
         canDelete.set(true);
         selectedYears.set(course.getYears());
         courseName.set(course.getName());

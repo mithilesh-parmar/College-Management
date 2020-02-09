@@ -12,14 +12,15 @@ import java.util.Map;
 public class ClassItem {
 
     private StringProperty name;
-    private LongProperty years;
+    private LongProperty years, fee;
     private StringProperty id;
 //    private ListProperty<Fee> feeList;
 
-    public ClassItem(String id, String name, long years) {
+    public ClassItem(String id, String name, long years, long fee) {
         this.id = new SimpleStringProperty(id);
         this.name = new SimpleStringProperty(name);
         this.years = new SimpleLongProperty(years);
+        this.fee = new SimpleLongProperty(fee);
 //        this.feeList = new SimpleListProperty<>(FXCollections.observableArrayList(feeList));
     }
 
@@ -32,7 +33,9 @@ public class ClassItem {
         return new ClassItem(
                 (String) json.get("id"),
                 (String) json.get("name"),
-                (long) json.get("years")
+                (long) json.get("years"),
+                json.containsKey("fee") ? (long) json.get("fee") : 0L
+
 //                (List<Fee>) json.get("fee_type")
         );
     }
@@ -42,11 +45,24 @@ public class ClassItem {
         json.put("id", id.get());
         json.put("name", name.get());
         json.put("years", years.get());
+        json.put("fee", fee.get());
         return json;
     }
 
     public long getYears() {
         return years.get();
+    }
+
+    public long getFee() {
+        return fee.get();
+    }
+
+    public LongProperty feeProperty() {
+        return fee;
+    }
+
+    public void setFee(long fee) {
+        this.fee.set(fee);
     }
 
     public LongProperty yearsProperty() {
