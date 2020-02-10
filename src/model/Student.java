@@ -25,7 +25,7 @@ public class Student {
             verified = new SimpleBooleanProperty(),
             profileCompleted = new SimpleBooleanProperty();
 
-    private LongProperty scholarship, amountDue, totalAmount;
+    private LongProperty scholarship = new SimpleLongProperty(), amountDue = new SimpleLongProperty(), totalAmount = new SimpleLongProperty();
 
     public Student(String ID,
                    String admissionID,

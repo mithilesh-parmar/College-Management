@@ -3,6 +3,8 @@ package utility;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import javafx.application.Platform;
+import javafx.beans.property.LongProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import listeners.DataChangeListener;
@@ -68,15 +70,32 @@ public class FeeFirestoreUtility {
 
     }
 
-    public ObservableList<Fee> getFeesForStudent(String studentID) {
+    public ObservableList<Fee> getAllFeesForStudent(String studentID) {
         System.out.println(fees);
         System.out.println("Filtering for: " + studentID);
+
         return
                 FXCollections.observableArrayList(
                         fees.stream()
                                 .filter(fee -> fee.getStudentID().matches(studentID))
                                 .collect(Collectors.toList())
                 );
+    }
+
+    public long getFeeAmountPaid(String studentID) {
+        System.out.println(fees);
+        System.out.println("Filtering for: " + studentID);
+
+        LongProperty amount = new SimpleLongProperty();
+        List<Fee> collect = fees.stream()
+                .filter(fee -> fee.getStudentID().matches(studentID))
+                .collect(Collectors.toList());
+        collect.forEach(fee -> {
+            if (fee.getType() == Fee.Type.ADMISSION_FEE) {
+                amount.set(amount.get() + fee.getAmount());
+            }
+        });
+        return amount.get();
     }
 
 
