@@ -13,7 +13,7 @@
            fx:controller="students.fee_view.StudentFeeController"
            stylesheets="@/styles/dark_metro_style.css">
 
-    <BorderPane>
+    <BorderPane fx:id="mainView">
 
 
         <top>

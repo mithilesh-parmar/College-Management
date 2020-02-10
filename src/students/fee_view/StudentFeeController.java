@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.BorderPane;
 import listeners.DataChangeListener;
 import model.Fee;
 import model.Student;
@@ -24,6 +25,7 @@ public class StudentFeeController implements Initializable {
     public TableView<Fee> feeTable;
     public ProgressIndicator progressIndicator;
     public Label dueAmountLabel;
+    public BorderPane mainView;
 
     private FeeFirestoreUtility feeFirestoreUtility = FeeFirestoreUtility.getInstance();
     private ClassFirestoreUtility classFirestoreUtility = ClassFirestoreUtility.getInstance();
@@ -40,8 +42,8 @@ public class StudentFeeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        progressIndicator.visibleProperty().bind(feeDataLoading.and(classDataLoading));
-
+        progressIndicator.visibleProperty().bind(feeDataLoading.or(classDataLoading));
+        mainView.visibleProperty().bind(feeDataLoading.or(classDataLoading).not());
         totalFeeLabel.textProperty().bind(totalFee.asString());
         amountPaidLabel.textProperty().bind(totalAmountPaid.asString());
         dueAmountLabel.textProperty().bind(dueAmount.asString());
