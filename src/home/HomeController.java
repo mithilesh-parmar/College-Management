@@ -75,7 +75,7 @@ public class HomeController implements Initializable {
     }
 
     private void setUpMenu() {
-//        menuList.add(new Menu("Test", "/time_table/TestView.fxml", ""));
+        menuList.add(new Menu("Back Logs", "/backlog/BackLogView.fxml", ""));
         menuList.add(new Menu("Fee", "/fee/FeeView.fxml", ""));
         menuList.add(new Menu("Students", "/students/StudentView.fxml", ""));
         menuList.add(new Menu("Teachers", "/teachers/TeacherView.fxml", ""));

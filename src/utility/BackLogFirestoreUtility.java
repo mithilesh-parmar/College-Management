@@ -11,11 +11,13 @@ import listeners.DataChangeListener;
 import model.BackLog;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BackLogFirestoreUtility {
     private DataChangeListener listener;
     private static BackLogFirestoreUtility instance;
     public ObservableList<BackLog> backLogs = FXCollections.observableArrayList();
+
 
     private BackLogFirestoreUtility() {
     }
@@ -58,6 +60,31 @@ public class BackLogFirestoreUtility {
 
     }
 
+
+    public List<BackLog> getBackLogsForStudent(String studentId) {
+        return backLogs
+                .stream()
+                .filter(backLog -> backLog.getStudentID().matches(studentId))
+                .collect(Collectors.toList());
+    }
+
+    public List<BackLog> getBackLogsForSection(String sectionId) {
+        return backLogs
+                .stream()
+                .filter(backLog -> backLog.getSectionID().matches(sectionId))
+                .collect(Collectors.toList());
+    }
+
+    public List<BackLog> getBackLogsForExam(String examId) {
+        return backLogs
+                .stream()
+                .filter(backLog -> backLog.getExamID().matches(examId))
+                .collect(Collectors.toList());
+    }
+
+    public void getBackLogsForSubject(String sectionId, String subjectName) {
+
+    }
 
     public void setListener(DataChangeListener listener) {
         this.listener = listener;

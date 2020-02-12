@@ -86,6 +86,7 @@ public class StudentDetailsController implements Initializable {
                     selectedName.get(),
                     selectedClassName.get(),
                     selectedEmail.get(),
+                    student.getSectionID(),
                     student.getScholarship(),
                     student.isRequested(),
                     student.isVerified(),

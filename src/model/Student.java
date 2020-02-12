@@ -18,6 +18,7 @@ public class Student {
             name = new SimpleStringProperty(),
             className = new SimpleStringProperty(),
             email = new SimpleStringProperty(),
+            sectionID = new SimpleStringProperty(),
             batch = new SimpleStringProperty();
 
     private BooleanProperty
@@ -39,6 +40,7 @@ public class Student {
                    String name,
                    String className,
                    String email,
+                   String sectionID,
                    long scholarship,
                    boolean requested,
                    boolean verified,
@@ -61,6 +63,7 @@ public class Student {
 //        setScholarship(scholarship);
         setRequested(requested);
         setVerified(verified);
+        setSectionID(sectionID);
 //        setAmountDue(amountDue);
         setProfileCompleted(profileCompleted);
     }
@@ -80,6 +83,7 @@ public class Student {
                 (String) json.get("name"),
                 (String) json.get("class_name"),
                 (String) json.get("email"),
+                (String) json.get("section_id"),
                 (long) json.get("scholarship"),
 //                (long) json.get("amount_due"),
                 (boolean) json.get("requested"),
@@ -105,8 +109,21 @@ public class Student {
         json.put("profile_completed", profileCompleted.get());
         json.put("scholarship", scholarship.get());
         json.put("admission_id", admissionID.get());
+        json.put("section_id", sectionID.get());
 //        json.put("amount_due", amountDue.get());
         return json;
+    }
+
+    public String getSectionID() {
+        return sectionID.get();
+    }
+
+    public StringProperty sectionIDProperty() {
+        return sectionID;
+    }
+
+    public void setSectionID(String sectionID) {
+        this.sectionID.set(sectionID);
     }
 
     public String getAdmissionID() {
