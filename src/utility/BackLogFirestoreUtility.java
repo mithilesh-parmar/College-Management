@@ -7,10 +7,12 @@ import com.google.cloud.firestore.QuerySnapshot;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.util.Pair;
 import listeners.DataChangeListener;
 import model.BackLog;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class BackLogFirestoreUtility {
@@ -99,5 +101,74 @@ public class BackLogFirestoreUtility {
         DocumentReference document = FirestoreConstants.backLogCollectionReference.document();
         backLog.setID(document.getId());
         document.set(backLog.toJSON());
+    }
+
+    public List<BackLog> getBackLogsForExam(Pair<String, String> result) {
+//        key -> exam_id
+//        value -> exam_name
+
+        System.out.println(result);
+
+        if (result.getValue().isEmpty() && !result.getKey().isEmpty()) {
+            System.out.println("Returning for key " + result.getKey());
+            return backLogs
+                    .stream()
+                    .filter(backLog -> backLog.getExamID().contains(result.getKey()))
+                    .collect(Collectors.toList());
+        } else if (result.getKey().isEmpty() && !result.getValue().isEmpty()) {
+            System.out.println("Returning for value" + result.getValue());
+            return backLogs
+                    .stream()
+                    .filter(backLog -> backLog.getExamName().toUpperCase().contains(result.getValue().toUpperCase()))
+                    .collect(Collectors.toList());
+        } else if (!result.getKey().isEmpty() && !result.getValue().isEmpty()) {
+            System.out.println("Returning for " + result.getKey() + " and " + result.getValue());
+            return backLogs
+                    .stream()
+                    .filter(
+                            backLog ->
+                                    backLog.getExamID().contains(result.getKey())
+                                            ||
+                                            backLog.getExamName().toUpperCase().contains(result.getValue().toUpperCase())
+                    )
+                    .collect(Collectors.toList());
+        }
+        System.out.println("Returning Empty List");
+        return List.of();
+    }
+
+    public List<BackLog> getBackLogsForSubject(Pair<String, String> result) {
+//        key -> section id
+//        value -> subject name
+
+        System.out.println(result);
+
+//        if (!result.getValue().isEmpty() && !result.getKey().isEmpty()) {
+//            System.out.println("Returning for key " + result.getKey());
+//            return backLogs
+//                    .stream()
+//                    .filter(backLog -> backLog.getSectionID().matches(result.getKey()))
+//                    .collect(Collectors.toList());
+//        } else if (!result.getKey().isEmpty() && !result.getValue().isEmpty()) {
+//            System.out.println("Returning for value" + result.getValue());
+//            return backLogs
+//                    .stream()
+//                    .filter(backLog -> backLog.getSubjectName().toUpperCase().contains(result.getValue().toUpperCase()))
+//                    .collect(Collectors.toList());
+//        } else
+        if (!result.getKey().isEmpty() && !result.getValue().isEmpty()) {
+            System.out.println("Returning for " + result.getKey() + " and " + result.getValue());
+            return backLogs
+                    .stream()
+                    .filter(
+                            backLog ->
+                                    backLog.getSectionID().matches(result.getKey())
+                                            &&
+                                            backLog.getSubjectName().toUpperCase().contains(result.getValue().toUpperCase())
+                    )
+                    .collect(Collectors.toList());
+        }
+        System.out.println("Returning Empty List");
+        return List.of();
     }
 }

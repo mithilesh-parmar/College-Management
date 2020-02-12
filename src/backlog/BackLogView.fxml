@@ -8,6 +8,7 @@
 
 <?import custom_view.SearchTextFieldController?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.geometry.Insets?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="backlog.BackLogController">
@@ -18,12 +19,16 @@
             <left>
                 <Label id="headline" text="Back Logs"/>
             </left>
-            <right>
-                <SearchTextFieldController fx:id="searchTextField"/>
-            </right>
+<!--            <right>-->
+<!--                <SearchTextFieldController fx:id="searchTextField"/>-->
+<!--            </right>-->
         </BorderPane>
 
         <HBox spacing="5" alignment="CENTER">
+
+            <padding>
+                <Insets topRightBottomLeft="14"/>
+            </padding>
 
             <Button fx:id="studentBackLogButton" text="For Student"/>
             <Button fx:id="subjectBackLogButton" text="For Subject"/>
