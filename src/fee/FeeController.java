@@ -8,37 +8,82 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
 import model.Fee;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import utility.FeeFirestoreUtility;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
+
+import static custom_view.dialog_helper.CustomDialog.showInputDialogWithOneParameter;
 
 public class FeeController implements Initializable, DataChangeListener {
 
     public TableView<Fee> feeTable;
     public ProgressIndicator progressIndicator;
     public Button addButton;
+    public Button findButton;
+    public Button clearButton;
 
     private FeeFirestoreUtility firestoreUtility = FeeFirestoreUtility.getInstance();
 
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
+    private BooleanProperty canViewClearButton = new SimpleBooleanProperty(false);
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        clearButton.visibleProperty().bind(canViewClearButton);
+        clearButton.setDefaultButton(true);
+        clearButton.setPadding(new Insets(8));
+        clearButton.setBorder(createBorder(Color.WHITESMOKE, BorderStrokeStyle.SOLID, 8, 1));
+        clearButton.setOnAction(actionEvent -> {
+            resetTable();
+        });
+
+
+        findButton.disableProperty().bind(canViewClearButton);
+        findButton.setPadding(new Insets(8));
+        findButton.setDefaultButton(true);
+        findButton.setOnAction(actionEvent -> loadStudentFee());
+        findButton.setBorder(createBorder(Color.WHITESMOKE, BorderStrokeStyle.SOLID, 8, 2));
+
+        addButton.setPadding(new Insets(8));
         progressIndicator.visibleProperty().bind(dataLoading);
         addButton.setOnAction(actionEvent -> loadAddView());
+        addButton.setBorder(createBorder(Color.WHITESMOKE, BorderStrokeStyle.SOLID, 8, 2));
         firestoreUtility.setListener(this);
         firestoreUtility.getFees();
+
+    }
+
+    private void resetTable() {
+        canViewClearButton.set(false);
+        feeTable.setItems(firestoreUtility.fees);
+    }
+
+    private void loadStudentFee() {
+        Optional<String> result = showInputDialogWithOneParameter("Student Details", "Student ID ");
+        result.ifPresent(data -> {
+            feeTable.setItems(firestoreUtility.getAllFeesForStudent(data));
+            canViewClearButton.set(true);
+        });
+    }
+
+    private Border createBorder(Color color, BorderStrokeStyle borderStrokeStyle, double radius, double width) {
+        return new Border(new BorderStroke(color, borderStrokeStyle, new CornerRadii(radius), new BorderWidths(width)));
     }
 
     private void loadAddView() {

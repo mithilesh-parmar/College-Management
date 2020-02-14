@@ -18,7 +18,6 @@ public abstract class AnimatingCard extends StackPane {
     private BooleanProperty frontViewVisible = new SimpleBooleanProperty(true);
 
     AnimatingCard() {
-
         setOnMouseEntered(event -> showRearView());
         setOnMouseExited(event -> showFrontView());
         ready.addListener((observableValue, aBoolean, t1) -> {

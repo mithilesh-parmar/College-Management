@@ -52,7 +52,7 @@ public class ExamCard extends AnimatingCard {
     }
 
     @Override
-    void initFrontView() {
+    public void initFrontView() {
         Label examNameLabel = new Label(title.get());
         Label classNameLabel = new Label(subTitle.get());
 

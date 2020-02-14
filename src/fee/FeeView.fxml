@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.geometry.Insets?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="fee.FeeController">
@@ -12,7 +13,24 @@
     <ProgressIndicator fx:id="progressIndicator"/>
 
     <VBox>
-        <Button fx:id="addButton" text="Add" defaultButton="true"/>
+        <BorderPane>
+            <padding>
+                <Insets topRightBottomLeft="18"/>
+            </padding>
+            <left>
+
+                <HBox spacing="5">
+                    <Button fx:id="findButton" text="Find"/>
+                    <Button fx:id="clearButton" text="Clear"/>
+                </HBox>
+
+            </left>
+
+            <right>
+                <Button fx:id="addButton" text="Add" defaultButton="true"/>
+            </right>
+        </BorderPane>
+
         <TableView fx:id="feeTable" VBox.vgrow="ALWAYS">
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>

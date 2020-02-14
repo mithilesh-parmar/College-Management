@@ -10,6 +10,8 @@
 
 
 <?import custom_view.time_textfield.TimeTextField?>
+<?import custom_view.ImageButton?>
+<?import custom_view.card_view.ImageCard?>
 <GridPane fx:controller="events.add_event.AddEventController"
           xmlns:fx="http://javafx.com/fxml" alignment="center"
           hgap="10" vgap="10"

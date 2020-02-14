@@ -38,7 +38,7 @@ public class CourseCard extends AnimatingCard {
         setRearView(rearView);
     }
 
-    void initRearView() {
+    public void initRearView() {
 
     }
 
@@ -53,7 +53,7 @@ public class CourseCard extends AnimatingCard {
         setRearView(rearView);
     }
 
-    void initFrontView() {
+    public void initFrontView() {
         Label titleLabel = new Label(title.get());
         Label subTitleLabel = new Label(subTitle.get());
         titleLabel.textProperty().bind(this.title);

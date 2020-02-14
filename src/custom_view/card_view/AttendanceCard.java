@@ -37,7 +37,7 @@ public class AttendanceCard extends AnimatingCard {
 
 
     @Override
-    void initFrontView() {
+    public void initFrontView() {
         Label courseNameLabel = new Label(courseName.get());
         Label yearLabel = new Label(year.get());
         Label dateLabel = new Label(date.get());

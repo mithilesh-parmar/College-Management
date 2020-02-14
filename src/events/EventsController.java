@@ -4,6 +4,8 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
+import custom_view.card_view.ImageCard;
+import custom_view.image_gallery_view.Gallery;
 import events.add_event.AddEventController;
 import events.add_event.AddEventListener;
 import javafx.application.Platform;
@@ -45,7 +47,7 @@ public class EventsController implements Initializable, DataChangeListener {
     public Label eventTitle;
     public Label eventDescription;
 
-    public ImageView eventImage;
+//    public ImageView eventImage;
 
     public ProgressIndicator mainProgressIndicator;
     public ProgressIndicator detailProgressIndicator;
@@ -64,6 +66,7 @@ public class EventsController implements Initializable, DataChangeListener {
     public VBox eventDetailPane;
     public Button editButton;
     public TextField searchTextField;
+    public Gallery galleryView;
 
 
     private BooleanProperty loadingData = new SimpleBooleanProperty(true);
@@ -72,6 +75,11 @@ public class EventsController implements Initializable, DataChangeListener {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+
+        galleryView.setImageView(List.of(
+                "https://avatars2.githubusercontent.com/u/4376913?s=400&v=4",
+                "https://avatars2.githubusercontent.com/u/4376913?s=400&v=4",
+                "https://avatars2.githubusercontent.com/u/4376913?s=400&v=4"));
 
         setfieldsvisiblity(false);
 
@@ -82,8 +90,8 @@ public class EventsController implements Initializable, DataChangeListener {
 
         mainProgressIndicator.visibleProperty().bind(loadingData);
 
-        eventImage.setFitHeight(150);
-        eventImage.setFitWidth(150);
+//        eventImage.setFitHeight(150);
+//        eventImage.setFitWidth(150);
 
         eventsList.getSelectionModel().selectedItemProperty().addListener((observableValue, a, t1) -> {
             detailProgressIndicator.setVisible(true);
@@ -176,12 +184,12 @@ public class EventsController implements Initializable, DataChangeListener {
         eventTime.setText(event.getTime());
         createdAt.setText(event.getCreatedAt().toString());
         eventDate.setText(event.getEventDate().toString());
-        if (event.getImages() != null && event.getImages().size() > 0) {
-
-            eventImage.setImage(new Image(event.getImages().get(0), true));
-        } else {
-            eventImage.setImage(new Image("/assets/cancel.png"));
-        }
+//        if (event.getImages() != null && event.getImages().size() > 0) {
+//
+//            eventImage.setImage(new Image(event.getImages().get(0), true));
+//        } else {
+//            eventImage.setImage(new Image("/assets/cancel.png"));
+//        }
 
         detailProgressIndicator.setVisible(false);
     }

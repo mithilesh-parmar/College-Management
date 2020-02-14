@@ -50,7 +50,7 @@ public class LeaveCard extends AnimatingCard {
     }
 
     @Override
-    void initFrontView() {
+    public void initFrontView() {
         Label teacherNameLabel = new Label(title.get());
         Label reasonLabel = new Label(subTitle.get());
 
