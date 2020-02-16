@@ -54,8 +54,6 @@ public class Event {
     }
 
 
-    private List<String> imagesList = new ArrayList<>();
-
     public Map<String, Object> toJSON() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", id.get());
@@ -64,7 +62,7 @@ public class Event {
         map.put("time", time.get());
         map.put("created_at", createdAt.get());
         map.put("event_date", eventDate.get());
-        map.put("images", imagesList);
+        map.put("images", images.get());
         return map;
     }
 
@@ -158,4 +156,12 @@ public class Event {
         this.eventDate.set(eventDate);
     }
 
+
+    public String getNameWithoutSpaces() {
+        String name = title.get();
+
+        name = name.replace(" ", "_");
+
+        return name;
+    }
 }

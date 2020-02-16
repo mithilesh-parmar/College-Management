@@ -44,8 +44,8 @@ public class AddEventController implements Initializable {
             if (listener == null) return;
 
 
-            if (event == null)
-
+            if (event == null) {
+                System.out.println("Adding new event");
 //            Initially setting id to null
                 listener.onEventAdded(new Event(
                         "",
@@ -56,8 +56,8 @@ public class AddEventController implements Initializable {
                         asTimeStamp(eventDatePicker.getValue()),
                         galleryView.getImageUrls()
                 ));
-            else
-//                Updating the values with new value while keeping the id same
+            } else {
+                //                Updating the values with new value while keeping the id same
                 System.out.println(galleryView.getImageUrls());
                 listener.onEventUpdated(
                         new Event(
@@ -70,6 +70,8 @@ public class AddEventController implements Initializable {
                                 galleryView.getImageUrls()
                         )
                 );
+            }
+
 
         });
     }
@@ -80,6 +82,7 @@ public class AddEventController implements Initializable {
     }
 
     private void loadData(Event event) {
+        System.out.println(event.toJSON());
         titleTextField.setText(event.getTitle());
         descriptionTextField.setText(event.getDescription());
         galleryView.setImageView(event.getImages());

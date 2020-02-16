@@ -1,6 +1,7 @@
 package custom_view.image_gallery_view;
 
 import custom_view.card_view.ImageCard;
+import custom_view.card_view.ImageCardListener;
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
@@ -48,7 +49,6 @@ Gallery extends BorderPane implements Initializable {
     public Gallery() {
         setPadding(new Insets(4));
 
-
         addButton = new Button("Add Image");
         setAlignment(addButton, Pos.CENTER);
 
@@ -94,24 +94,52 @@ Gallery extends BorderPane implements Initializable {
     }
 
     private void addImage() {
-        File image = showFileChooser("Choose Image");
-        if (image != null) {
-            imageViews.get().add(new ImageCard(new Image(image.toURI().toString()), true));
+        File file = showFileChooser("Choose Image");
+        System.out.println(file);
+        if (file != null) {
+            ImageCard imageCard = new ImageCard(file, true);
+            imageCard.setListener(new ImageCardListener() {
+                @Override
+                public void onDeleteAction(ImageCard card) {
+                    imageViews.remove(card);
+                }
+
+                @Override
+                public void onClickAction(ImageCard card) {
+
+                }
+            });
+            imageViews.get().add(imageCard);
 
         }
 
     }
 
     public void setImageView(List<String> imageUrls) {
+        System.out.println("Setting image urls " + imageUrls);
         if (imageUrls != null)
-            imageUrls.forEach(url -> imageViews.get().add(new ImageCard(new Image(url, true), true)));
+            imageUrls.forEach(url -> {
+//                ImageCard imageCard = new ImageCard(new Image(new File(url).toPath().toString(), true), true);
+                ImageCard imageCard = new ImageCard(url, true);
+                imageCard.setListener(new ImageCardListener() {
+                    @Override
+                    public void onDeleteAction(ImageCard card) {
+                        imageViews.remove(card);
+                    }
+
+                    @Override
+                    public void onClickAction(ImageCard card) {
+
+                    }
+                });
+                imageViews.get().add(imageCard);
+            });
 
     }
 
 
     public List<String> getImageUrls() {
         List<String> urls = new ArrayList<>();
-
         imageViews.forEach(card -> urls.add(card.getUrl()));
         return urls;
     }

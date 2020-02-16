@@ -127,6 +127,7 @@ public class EventsController implements Initializable, DataChangeListener {
             controller.setListener(new AddEventListener() {
                 @Override
                 public void onEventAdded(Event event) {
+                    System.out.println("Adding new event");
                     close(stage);
                     loadingData.set(true);
                     firestoreUtility.addEvent(event);
@@ -182,12 +183,10 @@ public class EventsController implements Initializable, DataChangeListener {
         createdAt.setText(event.getCreatedAt().toString());
         eventDate.setText(event.getEventDate().toString());
         if (event.getImages() != null && event.getImages().size() > 0) {
-
-            event.getImages().forEach(url -> {
-                images.get().add(new ImageCard(new Image(url, true), false));
-            });
-//            images.add(new ImageCard(event))
-//            eventImage.setImage(new Image(event.getImages().get(0), true));
+            images.clear();
+            event.getImages().forEach(url ->
+                    images.get().add(new ImageCard(url, false))
+            );
         } else {
             images.clear();
             images.get().add(new ImageCard(new Image("/assets/add.png", true), false));

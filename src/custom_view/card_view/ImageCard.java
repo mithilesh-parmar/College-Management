@@ -1,5 +1,6 @@
 package custom_view.card_view;
 
+import custom_view.loading_image.LoadingImage;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.HPos;
@@ -13,6 +14,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class ImageCard extends AnimatingCard {
 
@@ -22,11 +25,12 @@ public class ImageCard extends AnimatingCard {
     private BorderPane rearPane = new BorderPane();
     private BorderPane frontPane = new BorderPane();
     private Image image;
+    //    private LoadingImage image;
     private String url;
 
     public ImageCard(Image image, boolean shouldAnimate) {
-
         this.image = image;
+//        this.image = new LoadingImage(image.getUrl(), 100, 100);
         this.url = image.getUrl();
 
         initFrontView();
@@ -36,6 +40,34 @@ public class ImageCard extends AnimatingCard {
 
         setShouldAnimate(shouldAnimate);
     }
+
+
+    public ImageCard(File file, boolean shouldAnimate) {
+
+        this.image = new Image("file:" + file.getAbsolutePath().toString());
+        this.url = file.getAbsolutePath().toString();
+
+        initFrontView();
+        initRearView();
+        setFrontView(frontPane);
+        setRearView(rearPane);
+
+        setShouldAnimate(shouldAnimate);
+    }
+
+    public ImageCard(String url, boolean shouldAnimate) {
+
+
+        this.url = url;
+
+        initFrontView(new LoadingImage(url, 100, 100));
+        initRearView();
+        setFrontView(frontPane);
+        setRearView(rearPane);
+
+        setShouldAnimate(shouldAnimate);
+    }
+
 
     void initRearView() {
         Button deleteButton = new Button("Delete");
@@ -59,8 +91,8 @@ public class ImageCard extends AnimatingCard {
 
 
     public void setImage(File file) {
-        this.image = new Image(file.toURI().getPath());
-        this.url = this.image.getUrl();
+        this.image = new Image("file:" + file.getAbsolutePath());
+        this.url = file.getAbsolutePath();
         initFrontView();
         initRearView();
         setFrontView(frontPane);
@@ -69,17 +101,37 @@ public class ImageCard extends AnimatingCard {
 
 
     public void setImage(String url) {
-        this.image = new Image(url);
+//        this.image = ;
+//        this.image = new Image(new File(url).toPath().toString());
         this.url = url;
-        initFrontView();
+        initFrontView(new LoadingImage(url, 100, 100));
         initRearView();
         setFrontView(frontPane);
         setRearView(rearPane);
+
+    }
+
+    private void initFrontView(LoadingImage loadingImage) {
+        System.out.println("Setting loading images");
+        Reflection reflection = new Reflection();
+        reflection.setFraction(0.4);
+//        imageView.setImage(loadingImage);
+        loadingImage.setEffect(reflection);
+//        loadingImage.setSmooth(true);
+        loadingImage.setPickOnBounds(true);
+//        loadingImage.setFitHeight(100);
+//        loadingImage.setFitWidth(100);
+
+        frontPane.setCenter(loadingImage);
+        setOnMouseClicked(event -> {
+            if (listener == null) return;
+            if (event.getClickCount() == 2)
+                listener.onClickAction(this);
+        });
+
     }
 
     public void initFrontView() {
-
-
         Reflection reflection = new Reflection();
         reflection.setFraction(0.4);
         imageView.setImage(image);
@@ -89,15 +141,7 @@ public class ImageCard extends AnimatingCard {
         imageView.setFitHeight(100);
         imageView.setFitWidth(100);
 
-//        frontPane.setPadding(new Insets(4));
         frontPane.setCenter(imageView);
-//
-//        setBorder(new Border(new BorderStroke(Color.DARKSLATEGREY,
-//                BorderStrokeStyle.SOLID, new CornerRadii(8), new BorderWidths(1))));
-//        setId("card");
-//
-//        setStyle("/styles/dark_metro_style.css");
-
         setOnMouseClicked(event -> {
             if (listener == null) return;
             if (event.getClickCount() == 2)
@@ -107,7 +151,9 @@ public class ImageCard extends AnimatingCard {
 
     }
 
+
     public String getUrl() {
+        System.out.println("Returning url: " + url);
         return url;
     }
 

@@ -28,6 +28,7 @@ public class LoadingImage extends StackPane {
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
         imageView.setPickOnBounds(true);
+        imageView.setCache(true);
         imageView.setFitWidth(fitWidth == -1 ? size : fitWidth);
         imageView.setFitHeight(fitHeight == -1 ? size : fitWidth);
         loadData();

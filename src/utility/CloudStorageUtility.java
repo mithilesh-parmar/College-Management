@@ -78,7 +78,6 @@ public class CloudStorageUtility {
         try {
             System.out.println("Uploading to: " + uploadFolderPath);
             Blob blob = projectBucket.create(uploadFolderPath, new FileInputStream(document), documentType);
-
             blob.createAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER));
             if (listener != null) listener.onSuccess(blob);
         } catch (FileNotFoundException e) {
@@ -86,6 +85,14 @@ public class CloudStorageUtility {
 
         }
 
+    }
+
+
+    void uploadDocument(String uploadFolderPath, String fileName, String documentPath, String documentType) {
+        File file = new File(documentPath);
+        System.out.println(file);
+        System.out.println(file.toURI());
+        uploadDocument(uploadFolderPath, fileName, file, documentType);
     }
 
     void uploadStudentDocument(StudentDocument studentDocument) {
