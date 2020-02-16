@@ -20,7 +20,7 @@ public class Event {
             time = new SimpleStringProperty();
     private SimpleObjectProperty<Timestamp> createdAt = new SimpleObjectProperty<>(),
             eventDate = new SimpleObjectProperty<>();
-    private SimpleListProperty<String> images = new SimpleListProperty<>();
+    private SimpleListProperty<String> images = new SimpleListProperty<>(FXCollections.observableArrayList());
 
 
     public Event(String id, String title, String description, String time, Timestamp createdAt, Timestamp eventDate, List<String> images) {
@@ -29,12 +29,13 @@ public class Event {
         setDescription(description);
         setTime(time);
 
+        this.images.get().setAll(images);
         if (createdAt != null) setCreatedAt(createdAt);
         if (createdAt != null) setEventDate(eventDate);
-        if (images != null && images.size() > 0) {
-            ObservableList<String> imageList = FXCollections.observableList(images);
-            setImages(imageList);
-        }
+//        if (images != null && images.size() > 0) {
+//            ObservableList<String> imageList = FXCollections.observableList(images);
+//            setImages(imageList);
+//        }
     }
 
     public static Event fromJSON(Map<String, Object> json) {
@@ -53,7 +54,7 @@ public class Event {
     }
 
 
-    List imagesList = new ArrayList();
+    private List<String> imagesList = new ArrayList<>();
 
     public Map<String, Object> toJSON() {
         Map<String, Object> map = new HashMap<>();

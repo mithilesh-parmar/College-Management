@@ -1,6 +1,7 @@
 package events.add_event;
 
 import com.google.cloud.Timestamp;
+import custom_view.image_gallery_view.Gallery;
 import custom_view.time_textfield.TimeTextField;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -25,6 +26,7 @@ public class AddEventController implements Initializable {
     public DatePicker eventDatePicker;
     public DatePicker createdAtDatePicker;
     public TimeTextField eventTimeTextField;
+    public Gallery galleryView;
 
     private AddEventListener listener;
 
@@ -33,6 +35,8 @@ public class AddEventController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+
+        galleryView.setShowAddButton(true);
 
         submitButton.setOnAction(actionEvent -> {
 
@@ -50,10 +54,11 @@ public class AddEventController implements Initializable {
                         eventTimeTextField.getTime(),
                         asTimeStamp(createdAtDatePicker.getValue()),
                         asTimeStamp(eventDatePicker.getValue()),
-                        new ArrayList<>()
+                        galleryView.getImageUrls()
                 ));
             else
 //                Updating the values with new value while keeping the id same
+                System.out.println(galleryView.getImageUrls());
                 listener.onEventUpdated(
                         new Event(
                                 event.getId(),
@@ -62,7 +67,7 @@ public class AddEventController implements Initializable {
                                 eventTimeTextField.getTime(),
                                 asTimeStamp(createdAtDatePicker.getValue()),
                                 asTimeStamp(eventDatePicker.getValue()),
-                                new ArrayList<>()
+                                galleryView.getImageUrls()
                         )
                 );
 
@@ -77,6 +82,7 @@ public class AddEventController implements Initializable {
     private void loadData(Event event) {
         titleTextField.setText(event.getTitle());
         descriptionTextField.setText(event.getDescription());
+        galleryView.setImageView(event.getImages());
         System.out.println(event.getTime());
         eventTimeTextField.setText(event.getTime());
         createdAtDatePicker.setValue(asLocalDate(event.getCreatedAt().toDate()));

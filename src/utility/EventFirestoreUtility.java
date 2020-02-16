@@ -13,6 +13,9 @@ import java.util.concurrent.ExecutionException;
 
 public class EventFirestoreUtility {
 
+
+// TODO on event add and edit upload the images first then upload the object
+
     private static EventFirestoreUtility instance;
     public ObservableList<Event> events;
 

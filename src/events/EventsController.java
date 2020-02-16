@@ -4,13 +4,13 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
+import custom_view.ImageCarousel;
 import custom_view.card_view.ImageCard;
 import custom_view.image_gallery_view.Gallery;
 import events.add_event.AddEventController;
 import events.add_event.AddEventListener;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -71,16 +71,14 @@ public class EventsController implements Initializable, DataChangeListener {
 
     private BooleanProperty loadingData = new SimpleBooleanProperty(true);
     private EventFirestoreUtility firestoreUtility = EventFirestoreUtility.getInstance();
+    private ListProperty<ImageCard> images = new SimpleListProperty<>(FXCollections.observableArrayList());
+
+    private ObjectProperty<Event> selectedEvent = new SimpleObjectProperty<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-
-        galleryView.setImageView(List.of(
-                "https://avatars2.githubusercontent.com/u/4376913?s=400&v=4",
-                "https://avatars2.githubusercontent.com/u/4376913?s=400&v=4",
-                "https://avatars2.githubusercontent.com/u/4376913?s=400&v=4"));
-
+        galleryView.imageViewsProperty().bind(images);
+        galleryView.setShowAddButton(false);
         setfieldsvisiblity(false);
 
         firestoreUtility.setListener(this);
@@ -90,14 +88,13 @@ public class EventsController implements Initializable, DataChangeListener {
 
         mainProgressIndicator.visibleProperty().bind(loadingData);
 
-//        eventImage.setFitHeight(150);
-//        eventImage.setFitWidth(150);
+        eventsList.getSelectionModel().selectedItemProperty().addListener((observableValue, a, t1) -> selectedEvent.set(t1));
 
-        eventsList.getSelectionModel().selectedItemProperty().addListener((observableValue, a, t1) -> {
+        selectedEvent.addListener((observableValue, event, t1) -> {
+            if (t1 == null) return;
             detailProgressIndicator.setVisible(true);
             setfieldsvisiblity(true);
-            fillDetailsForEvent(observableValue.getValue());
-
+            fillDetailsForEvent(t1);
         });
 
         editButton.setOnAction(actionEvent -> loadAddView(eventsList.getSelectionModel().getSelectedItem()));
@@ -184,12 +181,17 @@ public class EventsController implements Initializable, DataChangeListener {
         eventTime.setText(event.getTime());
         createdAt.setText(event.getCreatedAt().toString());
         eventDate.setText(event.getEventDate().toString());
-//        if (event.getImages() != null && event.getImages().size() > 0) {
-//
+        if (event.getImages() != null && event.getImages().size() > 0) {
+
+            event.getImages().forEach(url -> {
+                images.get().add(new ImageCard(new Image(url, true), false));
+            });
+//            images.add(new ImageCard(event))
 //            eventImage.setImage(new Image(event.getImages().get(0), true));
-//        } else {
-//            eventImage.setImage(new Image("/assets/cancel.png"));
-//        }
+        } else {
+            images.clear();
+            images.get().add(new ImageCard(new Image("/assets/add.png", true), false));
+        }
 
         detailProgressIndicator.setVisible(false);
     }

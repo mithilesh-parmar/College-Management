@@ -9,6 +9,7 @@
 <?import javafx.geometry.Insets?>
 <?import custom_view.ImageViewController?>
 <?import custom_view.image_gallery_view.Gallery?>
+<?import custom_view.ImageCarousel?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="events.EventsController"
@@ -56,7 +57,9 @@
 
                 </Label>
 
+                <Gallery fx:id="galleryView" HBox.hgrow="ALWAYS"/>
                 <!--                <ImageView fx:id="eventImage"/>-->
+
 
 
                 <GridPane vgap="10" alignment="TOP_CENTER">
@@ -108,7 +111,6 @@
 
                 </GridPane>
 
-                <Gallery fx:id="galleryView"/>
 
             </VBox>
 
