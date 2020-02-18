@@ -5,14 +5,14 @@
 <?import javafx.scene.control.cell.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox stylesheets="@/styles/dark_metro_style.css" xmlns="http://javafx.com/javafx/10.0.2-internal"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="time_table.TimeTableController">
+<StackPane stylesheets="@/styles/dark_metro_style.css" xmlns="http://javafx.com/javafx/10.0.2-internal"
+           xmlns:fx="http://javafx.com/fxml/1" fx:controller="time_table.TimeTableController">
+    <ProgressIndicator fx:id="progressIndicator"/>
+
+    <GridPane>
 
 
-    <StackPane>
-
-
-        <VBox>
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0">
 
             <Label id="headline" text="Sections"/>
             <TextField fx:id="searchTextField" alignment="CENTER" maxWidth="Infinity"
@@ -29,194 +29,194 @@
             <ListView fx:id="sectionsListView" VBox.vgrow="ALWAYS"/>
         </VBox>
 
-        <ProgressIndicator fx:id="progressIndicator"/>
-
-    </StackPane>
-
-    <ListView fx:id="scheduleView" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
-        <Button fx:id="addButton" defaultButton="true" text="Add Lecture" StackPane.alignment="BOTTOM_LEFT"/>
-        <Label id="headline" text="Monday"/>
-        <TableView fx:id="mondayTableView" HBox.hgrow="ALWAYS">
-            <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-            </columnResizePolicy>
-            <columns>
-
-                <TableColumn text="Subject">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="name"/>
-                    </cellValueFactory>
-
-                </TableColumn>
-
-                <TableColumn text="Start Time">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="startTime"/>
-                    </cellValueFactory>
-                </TableColumn>
-
-                <TableColumn text="End Time">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="endTime"/>
-                    </cellValueFactory>
-                </TableColumn>
-
-            </columns>
-
-        </TableView>
 
 
-        <Label id="headline" text="Tuesday"/>
-        <TableView fx:id="tuesdayTableView" HBox.hgrow="ALWAYS">
-            <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-            </columnResizePolicy>
-            <columns>
 
-                <TableColumn text="Subject">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="name"/>
-                    </cellValueFactory>
-                </TableColumn>
+        <ListView fx:id="scheduleView" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" GridPane.columnIndex="1"
+                  GridPane.rowIndex="0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+            <Button fx:id="addButton" defaultButton="true" text="Add Lecture" StackPane.alignment="BOTTOM_LEFT"/>
+            <Label id="headline" text="Monday"/>
+            <TableView fx:id="mondayTableView" HBox.hgrow="ALWAYS">
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+                <columns>
 
-                <TableColumn text="Start Time">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="startTime"/>
-                    </cellValueFactory>
-                </TableColumn>
+                    <TableColumn text="Subject">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="name"/>
+                        </cellValueFactory>
 
-                <TableColumn text="End Time">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="endTime"/>
-                    </cellValueFactory>
-                </TableColumn>
+                    </TableColumn>
 
-            </columns>
+                    <TableColumn text="Start Time">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="startTime"/>
+                        </cellValueFactory>
+                    </TableColumn>
 
-        </TableView>
+                    <TableColumn text="End Time">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="endTime"/>
+                        </cellValueFactory>
+                    </TableColumn>
 
+                </columns>
 
-        <Label id="headline" text="Wednesday"/>
-        <TableView fx:id="wednesdayTableView">
-            <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-            </columnResizePolicy>
-            <columns>
-
-                <TableColumn text="Subject">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="name"/>
-                    </cellValueFactory>
-                </TableColumn>
-
-                <TableColumn text="Start Time">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="startTime"/>
-                    </cellValueFactory>
-                </TableColumn>
-
-                <TableColumn text="End Time">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="endTime"/>
-                    </cellValueFactory>
-                </TableColumn>
-
-            </columns>
-
-        </TableView>
+            </TableView>
 
 
-        <Label id="headline" text="Thursday"/>
-        <TableView fx:id="thursdayTableView">
-            <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-            </columnResizePolicy>
-            <columns>
+            <Label id="headline" text="Tuesday"/>
+            <TableView fx:id="tuesdayTableView" HBox.hgrow="ALWAYS">
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+                <columns>
 
-                <TableColumn text="Subject">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="name"/>
-                    </cellValueFactory>
-                </TableColumn>
+                    <TableColumn text="Subject">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="name"/>
+                        </cellValueFactory>
+                    </TableColumn>
 
-                <TableColumn text="Start Time">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="startTime"/>
-                    </cellValueFactory>
-                </TableColumn>
+                    <TableColumn text="Start Time">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="startTime"/>
+                        </cellValueFactory>
+                    </TableColumn>
 
-                <TableColumn text="End Time">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="endTime"/>
-                    </cellValueFactory>
-                </TableColumn>
+                    <TableColumn text="End Time">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="endTime"/>
+                        </cellValueFactory>
+                    </TableColumn>
 
-            </columns>
+                </columns>
 
-        </TableView>
-
-
-        <Label id="headline" text="Friday"/>
-        <TableView fx:id="fridayTableView">
-            <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-            </columnResizePolicy>
-            <columns>
-
-                <TableColumn text="Subject">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="name"/>
-                    </cellValueFactory>
-                </TableColumn>
-
-                <TableColumn text="Start Time">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="startTime"/>
-                    </cellValueFactory>
-                </TableColumn>
-
-                <TableColumn text="End Time">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="endTime"/>
-                    </cellValueFactory>
-                </TableColumn>
-
-            </columns>
-
-        </TableView>
+            </TableView>
 
 
-        <Label id="headline" text="Saturday"/>
-        <TableView fx:id="saturdayTableView">
-            <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-            </columnResizePolicy>
-            <columns>
+            <Label id="headline" text="Wednesday"/>
+            <TableView fx:id="wednesdayTableView">
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+                <columns>
 
-                <TableColumn text="Subject">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="name"/>
-                    </cellValueFactory>
-                </TableColumn>
+                    <TableColumn text="Subject">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="name"/>
+                        </cellValueFactory>
+                    </TableColumn>
 
-                <TableColumn text="Start Time">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="startTime"/>
-                    </cellValueFactory>
-                </TableColumn>
+                    <TableColumn text="Start Time">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="startTime"/>
+                        </cellValueFactory>
+                    </TableColumn>
 
-                <TableColumn text="End Time">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="endTime"/>
-                    </cellValueFactory>
-                </TableColumn>
+                    <TableColumn text="End Time">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="endTime"/>
+                        </cellValueFactory>
+                    </TableColumn>
 
-            </columns>
+                </columns>
 
-        </TableView>
-
-
-    </ListView>
+            </TableView>
 
 
-</HBox>
+            <Label id="headline" text="Thursday"/>
+            <TableView fx:id="thursdayTableView">
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+                <columns>
+
+                    <TableColumn text="Subject">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="name"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn text="Start Time">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="startTime"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn text="End Time">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="endTime"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                </columns>
+
+            </TableView>
+
+
+            <Label id="headline" text="Friday"/>
+            <TableView fx:id="fridayTableView">
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+                <columns>
+
+                    <TableColumn text="Subject">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="name"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn text="Start Time">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="startTime"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn text="End Time">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="endTime"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                </columns>
+
+            </TableView>
+
+
+            <Label id="headline" text="Saturday"/>
+            <TableView fx:id="saturdayTableView">
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+                <columns>
+
+                    <TableColumn text="Subject">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="name"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn text="Start Time">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="startTime"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn text="End Time">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="endTime"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                </columns>
+
+            </TableView>
+
+
+        </ListView>
+    </GridPane>
+
+</StackPane>

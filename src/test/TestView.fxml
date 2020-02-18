@@ -10,7 +10,7 @@
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
-           fx:controller="time_table.TestController"
+           fx:controller="test.TestController"
            stylesheets="@/styles/dark_metro_style.css"
 
 >

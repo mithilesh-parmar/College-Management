@@ -77,6 +77,7 @@ public class TimeTableController implements Initializable, DataChangeListener {
 
         addButton.visibleProperty().bind(canViewSchedule);
 
+
         mondayTableView.itemsProperty().bind(mondaySchedule);
         tuesdayTableView.itemsProperty().bind(tuesdaySchedule);
         wednesdayTableView.itemsProperty().bind(wednesdaySchedule);
@@ -92,6 +93,7 @@ public class TimeTableController implements Initializable, DataChangeListener {
 
 
         sectionsListView.getSelectionModel().selectedItemProperty().addListener((observableValue, section, t1) -> {
+            if (t1 == null) return;
             selectedSection.set(t1);
             checkCanViewSchedule();
 
@@ -103,12 +105,11 @@ public class TimeTableController implements Initializable, DataChangeListener {
             saturdaySchedule.setValue(t1.getClassSchedules().get("6"));
 
         });
-//        sectionsListView.getSelectionModel().selectFirst();
-
 
         scheduleView.visibleProperty().bind(canViewSchedule);
 
         canViewSchedule.addListener((observableValue, aBoolean, t1) -> {
+            if (t1 == null) return;
             if (t1) scrollPane.setContent(scheduleView);
         });
     }
@@ -149,7 +150,6 @@ public class TimeTableController implements Initializable, DataChangeListener {
                 }
             });
 
-
             stage.showAndWait();
 
 
@@ -164,7 +164,7 @@ public class TimeTableController implements Initializable, DataChangeListener {
     public void onDataLoaded(ObservableList data) {
         loadingData.set(false);
         sectionsListView.setItems(firestoreUtility.sections);
-
+        sectionsListView.getSelectionModel().selectFirst();
     }
 
     @Override
@@ -175,7 +175,8 @@ public class TimeTableController implements Initializable, DataChangeListener {
 
     @Override
     public void onError(Exception e) {
-
+        e.printStackTrace();
+        loadingData.set(false);
     }
 
     /**
@@ -220,10 +221,6 @@ public class TimeTableController implements Initializable, DataChangeListener {
         private final Label sectionNameLabel = new Label();
         private VBox vBox = new VBox(5);
 
-        SectionListCell() {
-//            setStyle("/styles/dark_metro_style.css");
-            // Add listeners here...
-        }
 
         @Override
         public void updateItem(Section obj, boolean empty) {

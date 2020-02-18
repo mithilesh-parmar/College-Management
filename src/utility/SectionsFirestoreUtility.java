@@ -81,8 +81,10 @@ public class SectionsFirestoreUtility {
         Query query = FirestoreConstants
                 .sectionsCollectionReference
                 .whereEqualTo("name", section.getSectionName())
-                .whereEqualTo("class_id", section.getClassName());
-        System.out.println("Section name " + section.getSectionName() + " class id " + section.getClassName());
+                .whereEqualTo("class_id", section.getClassID())
+                .whereEqualTo("id", section.getId());
+        System.out.println("Section name " + section.getSectionName() + " class id " + section.getClassID() + " id " + section.getId());
+        System.out.println(query);
         new Thread(() -> {
             try {
                 query.get().get().forEach(queryDocumentSnapshot -> {
@@ -110,7 +112,11 @@ public class SectionsFirestoreUtility {
     }
 
     private void parseSectionsData(List<QueryDocumentSnapshot> data) {
-        if (sections != null) sections.clear();
-        for (QueryDocumentSnapshot document : data) sections.add(Section.fromJSON(document.getData()));
+        if (sections != null) {
+            System.out.println(sections);
+            sections.clear();
+            for (QueryDocumentSnapshot document : data) sections.add(Section.fromJSON(document.getData()));
+        }
+
     }
 }

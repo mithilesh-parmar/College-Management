@@ -4,7 +4,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import time_table.DAY;
+import utility.DAY;
 
 import java.util.*;
 

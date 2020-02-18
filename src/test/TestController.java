@@ -1,4 +1,4 @@
-package time_table;
+package test;
 
 import com.google.cloud.firestore.QuerySnapshot;
 import custom_view.class_section_accordion.ClassSectionTitledPane;
@@ -16,13 +16,15 @@ import listeners.DataChangeListener;
 import model.ClassItem;
 import model.Lecture;
 import model.Section;
+import time_table.AddLectureController;
+import time_table.LectureListener;
 import utility.ClassFirestoreUtility;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static time_table.DAY.*;
+import static utility.DAY.*;
 
 
 public class TestController implements Initializable, DataChangeListener, ClassSectionTitledPane.EventCallback {

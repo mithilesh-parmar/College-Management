@@ -60,7 +60,7 @@ public class Student {
         setName(name);
         setClassName(className);
         setEmail(email);
-//        setScholarship(scholarship);
+        setScholarship(scholarship);
         setRequested(requested);
         setVerified(verified);
         setSectionID(sectionID);
@@ -84,7 +84,7 @@ public class Student {
                 (String) json.get("class_name"),
                 (String) json.get("email"),
                 (String) json.get("section_id"),
-                (long) json.get("scholarship"),
+                json.containsKey("scholarship") ? (long) json.get("scholarship") : 0L,
 //                (long) json.get("amount_due"),
                 (boolean) json.get("requested"),
                 (boolean) json.get("verified"),
@@ -110,6 +110,7 @@ public class Student {
         json.put("scholarship", scholarship.get());
         json.put("admission_id", admissionID.get());
         json.put("section_id", sectionID.get());
+        json.put("batch", batch.get());
 //        json.put("amount_due", amountDue.get());
         return json;
     }

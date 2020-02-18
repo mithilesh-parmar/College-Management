@@ -1,4 +1,4 @@
-package time_table;
+package utility;
 
 public enum DAY {
 

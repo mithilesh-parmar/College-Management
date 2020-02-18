@@ -1,9 +1,6 @@
-import com.google.api.gax.paging.Page;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.storage.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.google.firebase.cloud.StorageClient;
 import constants.Constants;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -11,14 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import utility.CloudStorageUtility;
-import utility.FirestoreConstants;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Map;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 
 public class Main extends Application {
@@ -26,8 +17,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-
-        Parent root = FXMLLoader.load(getClass().getResource("home/home.fxml"));
+        System.out.println("Starting applcation");
+        Parent root = FXMLLoader.load(getClass().getResource("/home/home.fxml"));
+        System.out.println("Loaded Home");
         primaryStage.setTitle("ISchool");
         primaryStage.setScene(new Scene(root));
 //        primaryStage.setFullScreen(true);
@@ -36,14 +28,13 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-
-    public static void main(String[] args) throws IOException {
-
-
+    public static void main(String[] args) {
         new Thread(() -> {
             GoogleCredentials credentials = null;
             try {
+                System.out.println("Loading Credentials : " + Constants.serviceAccount);
                 credentials = GoogleCredentials.fromStream(Constants.serviceAccount);
+                System.out.println("Loaded");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -55,13 +46,13 @@ public class Main extends Application {
                     .build();
 
 
+            System.out.println("Initialing app");
             FirebaseApp.initializeApp(options);
 
 //            Loading cloud storage credentials
             CloudStorageUtility.getInstance();
         }).start();
-
-
         launch(args);
     }
+
 }
