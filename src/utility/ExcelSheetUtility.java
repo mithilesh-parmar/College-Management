@@ -126,7 +126,8 @@ public class ExcelSheetUtility {
             System.out.println(studentData);
 //            write data to firestore
             HashMap<String, Object> lectureData = new HashMap<>();
-            lectureData.put("date", date);
+            lectureData.put("date", DateUtility.dateToStringForFirestore(date));
+            lectureData.put("unix_date", Timestamp.of(date));
             lectureData.put("lecture", subject);
             lectureData.put("present", present);
             ApiFuture<DocumentReference> attendance = queryDocumentSnapshot

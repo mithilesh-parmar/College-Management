@@ -43,7 +43,7 @@
            GridPane.rowIndex="3">
     </Label>
 
-    <TextField fx:id="deadLineTextField" prefHeight="40"
+    <DatePicker fx:id="deadLineDate" prefHeight="40"
                GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
 

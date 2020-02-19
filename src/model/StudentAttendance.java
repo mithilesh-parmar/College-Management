@@ -2,27 +2,31 @@ package model;
 
 import com.google.cloud.Timestamp;
 import javafx.beans.property.*;
+import utility.DateUtility;
 
+import java.sql.Time;
 import java.util.HashMap;
 import java.util.Map;
 
 public class StudentAttendance {
     private StringProperty date = new SimpleStringProperty();
     private BooleanProperty present = new SimpleBooleanProperty();
+    private StringProperty lecture;
     private ObjectProperty<Timestamp> unixDate = new SimpleObjectProperty<>();
 
-    public StudentAttendance(String date, boolean present, Timestamp unixDate) {
+    public StudentAttendance(String date, boolean present, Timestamp unixDate, String lecture) {
         setDate(date);
         setPresent(present);
         setUnixDate(unixDate);
-
+        this.lecture = new SimpleStringProperty(lecture);
     }
 
     public static StudentAttendance fromJSON(Map<String, Object> json) {
         return new StudentAttendance(
                 (String) json.get("date"),
                 (boolean) json.get("present"),
-                (Timestamp) json.get("unix_date")
+                (Timestamp) json.get("unix_date"),
+                (String) json.get("lecture")
         );
     }
 
@@ -69,5 +73,17 @@ public class StudentAttendance {
 
     public void setUnixDate(Timestamp unixDate) {
         this.unixDate.set(unixDate);
+    }
+
+    public String getLecture() {
+        return lecture.get();
+    }
+
+    public StringProperty lectureProperty() {
+        return lecture;
+    }
+
+    public void setLecture(String lecture) {
+        this.lecture.set(lecture);
     }
 }

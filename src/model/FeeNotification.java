@@ -1,21 +1,22 @@
 package model;
 
+import com.google.cloud.Timestamp;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.util.Map;
 
 public class FeeNotification extends Notification {
-    private StringProperty amount = new SimpleStringProperty(),
-            deadline = new SimpleStringProperty();
+    private StringProperty amount = new SimpleStringProperty();
+    private ObjectProperty<Timestamp> deadline;
 
-    public FeeNotification(String title, String message, String amount, String deadline) {
+    public FeeNotification(String title, String message, String amount, Timestamp deadline) {
         super(title, message);
         setAmount(amount);
-        setDeadline(deadline);
+        this.deadline = new SimpleObjectProperty<>(deadline);
     }
-
-
 
 
     public Map<String, Object> toJSON() {
@@ -37,15 +38,15 @@ public class FeeNotification extends Notification {
         this.amount.set(amount);
     }
 
-    public String getDeadline() {
+    public Timestamp getDeadline() {
         return deadline.get();
     }
 
-    public StringProperty deadlineProperty() {
+    public ObjectProperty<Timestamp> deadlineProperty() {
         return deadline;
     }
 
-    public void setDeadline(String deadline) {
+    public void setDeadline(Timestamp deadline) {
         this.deadline.set(deadline);
     }
 }

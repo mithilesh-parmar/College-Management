@@ -26,6 +26,12 @@
                 </cellValueFactory>
             </TableColumn>
 
+            <TableColumn text="Lecture">
+                <cellValueFactory>
+                    <PropertyValueFactory property="lecture"/>
+                </cellValueFactory>
+            </TableColumn>
+
             <TableColumn text="Present">
                 <cellValueFactory>
                     <PropertyValueFactory property="present"/>
