@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 public class CustomDialog {
@@ -46,6 +47,86 @@ public class CustomDialog {
         return dialog.showAndWait();
     }
 
+    public static Optional<LocalDate> showInputDialogWithDatePicker(String title, String promptedText) {
+        Dialog<LocalDate> dialog = new Dialog<>();
+        dialog.setTitle(title);
+
+        // Set the button types.
+        ButtonType loginButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 150, 10, 10));
+
+
+        DatePicker datePicker = new DatePicker();
+
+        gridPane.add(datePicker, 1, 0);
+        gridPane.add(new Label(promptedText), 0, 0);
+
+        dialog.getDialogPane().setContent(gridPane);
+
+        // Request focus on the username field by default.
+        Platform.runLater(datePicker::requestFocus);
+
+        // Convert the result to a username-password-pair when the login button is clicked.
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == loginButtonType) {
+                return datePicker.getValue();
+            }
+            return null;
+        });
+
+
+        return dialog.showAndWait();
+    }
+
+    public static Optional<Boolean> showInputDialogWithRadioButton(String title, String promptedText) {
+        Dialog<Boolean> dialog = new Dialog<>();
+        dialog.setTitle(title);
+
+        // Set the button types.
+        ButtonType loginButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 150, 10, 10));
+
+
+        ToggleGroup group = new ToggleGroup();
+
+        RadioButton firstButton = new RadioButton("True");
+        firstButton.setUserData(true);
+        RadioButton secondButton = new RadioButton("False");
+        secondButton.setUserData(false);
+
+
+        group.getToggles().addAll(firstButton, secondButton);
+
+        gridPane.add(firstButton, 1, 0);
+        gridPane.add(secondButton, 2, 0);
+        gridPane.add(new Label(promptedText), 0, 0);
+
+        dialog.getDialogPane().setContent(gridPane);
+
+        // Request focus on the username field by default.
+        Platform.runLater(firstButton::requestFocus);
+
+        // Convert the result to a username-password-pair when the login button is clicked.
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == loginButtonType) {
+                return (Boolean) group.getSelectedToggle().getUserData();
+            }
+            return null;
+        });
+
+
+        return dialog.showAndWait();
+    }
 
     public static Optional<Pair<String, String>> showInputDialogWithTwoParameter(String title, String promptedTextOne, String promptedTextTwo, String separatorText) {
         Dialog<Pair<String, String>> dialog = new Dialog<>();

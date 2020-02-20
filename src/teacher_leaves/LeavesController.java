@@ -35,6 +35,27 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class LeavesController implements Initializable, SearchCallback, DataChangeListener, LeaveCardListener {
+
+    enum Filter {
+
+        ALL("All"),
+        APPROVED("Approved"),
+        DECLINED("Declined"),
+        PENDING("Pending");
+
+        private String title;
+
+        Filter(String title) {
+            this.title = title;
+        }
+
+        @Override
+        public String toString() {
+            return title;
+        }
+    }
+
+
     public SearchTextFieldController searchTextField;
     public FlowPane teacherLeavesFlowPane;
     public ProgressIndicator progressIndicator;
@@ -69,24 +90,6 @@ public class LeavesController implements Initializable, SearchCallback, DataChan
         firestoreUtility.updateLeave(leave);
     }
 
-    enum Filter {
-
-        ALL("All"),
-        APPROVED("Approved"),
-        DECLINED("Declined"),
-        PENDING("Pending");
-
-        private String title;
-
-        Filter(String title) {
-            this.title = title;
-        }
-
-        @Override
-        public String toString() {
-            return title;
-        }
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

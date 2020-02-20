@@ -1,5 +1,6 @@
 package custom_view.card_view;
 
+import com.google.cloud.Timestamp;
 import custom_view.loading_image.LoadingImage;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -7,6 +8,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.effect.Reflection;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,6 +18,9 @@ import javafx.scene.paint.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.time.LocalDate;
+import java.util.Random;
+import java.util.UUID;
 
 public class ImageCard extends AnimatingCard {
 
@@ -25,13 +30,14 @@ public class ImageCard extends AnimatingCard {
     private BorderPane rearPane = new BorderPane();
     private BorderPane frontPane = new BorderPane();
     private Image image;
-    //    private LoadingImage image;
+
     private String url;
 
     public ImageCard(Image image, boolean shouldAnimate) {
         this.image = image;
 //        this.image = new LoadingImage(image.getUrl(), 100, 100);
         this.url = image.getUrl();
+
 
         initFrontView();
         initRearView();
@@ -60,7 +66,10 @@ public class ImageCard extends AnimatingCard {
 
         this.url = url;
 
-        initFrontView(new LoadingImage(url, 100, 100));
+        this.image = new Image(url, true);
+
+        initFrontView();
+//        initFrontView(new LoadingImage(url, 100, 100));
         initRearView();
         setFrontView(frontPane);
         setRearView(rearPane);
@@ -115,10 +124,12 @@ public class ImageCard extends AnimatingCard {
         System.out.println("Setting loading images");
         Reflection reflection = new Reflection();
         reflection.setFraction(0.4);
+
 //        imageView.setImage(loadingImage);
         loadingImage.setEffect(reflection);
 //        loadingImage.setSmooth(true);
         loadingImage.setPickOnBounds(true);
+
 //        loadingImage.setFitHeight(100);
 //        loadingImage.setFitWidth(100);
 
@@ -135,13 +146,17 @@ public class ImageCard extends AnimatingCard {
         Reflection reflection = new Reflection();
         reflection.setFraction(0.4);
         imageView.setImage(image);
+        imageView.setUserData(UUID.randomUUID());
+//        imageView = new ImageView(url);
         imageView.setEffect(reflection);
         imageView.setSmooth(true);
         imageView.setPickOnBounds(true);
         imageView.setFitHeight(100);
         imageView.setFitWidth(100);
+//        imageView.setCache(false);
 
         frontPane.setCenter(imageView);
+        frontPane.setBottom(new Label(UUID.randomUUID().toString()));
         setOnMouseClicked(event -> {
             if (listener == null) return;
             if (event.getClickCount() == 2)

@@ -9,21 +9,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StudentAttendance {
+
+
     private StringProperty date = new SimpleStringProperty();
     private BooleanProperty present = new SimpleBooleanProperty();
     private StringProperty lecture;
     private ObjectProperty<Timestamp> unixDate = new SimpleObjectProperty<>();
 
-    public StudentAttendance(String date, boolean present, Timestamp unixDate, String lecture) {
-        setDate(date);
+    public StudentAttendance(Timestamp date, boolean present, Timestamp unixDate, String lecture) {
+        setDate(DateUtility.timeStampToReadable(date));
         setPresent(present);
         setUnixDate(unixDate);
         this.lecture = new SimpleStringProperty(lecture);
     }
 
+    //    TODO for some students date is in string while for others it is in timestamp
     public static StudentAttendance fromJSON(Map<String, Object> json) {
         return new StudentAttendance(
-                (String) json.get("date"),
+                (Timestamp) json.get("date"),
                 (boolean) json.get("present"),
                 (Timestamp) json.get("unix_date"),
                 (String) json.get("lecture")
@@ -35,6 +38,7 @@ public class StudentAttendance {
         Map<String, Object> json = new HashMap<>();
         json.put("date", date.get());
         json.put("present", present.get());
+        json.put("lecture", lecture.get());
         json.put("unix_date", unixDate.get());
         return json;
     }

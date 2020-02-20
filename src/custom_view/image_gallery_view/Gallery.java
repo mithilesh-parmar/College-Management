@@ -3,6 +3,7 @@ package custom_view.image_gallery_view;
 import custom_view.card_view.ImageCard;
 import custom_view.card_view.ImageCardListener;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -26,6 +27,7 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.util.Duration;
+import model.Section;
 import utility.ScreenUtility;
 
 import java.io.File;
@@ -33,15 +35,21 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 import static utility.ScreenUtility.*;
 
 
-public class
-Gallery extends BorderPane implements Initializable {
+public class Gallery extends BorderPane implements Initializable {
 
     private ListProperty<ImageCard> imageViews = new SimpleListProperty<>(FXCollections.observableArrayList());
     private ListView<ImageCard> listView = new ListView<>();
+//
+
+//    private ListProperty<String> imageUrls = new SimpleListProperty<>(FXCollections.observableArrayList());
+//    private ListView<String> images = new ListView<>();
+
+
     private Button addButton;
 
     private BooleanProperty showAddButton = new SimpleBooleanProperty(false);
@@ -55,6 +63,7 @@ Gallery extends BorderPane implements Initializable {
         addButton.visibleProperty().bind(showAddButton);
         addButton.setDefaultButton(true);
 
+//        listView.setCellFactory(imageCardListView -> new GalleryItem());
         listView.setOrientation(Orientation.HORIZONTAL);
         listView.setPlaceholder(new ProgressIndicator());
 
@@ -63,6 +72,7 @@ Gallery extends BorderPane implements Initializable {
         listView.setMaxHeight(150);
         listView.itemsProperty().bind(imageViews);
         listView.setCache(true);
+
         addButton.setOnAction(actionEvent -> addImage());
 
         setMaxWidth(getScreenHalfWidth());
@@ -117,10 +127,11 @@ Gallery extends BorderPane implements Initializable {
 
     public void setImageView(List<String> imageUrls) {
         System.out.println("Setting image urls " + imageUrls);
-        if (imageUrls != null)
+        if (imageUrls != null) {
+
             imageUrls.forEach(url -> {
-//                ImageCard imageCard = new ImageCard(new Image(new File(url).toPath().toString(), true), true);
                 ImageCard imageCard = new ImageCard(url, true);
+                imageCard.setUserData(url + UUID.randomUUID());
                 imageCard.setListener(new ImageCardListener() {
                     @Override
                     public void onDeleteAction(ImageCard card) {
@@ -134,6 +145,8 @@ Gallery extends BorderPane implements Initializable {
                 });
                 imageViews.get().add(imageCard);
             });
+        }
+
 
     }
 
@@ -152,4 +165,21 @@ Gallery extends BorderPane implements Initializable {
     public ListProperty<ImageCard> imageViewsProperty() {
         return imageViews;
     }
+
+
+//    public static class GalleryItem extends ListCell<ImageCard> {
+//        @Override
+//        protected void updateItem(ImageCard item, boolean empty) {
+//            super.updateItem(item, empty);
+//            if (empty) {
+//                setGraphic(null);
+//            } else {
+//                Platform.runLater(() -> {
+//                    setGraphic(new ImageView(new Image(item.getUrl(), true)));
+//                });
+//
+//            }
+//        }
+//    }
+
 }

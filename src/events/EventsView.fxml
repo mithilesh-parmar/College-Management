@@ -57,10 +57,12 @@
 
                 </Label>
 
-                <Gallery fx:id="galleryView" HBox.hgrow="ALWAYS"/>
+                                <Gallery fx:id="galleryView" HBox.hgrow="ALWAYS"/>
                 <!--                <ImageView fx:id="eventImage"/>-->
 
 
+<!--                <HBox fx:id="imageBox"/>-->
+<!--                <ListView fx:id="testList" HBox.hgrow="ALWAYS"/>-->
 
                 <GridPane vgap="10" alignment="TOP_CENTER">
 

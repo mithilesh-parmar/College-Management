@@ -28,7 +28,7 @@ public class LoadingImage extends StackPane {
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
         imageView.setPickOnBounds(true);
-        imageView.setCache(true);
+//        imageView.setCache(true);
         imageView.setFitWidth(fitWidth == -1 ? size : fitWidth);
         imageView.setFitHeight(fitHeight == -1 ? size : fitWidth);
         loadData();
@@ -38,7 +38,9 @@ public class LoadingImage extends StackPane {
 
         image = new Image(getUrl(), true);
         image.progressProperty().addListener((observableValue, number, t1) -> {
-            if (t1.doubleValue() == 1.0) loadingData.set(false);
+            if (t1.doubleValue() == 1.0) {
+                loadingData.set(false);
+            }
         });
         image.errorProperty().addListener((observableValue, aBoolean, t1) -> {
             loadingData.set(false);
@@ -48,6 +50,7 @@ public class LoadingImage extends StackPane {
             loadingData.set(false);
 
         });
+
 
         imageView.setImage(image);
         getChildren().addAll(imageView, progressIndicator);
