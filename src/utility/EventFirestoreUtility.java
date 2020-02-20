@@ -85,14 +85,7 @@ public class EventFirestoreUtility {
 //        upload pictures of event
         ListProperty<String> uploadURLS = new SimpleListProperty<>(FXCollections.observableArrayList());
 
-        IntegerProperty sizeProperty = new SimpleIntegerProperty(0);
-
         CloudStorageUtility cloudStorageUtility = CloudStorageUtility.getInstance();
-
-
-//        sizeProperty.addListener((observableValue, number, t1) -> {
-//
-//        });
 
         uploadURLS.sizeProperty().addListener((observableValue, number, t1) -> {
             System.out.println("Size Changed" + t1);
@@ -107,7 +100,6 @@ public class EventFirestoreUtility {
             if (t1 == null) return;
             if (t1) {
                 //        upload event
-
                 DocumentReference document = FirestoreConstants.eventCollectionReference.document();
                 event.setId(document.getId());
                 event.setImages(uploadURLS.get());
@@ -116,9 +108,10 @@ public class EventFirestoreUtility {
                 document.set(event.toJSON());
             }
         });
-        for (String s : event.getImages()) {
 
-            System.out.println("Image: " + s);
+        ObservableList<String> images = event.getImages();
+        for (int i = 0; i < images.size(); i++) {
+            System.out.println("Image: " + images.get(i));
             cloudStorageUtility.setListener(new DocumentUploadListener() {
                 @Override
                 public void onSuccess(Blob blob) {
@@ -133,9 +126,9 @@ public class EventFirestoreUtility {
             });
 
             cloudStorageUtility.uploadDocument(
-                    Constants.eventImageFolder + event.getNameWithoutSpaces(),
-                    event.getNameWithoutSpaces(),
-                    s,
+                    Constants.eventImageFolder + "/" + event.getNameWithoutSpaces(),
+                    "",
+                    images.get(i),
                     DocumentType.IMAGE.toString());
         }
 
@@ -143,7 +136,44 @@ public class EventFirestoreUtility {
 
     public void updateEvent(Event updatedEvent) {
         System.out.println("Updating event with data: " + updatedEvent.toJSON());
+
+//        TODO adding new images bug
+//        first upload any newly added image
+
+        ObservableList<String> images = updatedEvent.getImages();
+
+        for (int i = 0; i < images.size(); i++) {
+            String s = images.get(i);
+            if (!s.startsWith("http")) {
+//                Upload this image to firestore and add url to event
+                CloudStorageUtility cloudStorageUtility = CloudStorageUtility.getInstance();
+                cloudStorageUtility.setListener(new DocumentUploadListener() {
+                    @Override
+                    public void onSuccess(Blob blob) {
+                        String url = blob.getMediaLink();
+                        System.out.println("Uploaded " + blob);
+                        int indexOfLocalImage = updatedEvent.getImages().indexOf(s);
+                        updatedEvent.getImages().add(indexOfLocalImage, url);
+                        System.out.println(updatedEvent.toJSON());
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+
+                cloudStorageUtility.uploadDocument(
+                        Constants.eventImageFolder + "/" + updatedEvent.getNameWithoutSpaces(),
+                        "",
+                        s,
+                        DocumentType.IMAGE.toString());
+            }
+        }
+
+
         try {
+            System.out.println("Now uploading event");
             ApiFuture<QuerySnapshot> future = FirestoreConstants.eventCollectionReference.whereEqualTo("id", updatedEvent.getId()).get();
             List<QueryDocumentSnapshot> documents = future.get().getDocuments();
             for (DocumentSnapshot document : documents) {
@@ -154,7 +184,7 @@ public class EventFirestoreUtility {
                     new Thread(() -> document.getReference().set(updatedEvent.toJSON())).start();
                 }
             }
-            System.out.println("Quitting noew");
+            System.out.println("Quitting now");
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }

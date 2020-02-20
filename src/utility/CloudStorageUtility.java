@@ -87,7 +87,6 @@ public class CloudStorageUtility {
 
     }
 
-
     void uploadDocument(String uploadFolderPath, String fileName, String documentPath, String documentType) {
         File file = new File(documentPath);
         System.out.println(file);

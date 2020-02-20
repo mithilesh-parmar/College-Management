@@ -8,6 +8,7 @@
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.geometry.Insets?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="students.attendance.AttendanceController"
@@ -16,6 +17,10 @@
 
 
     <BorderPane>
+
+        <padding>
+            <Insets topRightBottomLeft="14"/>
+        </padding>
 
         <top>
             <ComboBox fx:id="filterComboBox"/>

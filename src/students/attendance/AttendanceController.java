@@ -86,6 +86,7 @@ public class AttendanceController implements Initializable {
 
         progressIndicator.visibleProperty().bind(dataLoading);
 
+        filterComboBox.visibleProperty().bind(dataLoading.not());
 
         filterComboBox.setPadding(new Insets(25));
 

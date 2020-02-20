@@ -73,48 +73,21 @@ public class EventsController implements Initializable, DataChangeListener {
     public Button editButton;
     public TextField searchTextField;
     public Gallery galleryView;
-    public ListView testList;
-    public HBox imageBox;
 
 
     private BooleanProperty loadingData = new SimpleBooleanProperty(true);
     private EventFirestoreUtility firestoreUtility = EventFirestoreUtility.getInstance();
     private ListProperty<ImageCard> images = new SimpleListProperty<>(FXCollections.observableArrayList());
 
-    private ListProperty<String> imagesTest = new SimpleListProperty<>(FXCollections.observableArrayList());
-
 
     private ObjectProperty<Event> selectedEvent = new SimpleObjectProperty<>();
 
-
-    public static class GalleryItem extends ListCell<String> {
-        private final Button button = new Button();
-
-        @Override
-        protected void updateItem(String item, boolean empty) {
-            super.updateItem(item, empty);
-            if (empty) {
-                setGraphic(null);
-            } else {
-                ImageView imageView = new ImageView(new Image(item, false));
-                imageView.setFitWidth(20);
-                imageView.setFitHeight(20);
-                imageView.setCache(false);
-                button.setGraphic(imageView);
-                setGraphic(button);
-
-            }
-        }
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         galleryView.imageViewsProperty().bind(images);
 
         galleryView.setShowAddButton(false);
-
-//        testList.itemsProperty().bind(imagesTest);
-//        testList.setCellFactory(listView -> new GalleryItem());
 
         setfieldsvisiblity(false);
 
@@ -221,21 +194,16 @@ public class EventsController implements Initializable, DataChangeListener {
         eventDate.setText(event.getEventDate().toString());
         if (event.getImages() != null && event.getImages().size() > 0) {
             images.clear();
-            imagesTest.clear();
 
 
             event.getImages().forEach(url -> {
                         images.get().add(new ImageCard(url, false));
-                        System.out.println(url);
-//                        imagesTest.get().add(url);
-//                        imageBox.getChildren().add(createImageView(url));
                     }
             );
 
 
-            System.out.println(imagesTest);
         } else {
-            imagesTest.clear();
+
             images.clear();
             images.get().add(new ImageCard(new Image("/assets/add.png", true), false));
         }
@@ -243,107 +211,6 @@ public class EventsController implements Initializable, DataChangeListener {
         detailProgressIndicator.setVisible(false);
     }
 
-    private ImageView createImageView(final File imageFile) {
-        // DEFAULT_THUMBNAIL_WIDTH is a constant you need to define
-        // The last two arguments are: preserveRatio, and use smooth (slower)
-        // resizing
-
-        ImageView imageView = null;
-        try {
-            final Image image = new Image(new FileInputStream(imageFile), 150, 0, true,
-                    true);
-            imageView = new ImageView(image);
-            imageView.setFitWidth(150);
-//            imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//
-//                @Override
-//                public void handle(MouseEvent mouseEvent) {
-//
-//                    if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-//
-//                        if (mouseEvent.getClickCount() == 2) {
-//                            try {
-//                                BorderPane borderPane = new BorderPane();
-//                                ImageView imageView = new ImageView();
-//                                Image image = new Image(new FileInputStream(imageFile));
-//                                imageView.setImage(image);
-//                                imageView.setStyle("-fx-background-color: BLACK");
-////                                imageView.setFitHeight(stage.getHeight() - 10);
-//                                imageView.setPreserveRatio(true);
-//                                imageView.setSmooth(true);
-//                                imageView.setCache(true);
-//                                borderPane.setCenter(imageView);
-//                                borderPane.setStyle("-fx-background-color: BLACK");
-//                                Stage newStage = new Stage();
-////                                newStage.setWidth(stage.getWidth());
-////                                newStage.setHeight(stage.getHeight());
-//                                newStage.setTitle(imageFile.getName());
-//                                Scene scene = new Scene(borderPane, Color.BLACK);
-//                                newStage.setScene(scene);
-//                                newStage.show();
-//                            } catch (FileNotFoundException e) {
-//                                e.printStackTrace();
-//                            }
-//
-//                        }
-//                    }
-//                }
-//            });
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        }
-        return imageView;
-    }
-
-    private ImageView createImageView(final String imageUrl) {
-        // DEFAULT_THUMBNAIL_WIDTH is a constant you need to define
-        // The last two arguments are: preserveRatio, and use smooth (slower)
-        // resizing
-
-        ImageView imageView = null;
-
-        final Image image = new Image(imageUrl, 150, 0, true,
-                true);
-        imageView = new ImageView(image);
-        imageView.setUserData(imageUrl);
-        imageView.setFitWidth(150);
-//            imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//
-//                @Override
-//                public void handle(MouseEvent mouseEvent) {
-//
-//                    if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-//
-//                        if (mouseEvent.getClickCount() == 2) {
-//                            try {
-//                                BorderPane borderPane = new BorderPane();
-//                                ImageView imageView = new ImageView();
-//                                Image image = new Image(new FileInputStream(imageFile));
-//                                imageView.setImage(image);
-//                                imageView.setStyle("-fx-background-color: BLACK");
-////                                imageView.setFitHeight(stage.getHeight() - 10);
-//                                imageView.setPreserveRatio(true);
-//                                imageView.setSmooth(true);
-//                                imageView.setCache(true);
-//                                borderPane.setCenter(imageView);
-//                                borderPane.setStyle("-fx-background-color: BLACK");
-//                                Stage newStage = new Stage();
-////                                newStage.setWidth(stage.getWidth());
-////                                newStage.setHeight(stage.getHeight());
-//                                newStage.setTitle(imageFile.getName());
-//                                Scene scene = new Scene(borderPane, Color.BLACK);
-//                                newStage.setScene(scene);
-//                                newStage.show();
-//                            } catch (FileNotFoundException e) {
-//                                e.printStackTrace();
-//                            }
-//
-//                        }
-//                    }
-//                }
-//            });
-        return imageView;
-    }
 
 
     @Override

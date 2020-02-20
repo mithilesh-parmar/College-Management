@@ -68,8 +68,8 @@ public class ImageCard extends AnimatingCard {
 
         this.image = new Image(url, true);
 
-        initFrontView();
-//        initFrontView(new LoadingImage(url, 100, 100));
+//        initFrontView();
+        initFrontView(new LoadingImage(url, 100, 100));
         initRearView();
         setFrontView(frontPane);
         setRearView(rearPane);
@@ -83,7 +83,7 @@ public class ImageCard extends AnimatingCard {
         deleteButton.setDefaultButton(true);
         deleteButton.setOnAction(actionEvent -> {
             if (listener == null) return;
-            listener.onDeleteAction(this);
+            listener.onDeleteAction(this, url);
         });
         rearPane.setPadding(new Insets(14));
         rearPane.setCenter(deleteButton);
@@ -120,18 +120,13 @@ public class ImageCard extends AnimatingCard {
 
     }
 
+    //    This function is called in events controller where each event must have a url of images hence we show loading images
     private void initFrontView(LoadingImage loadingImage) {
         System.out.println("Setting loading images");
         Reflection reflection = new Reflection();
         reflection.setFraction(0.4);
-
-//        imageView.setImage(loadingImage);
         loadingImage.setEffect(reflection);
-//        loadingImage.setSmooth(true);
         loadingImage.setPickOnBounds(true);
-
-//        loadingImage.setFitHeight(100);
-//        loadingImage.setFitWidth(100);
 
         frontPane.setCenter(loadingImage);
         setOnMouseClicked(event -> {
@@ -146,17 +141,13 @@ public class ImageCard extends AnimatingCard {
         Reflection reflection = new Reflection();
         reflection.setFraction(0.4);
         imageView.setImage(image);
-        imageView.setUserData(UUID.randomUUID());
-//        imageView = new ImageView(url);
         imageView.setEffect(reflection);
         imageView.setSmooth(true);
         imageView.setPickOnBounds(true);
         imageView.setFitHeight(100);
         imageView.setFitWidth(100);
-//        imageView.setCache(false);
 
         frontPane.setCenter(imageView);
-        frontPane.setBottom(new Label(UUID.randomUUID().toString()));
         setOnMouseClicked(event -> {
             if (listener == null) return;
             if (event.getClickCount() == 2)

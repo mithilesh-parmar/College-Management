@@ -3,11 +3,13 @@ package events.add_event;
 import com.google.cloud.Timestamp;
 import custom_view.image_gallery_view.Gallery;
 import custom_view.time_textfield.TimeTextField;
+import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import model.Event;
+import utility.CloudStorageUtility;
 
 import java.net.URL;
 
@@ -59,6 +61,7 @@ public class AddEventController implements Initializable {
             } else {
                 //                Updating the values with new value while keeping the id same
                 System.out.println(galleryView.getImageUrls());
+
                 listener.onEventUpdated(
                         new Event(
                                 event.getId(),
@@ -86,6 +89,7 @@ public class AddEventController implements Initializable {
         titleTextField.setText(event.getTitle());
         descriptionTextField.setText(event.getDescription());
         galleryView.setImageView(event.getImages());
+
         System.out.println(event.getTime());
         eventTimeTextField.setText(event.getTime());
         createdAtDatePicker.setValue(asLocalDate(event.getCreatedAt().toDate()));

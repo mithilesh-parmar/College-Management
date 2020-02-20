@@ -28,6 +28,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.util.Duration;
 import model.Section;
+import org.apache.poi.ss.formula.functions.Even;
 import utility.ScreenUtility;
 
 import java.io.File;
@@ -42,13 +43,16 @@ import static utility.ScreenUtility.*;
 
 public class Gallery extends BorderPane implements Initializable {
 
+    public interface GalleryListener {
+        void onDeleteImage(String url);
+
+    }
+
     private ListProperty<ImageCard> imageViews = new SimpleListProperty<>(FXCollections.observableArrayList());
     private ListView<ImageCard> listView = new ListView<>();
-//
 
-//    private ListProperty<String> imageUrls = new SimpleListProperty<>(FXCollections.observableArrayList());
-//    private ListView<String> images = new ListView<>();
 
+    private GalleryListener listener;
 
     private Button addButton;
 
@@ -63,7 +67,6 @@ public class Gallery extends BorderPane implements Initializable {
         addButton.visibleProperty().bind(showAddButton);
         addButton.setDefaultButton(true);
 
-//        listView.setCellFactory(imageCardListView -> new GalleryItem());
         listView.setOrientation(Orientation.HORIZONTAL);
         listView.setPlaceholder(new ProgressIndicator());
 
@@ -90,10 +93,6 @@ public class Gallery extends BorderPane implements Initializable {
         showAddButton.set(value);
     }
 
-    private Border createBorder(Color color, BorderStrokeStyle borderStrokeStyle, double radius, double width) {
-        return new Border(new BorderStroke(color, borderStrokeStyle, new CornerRadii(radius), new BorderWidths(width)));
-    }
-
     private File showFileChooser(String title) {
         FileChooser.ExtensionFilter extFilterJPG = new FileChooser.ExtensionFilter("JPG files (*.jpg)", "*.JPG");
         FileChooser.ExtensionFilter extFilterPNG = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.PNG");
@@ -105,12 +104,13 @@ public class Gallery extends BorderPane implements Initializable {
 
     private void addImage() {
         File file = showFileChooser("Choose Image");
-        System.out.println(file);
+//        System.out.println(file);
         if (file != null) {
             ImageCard imageCard = new ImageCard(file, true);
             imageCard.setListener(new ImageCardListener() {
+
                 @Override
-                public void onDeleteAction(ImageCard card) {
+                public void onDeleteAction(ImageCard card, String url) {
                     imageViews.remove(card);
                 }
 
@@ -119,6 +119,7 @@ public class Gallery extends BorderPane implements Initializable {
 
                 }
             });
+
             imageViews.get().add(imageCard);
 
         }
@@ -134,8 +135,10 @@ public class Gallery extends BorderPane implements Initializable {
                 imageCard.setUserData(url + UUID.randomUUID());
                 imageCard.setListener(new ImageCardListener() {
                     @Override
-                    public void onDeleteAction(ImageCard card) {
+                    public void onDeleteAction(ImageCard card, String url) {
                         imageViews.remove(card);
+                        if (listener != null)
+                            listener.onDeleteImage(url);
                     }
 
                     @Override
@@ -150,6 +153,9 @@ public class Gallery extends BorderPane implements Initializable {
 
     }
 
+    public void setListener(GalleryListener listener) {
+        this.listener = listener;
+    }
 
     public List<String> getImageUrls() {
         List<String> urls = new ArrayList<>();
@@ -157,29 +163,8 @@ public class Gallery extends BorderPane implements Initializable {
         return urls;
     }
 
-
-    public ObservableList<ImageCard> getImageViews() {
-        return imageViews.get();
-    }
-
     public ListProperty<ImageCard> imageViewsProperty() {
         return imageViews;
     }
-
-
-//    public static class GalleryItem extends ListCell<ImageCard> {
-//        @Override
-//        protected void updateItem(ImageCard item, boolean empty) {
-//            super.updateItem(item, empty);
-//            if (empty) {
-//                setGraphic(null);
-//            } else {
-//                Platform.runLater(() -> {
-//                    setGraphic(new ImageView(new Image(item.getUrl(), true)));
-//                });
-//
-//            }
-//        }
-//    }
 
 }
