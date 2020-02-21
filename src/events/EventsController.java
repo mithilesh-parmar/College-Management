@@ -29,6 +29,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -85,6 +86,14 @@ public class EventsController implements Initializable, DataChangeListener {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        ImageView imageView = new ImageView();
+        imageView.setFitWidth(20);
+        imageView.setFitHeight(20);
+        imageView.setImage(new Image("assets/add.png"));
+
+        addButton.setGraphic(imageView);
+
         galleryView.imageViewsProperty().bind(images);
 
         galleryView.setShowAddButton(false);
@@ -100,6 +109,7 @@ public class EventsController implements Initializable, DataChangeListener {
 
         eventsList.getSelectionModel().selectedItemProperty().addListener((observableValue, a, t1) -> selectedEvent.set(t1));
 
+        eventsList.getSelectionModel().selectFirst();
         selectedEvent.addListener((observableValue, event, t1) -> {
             if (t1 == null) return;
             detailProgressIndicator.setVisible(true);
@@ -110,7 +120,7 @@ public class EventsController implements Initializable, DataChangeListener {
         editButton.setOnAction(actionEvent -> loadAddView(eventsList.getSelectionModel().getSelectedItem()));
 
 
-        addButton.setPadding(new Insets(15));
+//        addButton.setPadding(new Insets(15));
         addButton.setOnAction(actionEvent -> loadAddView(null));
 
     }
@@ -210,7 +220,6 @@ public class EventsController implements Initializable, DataChangeListener {
 
         detailProgressIndicator.setVisible(false);
     }
-
 
 
     @Override

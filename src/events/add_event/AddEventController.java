@@ -27,7 +27,7 @@ public class AddEventController implements Initializable {
     public Button submitButton;
     public DatePicker eventDatePicker;
     public DatePicker createdAtDatePicker;
-    public TimeTextField eventTimeTextField;
+    public TextField eventTimeTextField;
     public Gallery galleryView;
 
     private AddEventListener listener;
@@ -53,7 +53,7 @@ public class AddEventController implements Initializable {
                         "",
                         titleTextField.getText(),
                         descriptionTextField.getText(),
-                        eventTimeTextField.getTime(),
+                        eventTimeTextField.getText(),
                         asTimeStamp(createdAtDatePicker.getValue()),
                         asTimeStamp(eventDatePicker.getValue()),
                         galleryView.getImageUrls()
@@ -67,7 +67,7 @@ public class AddEventController implements Initializable {
                                 event.getId(),
                                 titleTextField.getText(),
                                 descriptionTextField.getText(),
-                                eventTimeTextField.getTime(),
+                                eventTimeTextField.getText(),
                                 asTimeStamp(createdAtDatePicker.getValue()),
                                 asTimeStamp(eventDatePicker.getValue()),
                                 galleryView.getImageUrls()

@@ -142,8 +142,11 @@ public class EventFirestoreUtility {
 
         ObservableList<String> images = updatedEvent.getImages();
 
-        for (int i = 0; i < images.size(); i++) {
-            String s = images.get(i);
+//        for (int i = 0; i < images.size(); i++) {
+//            String s = images.get(i);
+//
+//        }
+        images.forEach(s -> {
             if (!s.startsWith("http")) {
 //                Upload this image to firestore and add url to event
                 CloudStorageUtility cloudStorageUtility = CloudStorageUtility.getInstance();
@@ -153,6 +156,7 @@ public class EventFirestoreUtility {
                         String url = blob.getMediaLink();
                         System.out.println("Uploaded " + blob);
                         int indexOfLocalImage = updatedEvent.getImages().indexOf(s);
+                        updatedEvent.getImages().remove(indexOfLocalImage);
                         updatedEvent.getImages().add(indexOfLocalImage, url);
                         System.out.println(updatedEvent.toJSON());
                     }
@@ -169,7 +173,7 @@ public class EventFirestoreUtility {
                         s,
                         DocumentType.IMAGE.toString());
             }
-        }
+        });
 
 
         try {

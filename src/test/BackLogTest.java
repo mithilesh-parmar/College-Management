@@ -5,6 +5,8 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import constants.Constants;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import model.BackLog;
 import model.Section;
@@ -73,7 +75,28 @@ public class BackLogTest {
 
 
     public static void main(String[] args) throws FileNotFoundException {
-        System.out.println(List.of("a", "v", "as", "Va").size());
+
+        ObservableList test = FXCollections.observableArrayList();
+
+        test.add("1");
+        test.add("2");
+        test.add("3");
+        test.add("4");
+        test.add("5");
+        test.add("6");
+        test.add("7");
+        test.add("8");
+        test.add("9");
+
+        System.out.println(test);
+
+        System.out.println(test.indexOf("5"));
+        int i = test.indexOf("5");
+        test.remove(test.indexOf("5"));
+        test.add(i, "Test");
+        System.out.println(test);
+
+
 //        String url = "/Users/mithileshparmar/Downloads/052094ad9d2ff9399961dad584912758.jpg";
 //        File file = new File(url);
 //        Image image = new Image(file.toURI().toString());

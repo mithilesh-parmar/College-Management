@@ -56,9 +56,7 @@
         <Label text="Event Time : " GridPane.columnIndex="0"
                GridPane.rowIndex="4">
         </Label>
-        <TimeTextField fx:id="eventTimeTextField" prefHeight="40"
-                       GridPane.columnIndex="1" GridPane.rowIndex="4"
-        />
+        <TextField fx:id="eventTimeTextField" prefHeight="40" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
         <Label text="Created At : " GridPane.columnIndex="0"
                GridPane.rowIndex="5">
