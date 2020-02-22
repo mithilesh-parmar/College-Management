@@ -7,6 +7,7 @@ import custom_view.loading_combobox.class_section_combobox.ClassSectionListener;
 import javafx.beans.property.*;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import model.ClassItem;
 import model.Section;
@@ -28,14 +29,25 @@ public class StudentDetailsController implements Initializable {
 
     public BatchLoadingComboBox batchComboBox;
     public ClassSectionComboBox classSectionComboBox;
+    public TextField scholarshipTextField;
+    public TextField admissionIDTextField;
+    public ComboBox<Boolean> verifiedComboBox;
+    public ComboBox<Boolean> profileCompleteComboBox;
+    public TextField sectionIDTextField;
+
 
     private Student student;
     private StudentListener listener;
 
+    private LongProperty selectedScholarship = new SimpleLongProperty(0L);
+    private StringProperty selectedSectionID = new SimpleStringProperty();
+    private StringProperty selectedClassID = new SimpleStringProperty();
+    private StringProperty selectedAdmissionID = new SimpleStringProperty();
+    private BooleanProperty selectedVerifiedValue = new SimpleBooleanProperty();
+    private BooleanProperty selectedProfileCompleteValue = new SimpleBooleanProperty();
     private StringProperty selectedClassName = new SimpleStringProperty();
     private StringProperty selectedBatch = new SimpleStringProperty();
     private StringProperty selectedSection = new SimpleStringProperty();
-
     private StringProperty selectedName = new SimpleStringProperty();
     private StringProperty selectedEmail = new SimpleStringProperty();
     private StringProperty selectedParentNumber = new SimpleStringProperty();
@@ -46,12 +58,26 @@ public class StudentDetailsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        verifiedComboBox.getItems().addAll(true, false);
+        profileCompleteComboBox.getItems().addAll(true, false);
+
+        sectionIDTextField.disableProperty().set(true);
+
         profileImageView.setListener(file -> selectedProfilePicture.set(file));
         nameField.textProperty().addListener((observableValue, s, t1) -> selectedName.set(t1));
         emailField.textProperty().addListener((observableValue, s, t1) -> selectedEmail.set(t1));
         parentNumberTextField.textProperty().addListener((observableValue, s, t1) -> selectedParentNumber.set(t1));
         requestedRemarkTextField.textProperty().addListener((observableValue, s, t1) -> selectedRemark.set(t1));
-
+        scholarshipTextField.textProperty().addListener((observableValue, s, t1) -> selectedScholarship.set(Long.parseLong(t1)));
+        admissionIDTextField.textProperty().addListener((observableValue, s, t1) -> selectedAdmissionID.set(t1));
+        verifiedComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, aBoolean, t1) -> {
+            if (t1 == null) return;
+            selectedVerifiedValue.set(t1);
+        });
+        profileCompleteComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, aBoolean, t1) -> {
+            if (t1 == null) return;
+            selectedProfileCompleteValue.set(t1);
+        });
 
         batchComboBox.setListener(selctedItem -> selectedBatch.set(String.valueOf(selctedItem)));
 
@@ -61,12 +87,14 @@ public class StudentDetailsController implements Initializable {
             public void onSectionSelected(Section section) {
                 System.out.println("Section Selected: " + section);
                 selectedSection.set(section.getSectionName());
+                selectedSectionID.set(section.getId());
             }
 
             @Override
             public void onClassSelected(ClassItem classItem) {
                 System.out.println("Class Selected: " + classItem);
                 selectedClassName.set(classItem.getName());
+                selectedClassID.set(classItem.getId());
             }
         });
 
@@ -75,7 +103,7 @@ public class StudentDetailsController implements Initializable {
 
             listener.onStudentSubmit(new Student(
                     student.getID(),
-                    student.getAdmissionID(),
+                    selectedAdmissionID.get(),
                     selectedBatch.get(),
                     student.getAddress(),
                     student.getProfilePictureURL(),
@@ -86,11 +114,11 @@ public class StudentDetailsController implements Initializable {
                     selectedName.get(),
                     selectedClassName.get(),
                     selectedEmail.get(),
-                    student.getSectionID(),
-                    student.getScholarship(),
+                    selectedSectionID.get(),
+                    selectedScholarship.get(),
                     student.isRequested(),
-                    student.isVerified(),
-                    student.isProfileCompleted()
+                    selectedVerifiedValue.get(),
+                    selectedProfileCompleteValue.get()
             ), selectedProfilePicture.get());
         });
 
@@ -131,6 +159,24 @@ public class StudentDetailsController implements Initializable {
 
         classSectionComboBox.setSection(student.getSection());
         selectedSection.set(student.getSection());
+
+
+        scholarshipTextField.setText(String.valueOf(student.getScholarship()));
+        selectedScholarship.set(student.getScholarship());
+
+        admissionIDTextField.setText(student.getAdmissionID());
+        selectedAdmissionID.set(student.getAdmissionID());
+
+        verifiedComboBox.getSelectionModel().select(student.isVerified());
+        selectedVerifiedValue.set(student.isVerified());
+
+        profileCompleteComboBox.getSelectionModel().select(student.isProfileCompleted());
+        selectedProfileCompleteValue.set(student.isProfileCompleted());
+
+
+        sectionIDTextField.setText(student.getSectionID());
+
+
     }
 
     public void setStudent(Student student) {

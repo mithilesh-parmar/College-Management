@@ -6,6 +6,7 @@ import custom_view.card_view.ExamCard;
 import custom_view.card_view.ExamCardListener;
 import exams.add_exam.AddExamCallback;
 import exams.add_exam.AddExamController;
+import javafx.geometry.Insets;
 import result.ResultController;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -48,6 +49,7 @@ public class ExamController implements Initializable, DataChangeListener, Search
         examFlowPane.setHgap(10);
         examFlowPane.setVgap(10);
         examFlowPane.setAlignment(Pos.TOP_LEFT);
+        examFlowPane.setPadding(new Insets(14));
 
         scroll.setContent(examFlowPane);
         scroll.viewportBoundsProperty().addListener((ov, oldBounds, bounds) -> {

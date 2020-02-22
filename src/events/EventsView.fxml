@@ -26,11 +26,9 @@
             <VBox>
 
 
-
-                    <Label text="Events" alignment="CENTER" id="headline">
-                    </Label>
-                    <Button fx:id="addButton" text="Add Event" />
-
+                <Label text="Events" alignment="CENTER" id="headline">
+                </Label>
+                <Button fx:id="addButton" text="Add Event"/>
 
 
                 <TextField fx:id="searchTextField"

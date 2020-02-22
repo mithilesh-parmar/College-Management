@@ -8,6 +8,8 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import model.*;
 import utility.DateUtility;
@@ -179,7 +181,7 @@ public class AddExamController implements Initializable {
         private final Label subjectNameLabel = new Label();
         private final DatePicker datePicker = new DatePicker();
         private final Button cancelButton = new Button();
-
+        private final String GRAPHICS_PATH = "/assets/delete.png";
         private BorderPane borderPane = new BorderPane();
 
 
@@ -191,6 +193,13 @@ public class AddExamController implements Initializable {
                 callback.onDeleteAction();
             });
 
+            ImageView imageView = new ImageView();
+            imageView.setFitHeight(20);
+            imageView.setFitWidth(20);
+            imageView.setSmooth(true);
+            imageView.setCache(true);
+            imageView.setImage(new Image(GRAPHICS_PATH));
+            cancelButton.setGraphic(imageView);
             cancelButton.visibleProperty().bind(selectedProperty());
 
 
