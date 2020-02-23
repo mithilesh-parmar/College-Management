@@ -1,0 +1,46 @@
+
+
+# FOR WINDOWS
+
+# PART 1
+- Install Java 11 (Open JDK 11) From https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_windows-x64_bin.zip
+    if the above link does not work visit this and download the jdk version 11 https://jdk.java.net/archive/
+- setup system variables
+
+
+# PART 2
+- create a new folder with any name wherever you want the location of software to be (eg.. College_ERP)
+
+# PART 3
+- Download the JavaFX SDK for windows from http://gluonhq.com/download/javafx-11-0-2-sdk-windows/
+    or visit website and choose for windows https://gluonhq.com/products/javafx/  (Choose version 11.0.2)
+- UnZip the downloaded file in (College_ERP) folder.
+
+# PART 4
+
+- copy the Firebase keys file to the  (College_ERP) folder
+- copy the App.jar file to this folder
+
+# PART 5
+
+- create a new notepad file for windows with content
+
+        echo Starting application
+        java --module-path windows-javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml -jar App.jar
+        pause
+
+- in the above script windows-javafx-sdk-11.0.2 should be replaced with the folder obtained from PART 3
+
+
+# FOLDER STRUCTURE
+
+- College_ERP
+    - windows-javafx-sdk-11.0.2 (Folder from unzipping in part 2)
+    - firebase_keys.json (Firebase keys file ** Name maybe different)(Copied in part 4)
+    - App.jar (Software jar file) (Copied in part 4)
+    - Runner.bat (Bat file created in part 5)
+
+
+** NOTE **
+DO NOT CHANGE THE NAME OF THE FIREBASE KEYS FILE AND App.jar FILE
+** NOTE**

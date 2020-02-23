@@ -10,6 +10,8 @@
     <orderEntry type="library" name="com.google.firebase:firebase-admin:6.11.0" level="project" />
     <orderEntry type="library" name="org.apache.poi:poi:3.17" level="project" />
     <orderEntry type="library" name="org.apache.poi:poi-ooxml:3.17" level="project" />
-    <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="library" name="lib" level="application" />
+    <orderEntry type="library" name="javafx-mac" level="application" />
+    <orderEntry type="library" name="javafx-windows" level="application" />
   </component>
 </module>

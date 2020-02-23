@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 
 public class Constants {
 
-    private static final String fileUrl = "src/ischool-7f729-firebase-adminsdk-3r9gq-2f1029222a.json";
+    private static final String fileUrl = "ischool-7f729-firebase-adminsdk-3r9gq-2f1029222a.json";
 
     public static FileInputStream serviceAccount;
 
