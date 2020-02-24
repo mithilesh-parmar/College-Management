@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="students.back_logs.StudentBackLogController">
+
+    <VBox>
+
+        <BorderPane>
+            <left>
+                <Label id="headline" text="Back Logs"/>
+            </left>
+            <!--            <right>-->
+            <!--                <SearchTextFieldController fx:id="searchTextField"/>-->
+            <!--            </right>-->
+        </BorderPane>
+
+        <HBox spacing="5" alignment="CENTER">
+
+            <padding>
+                <Insets topRightBottomLeft="14"/>
+            </padding>
+
+            <Button fx:id="subjectBackLogButton" text="For Subject"/>
+            <Button fx:id="sectionBackLogButton" text="For Section"/>
+            <Button fx:id="examBackLogButton" text="For Exam"/>
+
+            <Button fx:id="clearButton" text="Clear"/>
+
+
+        </HBox>
+
+        <TableView fx:id="backLogTable" VBox.vgrow="ALWAYS">
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+            <columns>
+
+                <TableColumn text="Admission Number">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="studentID"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn text="Subject">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="subjectName"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn text="Exam">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="examName"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn text="Exam Id">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="examID"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn text="Section Name">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="sectionName"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn text="Section ID">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="sectionID"/>
+                    </cellValueFactory>
+                </TableColumn>
+
+            </columns>
+
+        </TableView>
+
+    </VBox>
+    <ProgressIndicator fx:id="progressIndicator"/>
+
+
+</StackPane>

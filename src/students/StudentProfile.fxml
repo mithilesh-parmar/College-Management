@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TabPane xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml"
+         fx:controller="students.StudentProfile"
+         fx:id="tabs"
+         stylesheets="@/styles/dark_metro_style.css"
+>
+
+    <Tab fx:id="profileTab" text="Profile">
+    </Tab>
+
+    <Tab fx:id="attendanceTab" text="Attendance">
+    </Tab>
+
+    <Tab fx:id="feeTab" text="Fee">
+    </Tab>
+
+    <Tab fx:id="backlogTab" text="Back Logs">
+    </Tab>
+
+
+</TabPane>

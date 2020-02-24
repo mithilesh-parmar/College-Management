@@ -50,6 +50,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
     private BooleanProperty loadingData = new SimpleBooleanProperty(true);
     private ContextMenu tableContextMenu = new ContextMenu();
     private MenuItem attendanceMenuButton = new MenuItem("Attendance");
+    //    private MenuItem attendanceMenuButton = new MenuItem("Attendance");
     private MenuItem feesMenuButton = new MenuItem("Fees");
     private MenuItem feesNotificationMenuButton = new MenuItem("Fees Notification");
     private MenuItem pushNotificationMenuButton = new MenuItem("Push Notification");
@@ -148,44 +149,21 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         System.out.println(e);
     }
 
-
     private void loadEditView(Student student) {
 
         FXMLLoader loader;
-        loader = new FXMLLoader(getClass().getResource("/students/detail_view/StudentDetailView.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/students/StudentProfile.fxml"));
         final Stage stage = new Stage();
         Parent parent = null;
         try {
 
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Add Student Details");
-
             parent = loader.load();
             Scene scene = new Scene(parent);
             stage.setScene(scene);
-            StudentDetailsController controller = loader.getController();
-
-            if (student != null) controller.setStudent(student);
-            controller.setListener(new StudentListener() {
-                @Override
-                public void onStudentSubmit(Student student, File profileImage) {
-                    close(stage);
-                    loadingData.set(true);
-
-                    firestoreUtility.updateStudent(student, profileImage);
-                }
-
-                @Override
-                public void onStudentEdit(Student student) {
-
-                }
-
-                @Override
-                public void onCancel() {
-
-                }
-            });
-
+            StudentProfile controller = loader.getController();
+            controller.setStudent(student);
             stage.showAndWait();
 
 
@@ -194,6 +172,53 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         }
 
     }
+
+
+//    private void loadEditView(Student student) {
+//
+//        FXMLLoader loader;
+//        loader = new FXMLLoader(getClass().getResource("/students/detail_view/StudentDetailView.fxml"));
+//        final Stage stage = new Stage();
+//        Parent parent = null;
+//        try {
+//
+//            stage.initModality(Modality.APPLICATION_MODAL);
+//            stage.setTitle("Add Student Details");
+//
+//            parent = loader.load();
+//            Scene scene = new Scene(parent);
+//            stage.setScene(scene);
+//            StudentDetailsController controller = loader.getController();
+//
+//            if (student != null) controller.setStudent(student);
+//            controller.setListener(new StudentListener() {
+//                @Override
+//                public void onStudentSubmit(Student student, File profileImage) {
+//                    close(stage);
+//                    loadingData.set(true);
+//
+//                    firestoreUtility.updateStudent(student, profileImage);
+//                }
+//
+//                @Override
+//                public void onStudentEdit(Student student) {
+//
+//                }
+//
+//                @Override
+//                public void onCancel() {
+//
+//                }
+//            });
+//
+//            stage.showAndWait();
+//
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
     private void loadAttendanceView(Student student) {
         FXMLLoader loader;
@@ -338,6 +363,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
     @Override
     public void onCardClick(Student student) {
         loadEditView(student);
+//        loadEditView();
     }
 
     @Override

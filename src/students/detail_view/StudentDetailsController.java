@@ -33,7 +33,6 @@ public class StudentDetailsController implements Initializable {
     public TextField admissionIDTextField;
     public ComboBox<Boolean> verifiedComboBox;
     public ComboBox<Boolean> profileCompleteComboBox;
-    public TextField sectionIDTextField;
 
 
     private Student student;
@@ -61,7 +60,6 @@ public class StudentDetailsController implements Initializable {
         verifiedComboBox.getItems().addAll(true, false);
         profileCompleteComboBox.getItems().addAll(true, false);
 
-        sectionIDTextField.disableProperty().set(true);
 
         profileImageView.setListener(file -> selectedProfilePicture.set(file));
         nameField.textProperty().addListener((observableValue, s, t1) -> selectedName.set(t1));
@@ -173,8 +171,6 @@ public class StudentDetailsController implements Initializable {
         profileCompleteComboBox.getSelectionModel().select(student.isProfileCompleted());
         selectedProfileCompleteValue.set(student.isProfileCompleted());
 
-
-        sectionIDTextField.setText(student.getSectionID());
 
 
     }
