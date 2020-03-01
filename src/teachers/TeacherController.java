@@ -84,6 +84,10 @@ public class TeacherController implements Initializable,
 
         teacherFlowPane.getChildren().addAll(firestoreUtility.teacherCards);
 
+        teacherFlowPane.setOnMouseClicked(mouseEvent -> {
+            if (tableContextMenu.isShowing()) tableContextMenu.hide();
+        });
+
         tableContextMenu.getItems().addAll(
                 pushNotificationMenuButton,
                 editMenuButton,

@@ -140,9 +140,23 @@ button_background_color: white;
     border_hover_default_color: derive(accent_color, -40%);
 }
 
+
 .toggle-button {
     border_hover_selected_color: derive(accent_color, -40%);
 }
+
+#menu-toggle{
+ button_background_color: transparent;
+    background_pressed_color: #999999;
+
+    border_hover_color: #7a7a7a;
+
+    text_color: #111;
+    default_button_text_color: white;
+
+    focus_ring_border_color: white;
+}
+
 
 #menubutton{
  button_background_color: white;
@@ -155,6 +169,19 @@ button_background_color: white;
 
     focus_ring_border_color: white;
 }
+
+#screen-button{
+    button_background_color: transparent;
+    background_pressed_color: #999999;
+
+    border_hover_color: #7a7a7a;
+
+    text_color: #111;
+    default_button_text_color: white;
+
+    focus_ring_border_color: white;
+}
+
 
 
 #deleteMenuButton{
@@ -439,7 +466,7 @@ button_background_color: white;
  * Date Picker                                                                 *
  *                                                                             *
  ******************************************************************************/
-
+/*
 .date-picker {
     graphic_color: #111;
     graphic_focused_color: #111;
@@ -475,6 +502,7 @@ button_background_color: white;
 
     text_field_disabled_background_color: #eaeaea;
 }
+*/
 
 /*******************************************************************************
  *                                                                             *
@@ -520,6 +548,10 @@ Text {
     list_view_background_color: #f2f2f2;
     border_color: transparent;
 }
+
+
+
+
 
 /*******************************************************************************
  *                                                                             *

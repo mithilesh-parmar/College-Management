@@ -50,7 +50,6 @@ public class StudentController implements Initializable, DataChangeListener, Sea
     private BooleanProperty loadingData = new SimpleBooleanProperty(true);
     private ContextMenu tableContextMenu = new ContextMenu();
     private MenuItem attendanceMenuButton = new MenuItem("Attendance");
-    //    private MenuItem attendanceMenuButton = new MenuItem("Attendance");
     private MenuItem feesMenuButton = new MenuItem("Fees");
     private MenuItem feesNotificationMenuButton = new MenuItem("Fees Notification");
     private MenuItem pushNotificationMenuButton = new MenuItem("Push Notification");
@@ -74,6 +73,11 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         studentFlowPane.setVgap(10);
         studentFlowPane.setAlignment(Pos.TOP_LEFT);
 
+        studentFlowPane.setOnMouseClicked(mouseEvent -> {
+            if (tableContextMenu.isShowing()) {
+                tableContextMenu.hide();
+            }
+        });
 
         studentFlowPane.setPadding(new Insets(10));
 
