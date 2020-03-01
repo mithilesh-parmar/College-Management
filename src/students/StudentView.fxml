@@ -23,8 +23,10 @@
             </right>
         </BorderPane>
 
+        <Button text="Add Student" fx:id="addStudent"/>
+
         <ScrollPane fx:id="scroll" VBox.vgrow="ALWAYS">
-            <FlowPane fx:id="studentFlowPane" />
+            <FlowPane fx:id="studentFlowPane"/>
         </ScrollPane>
 
 

@@ -11,7 +11,7 @@
 <?import javafx.geometry.Insets?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
-           fx:controller="students.attendance.AttendanceController"
+           fx:controller="students.profile.attendance.AttendanceController"
            stylesheets="@/styles/dark_metro_style.css"
 >
 

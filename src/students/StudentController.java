@@ -25,15 +25,13 @@ import custom_view.notification_view.NotificationDialogListener;
 import model.Notification;
 import model.Student;
 import custom_view.notification_view.NotificationsController;
-import students.attendance.AttendanceController;
-import students.detail_view.StudentDetailsController;
-import students.detail_view.StudentListener;
-import students.fee_view.StudentFeeController;
+import students.profile.attendance.AttendanceController;
+import students.profile.fee_view.StudentFeeController;
+import students.profile.StudentProfile;
 import utility.DocumentUploadListener;
 import utility.SearchCallback;
 import utility.StudentFirestoreUtility;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -45,6 +43,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
     public SearchTextFieldController searchTextField;
     public FlowPane studentFlowPane;
     public ScrollPane scroll;
+    public Button addStudent;
 
     private StudentFirestoreUtility firestoreUtility = StudentFirestoreUtility.getInstance();
     private BooleanProperty loadingData = new SimpleBooleanProperty(true);
@@ -63,6 +62,8 @@ public class StudentController implements Initializable, DataChangeListener, Sea
 
 
         Menu menu = new Menu("Notifications");
+
+        addStudent.setOnAction(actionEvent -> loadEditView(null));
 
         scroll.setContent(studentFlowPane);
         scroll.viewportBoundsProperty().addListener((ov, oldBounds, bounds) -> {
@@ -112,7 +113,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
     private void loadFeeView(Student student) {
 
         FXMLLoader loader;
-        loader = new FXMLLoader(getClass().getResource("/students/fee_view/StudentFeeView.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/students/profile/fee_view/StudentFeeView.fxml"));
         final Stage stage = new Stage();
         Parent parent = null;
         try {
@@ -156,7 +157,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
     private void loadEditView(Student student) {
 
         FXMLLoader loader;
-        loader = new FXMLLoader(getClass().getResource("/students/StudentProfile.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/students/profile/StudentProfile.fxml"));
         final Stage stage = new Stage();
         Parent parent = null;
         try {
@@ -177,56 +178,9 @@ public class StudentController implements Initializable, DataChangeListener, Sea
 
     }
 
-
-//    private void loadEditView(Student student) {
-//
-//        FXMLLoader loader;
-//        loader = new FXMLLoader(getClass().getResource("/students/detail_view/StudentDetailView.fxml"));
-//        final Stage stage = new Stage();
-//        Parent parent = null;
-//        try {
-//
-//            stage.initModality(Modality.APPLICATION_MODAL);
-//            stage.setTitle("Add Student Details");
-//
-//            parent = loader.load();
-//            Scene scene = new Scene(parent);
-//            stage.setScene(scene);
-//            StudentDetailsController controller = loader.getController();
-//
-//            if (student != null) controller.setStudent(student);
-//            controller.setListener(new StudentListener() {
-//                @Override
-//                public void onStudentSubmit(Student student, File profileImage) {
-//                    close(stage);
-//                    loadingData.set(true);
-//
-//                    firestoreUtility.updateStudent(student, profileImage);
-//                }
-//
-//                @Override
-//                public void onStudentEdit(Student student) {
-//
-//                }
-//
-//                @Override
-//                public void onCancel() {
-//
-//                }
-//            });
-//
-//            stage.showAndWait();
-//
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-
     private void loadAttendanceView(Student student) {
         FXMLLoader loader;
-        loader = new FXMLLoader(getClass().getResource("/students/attendance/AttendanceView.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/students/profile/attendance/AttendanceView.fxml"));
         final Stage stage = new Stage();
         Parent parent = null;
         try {

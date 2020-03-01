@@ -1,4 +1,4 @@
-package students.detail_view;
+package students.profile.detail_view;
 
 import custom_view.ImageButton;
 import custom_view.loading_combobox.class_section_combobox.ClassSectionComboBox;
@@ -99,25 +99,48 @@ public class StudentDetailsController implements Initializable {
         submitButton.setOnAction(actionEvent -> {
             if (listener == null) return;
 
-            listener.onStudentSubmit(new Student(
-                    student.getID(),
-                    selectedAdmissionID.get(),
-                    selectedBatch.get(),
-                    student.getAddress(),
-                    student.getProfilePictureURL(),
-                    selectedSection.get(),
-                    student.getToken(),
-                    selectedParentNumber.get(),
-                    selectedRemark.get(),
-                    selectedName.get(),
-                    selectedClassName.get(),
-                    selectedEmail.get(),
-                    selectedSectionID.get(),
-                    selectedScholarship.get(),
-                    student.isRequested(),
-                    selectedVerifiedValue.get(),
-                    selectedProfileCompleteValue.get()
-            ), selectedProfilePicture.get());
+//            if we are editing student profile
+            if (student != null)
+                listener.onStudentSubmit(new Student(
+                        student.getID(),
+                        selectedAdmissionID.get(),
+                        selectedBatch.get(),
+                        student.getAddress(),
+                        student.getProfilePictureURL(),
+                        selectedSection.get(),
+                        student.getToken(),
+                        selectedParentNumber.get(),
+                        selectedRemark.get(),
+                        selectedName.get(),
+                        selectedClassName.get(),
+                        selectedEmail.get(),
+                        selectedSectionID.get(),
+                        selectedScholarship.get(),
+                        student.isRequested(),
+                        selectedVerifiedValue.get(),
+                        selectedProfileCompleteValue.get()
+                ), selectedProfilePicture.get());
+                //        if we are adding new student
+            else
+                listener.onStudentSubmit(new Student(
+                        "",
+                        selectedAdmissionID.get(),
+                        selectedBatch.get(),
+                        "",
+                        "",
+                        selectedSection.get(),
+                        "",
+                        selectedParentNumber.get(),
+                        selectedRemark.get(),
+                        selectedName.get(),
+                        selectedClassName.get(),
+                        selectedEmail.get(),
+                        selectedSectionID.get(),
+                        selectedScholarship.get(),
+                        false,
+                        selectedVerifiedValue.get(),
+                        selectedProfileCompleteValue.get()
+                ), selectedProfilePicture.get());
         });
 
 
@@ -170,7 +193,6 @@ public class StudentDetailsController implements Initializable {
 
         profileCompleteComboBox.getSelectionModel().select(student.isProfileCompleted());
         selectedProfileCompleteValue.set(student.isProfileCompleted());
-
 
 
     }

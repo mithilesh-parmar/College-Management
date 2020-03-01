@@ -1,4 +1,4 @@
-package students;
+package students.profile;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -8,11 +8,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import model.Student;
-import students.attendance.AttendanceController;
-import students.back_logs.StudentBackLogController;
-import students.detail_view.StudentDetailsController;
-import students.fee_view.StudentFeeController;
+import students.profile.attendance.AttendanceController;
+import students.profile.back_logs.StudentBackLogController;
+import students.profile.detail_view.StudentDetailsController;
+import students.profile.detail_view.StudentListener;
+import students.profile.fee_view.StudentFeeController;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -25,10 +27,10 @@ public class StudentProfile implements Initializable {
     private Tab profileTab, attendanceTab, feeTab, backlogTab;
 
 
-    private final String DETAIL_VIEW = "/students/detail_view/StudentDetailView.fxml",
-            ATTENDANCE_VIEW = "/students/attendance/AttendanceView.fxml",
-            FEE_VIEW = "/students/fee_view/StudentFeeView.fxml",
-            BACKLOG_VIEW = "/students/back_logs/StudentBackLogView.fxml";
+    private final String DETAIL_VIEW = "/students/profile/detail_view/StudentDetailView.fxml",
+            ATTENDANCE_VIEW = "/students/profile/attendance/AttendanceView.fxml",
+            FEE_VIEW = "/students/profile/fee_view/StudentFeeView.fxml",
+            BACKLOG_VIEW = "/students/profile/back_logs/StudentBackLogView.fxml";
 
     private ObjectProperty<Student> student = new SimpleObjectProperty<>();
     private StudentDetailsController detailsController;
@@ -41,13 +43,44 @@ public class StudentProfile implements Initializable {
 
         student.addListener((observableValue, student1, t1) -> {
             if (t1 == null) return;
-            if (detailsController != null) detailsController.setStudent(t1);
-            if (attendanceController != null) attendanceController.setStudent(t1);
-            if (feeController != null) feeController.setStudent(t1);
-            if (backLogController != null) backLogController.setStudent(t1);
+            if (detailsController != null) {
+                detailsController.setStudent(t1);
+
+            }
+            if (attendanceController != null) {
+                attendanceController.setStudent(t1);
+
+            }
+            if (feeController != null) {
+                feeController.setStudent(t1);
+
+            }
+            if (backLogController != null) {
+                backLogController.setStudent(t1);
+
+            }
         });
 
         detailsController = (StudentDetailsController) loadView(DETAIL_VIEW, profileTab);
+        if (detailsController != null)
+            detailsController.setListener(new StudentListener() {
+                @Override
+                public void onStudentSubmit(Student student, File profileImage) {
+                    System.out.println("New Student Submited");
+                    System.out.println(student.toJSON());
+                }
+
+                @Override
+                public void onStudentEdit(Student student) {
+                    System.out.println("Student Edited");
+                    System.out.println(student.toJSON());
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+            });
         attendanceController = (AttendanceController) loadView(ATTENDANCE_VIEW, attendanceTab);
         feeController = (StudentFeeController) loadView(FEE_VIEW, feeTab);
         backLogController = (StudentBackLogController) loadView(BACKLOG_VIEW, backlogTab);

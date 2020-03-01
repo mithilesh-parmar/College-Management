@@ -10,7 +10,7 @@
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
-           fx:controller="students.fee_view.StudentFeeController"
+           fx:controller="students.profile.fee_view.StudentFeeController"
            stylesheets="@/styles/dark_metro_style.css">
 
     <BorderPane fx:id="mainView">

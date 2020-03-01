@@ -12,7 +12,7 @@
 <?import custom_view.loading_combobox.class_section_combobox.ClassSectionComboBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ScrollPane?>
-<ScrollPane fx:controller="students.detail_view.StudentDetailsController"
+<ScrollPane fx:controller="students.profile.detail_view.StudentDetailsController"
             xmlns:fx="http://javafx.com/fxml"
             stylesheets="@/styles/dark_metro_style.css"
 >

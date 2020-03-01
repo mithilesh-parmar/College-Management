@@ -30,6 +30,8 @@ public class HomeController implements Initializable {
     private ObservableList<ToggleButton> menuList;
     private ToggleGroup toggleGroup = new ToggleGroup();
 
+    private static final String QUIT = "QUIT";
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -40,6 +42,7 @@ public class HomeController implements Initializable {
         mainMenu.getChildren().addAll(menuList);
         toggleGroup.getToggles().addAll(menuList);
         toggleGroup.selectedToggleProperty().addListener((observableValue, toggle, t1) -> {
+            if (t1.getUserData() == QUIT) System.exit(0);
             try {
                 changePageTo(FXMLLoader.load(getClass().getResource((String) t1.getUserData())));
             } catch (IOException e) {
@@ -73,6 +76,7 @@ public class HomeController implements Initializable {
         menuList.add(getScreenButton("Documents", "/documents/DocumentView.fxml", "/assets/documents.png"));
         menuList.add(getScreenButton("Exams", "/exams/ExamView.fxml", "/assets/exam.png"));
         menuList.add(getScreenButton("Result", "/result/ResultView.fxml", "/assets/backlog.png"));
+        menuList.add(getScreenButton("Exit", QUIT, "/assets/exit.png"));
     }
 
 

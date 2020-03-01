@@ -8,7 +8,7 @@
 
 <TabPane xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml"
-         fx:controller="students.StudentProfile"
+         fx:controller="students.profile.StudentProfile"
          fx:id="tabs"
          stylesheets="@/styles/dark_metro_style.css"
 >

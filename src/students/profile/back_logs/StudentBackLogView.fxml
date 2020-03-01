@@ -10,7 +10,7 @@
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
-           fx:controller="students.back_logs.StudentBackLogController">
+           fx:controller="students.profile.back_logs.StudentBackLogController">
 
     <VBox>
 

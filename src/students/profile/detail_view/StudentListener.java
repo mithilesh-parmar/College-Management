@@ -1,4 +1,4 @@
-package students.detail_view;
+package students.profile.detail_view;
 
 import javafx.stage.Stage;
 import model.Student;

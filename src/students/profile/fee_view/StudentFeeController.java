@@ -1,4 +1,4 @@
-package students.fee_view;
+package students.profile.fee_view;
 
 import com.google.cloud.firestore.QuerySnapshot;
 import javafx.beans.property.*;

@@ -1,4 +1,4 @@
-package students.back_logs;
+package students.profile.back_logs;
 
 import com.google.cloud.firestore.QuerySnapshot;
 import javafx.beans.property.BooleanProperty;

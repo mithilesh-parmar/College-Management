@@ -1,10 +1,9 @@
-package students.attendance;
+package students.profile.attendance;
 
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.EventListener;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
-import custom_view.dialog_helper.CustomDialog;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -17,7 +16,6 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
 import model.StudentAttendance;
 import model.Student;
-import teacher_leaves.LeavesController;
 import utility.DateUtility;
 import utility.StudentFirestoreUtility;
 
@@ -29,7 +27,7 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import static custom_view.dialog_helper.CustomDialog.*;
-import static students.attendance.AttendanceController.Filter.*;
+import static students.profile.attendance.AttendanceController.Filter.*;
 
 public class AttendanceController implements Initializable {
 
