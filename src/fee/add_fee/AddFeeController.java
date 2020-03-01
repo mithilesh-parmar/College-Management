@@ -103,6 +103,13 @@ public class AddFeeController implements Initializable {
         );
     }
 
+    public void setStudent(Student student) {
+        this.student.set(student);
+        selectedStudentAdmissionId.set(student.getAdmissionID());
+        studentIDField.setText(student.getAdmissionID());
+        studentIDField.disableProperty().set(true);
+    }
+
     private void showSuccessDialog(Student student) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Alert");

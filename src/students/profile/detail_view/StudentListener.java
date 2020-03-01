@@ -10,9 +10,7 @@ public interface StudentListener {
 
     void onStudentSubmit(Student student, File profileImage);
 
-    void onStudentEdit(Student student);
-
-    void onCancel();
+    void onStudentEdit(Student student,File profileImage);
 
     default void close(Stage stage) {
         stage.close();

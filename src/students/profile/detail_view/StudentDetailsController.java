@@ -26,17 +26,18 @@ public class StudentDetailsController implements Initializable {
     public Button submitButton;
     public TextField parentNumberTextField;
     public TextField requestedRemarkTextField;
-
     public BatchLoadingComboBox batchComboBox;
     public ClassSectionComboBox classSectionComboBox;
     public TextField scholarshipTextField;
     public TextField admissionIDTextField;
     public ComboBox<Boolean> verifiedComboBox;
     public ComboBox<Boolean> profileCompleteComboBox;
+    public TextField addressTextField;
 
 
     private Student student;
     private StudentListener listener;
+
 
     private LongProperty selectedScholarship = new SimpleLongProperty(0L);
     private StringProperty selectedSectionID = new SimpleStringProperty();
@@ -51,6 +52,7 @@ public class StudentDetailsController implements Initializable {
     private StringProperty selectedEmail = new SimpleStringProperty();
     private StringProperty selectedParentNumber = new SimpleStringProperty();
     private StringProperty selectedRemark = new SimpleStringProperty();
+    private StringProperty selectedAddress = new SimpleStringProperty();
     private ObjectProperty<File> selectedProfilePicture = new SimpleObjectProperty<>();
 
 
@@ -68,6 +70,7 @@ public class StudentDetailsController implements Initializable {
         requestedRemarkTextField.textProperty().addListener((observableValue, s, t1) -> selectedRemark.set(t1));
         scholarshipTextField.textProperty().addListener((observableValue, s, t1) -> selectedScholarship.set(Long.parseLong(t1)));
         admissionIDTextField.textProperty().addListener((observableValue, s, t1) -> selectedAdmissionID.set(t1));
+        addressTextField.textProperty().addListener((observableValue, s, t1) -> selectedAddress.set(t1));
         verifiedComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, aBoolean, t1) -> {
             if (t1 == null) return;
             selectedVerifiedValue.set(t1);
@@ -83,14 +86,14 @@ public class StudentDetailsController implements Initializable {
         classSectionComboBox.setListener(new ClassSectionListener() {
             @Override
             public void onSectionSelected(Section section) {
-                System.out.println("Section Selected: " + section);
+//                System.out.println("Section Selected: " + section);
                 selectedSection.set(section.getSectionName());
                 selectedSectionID.set(section.getId());
             }
 
             @Override
             public void onClassSelected(ClassItem classItem) {
-                System.out.println("Class Selected: " + classItem);
+//                System.out.println("Class Selected: " + classItem);
                 selectedClassName.set(classItem.getName());
                 selectedClassID.set(classItem.getId());
             }
@@ -101,11 +104,11 @@ public class StudentDetailsController implements Initializable {
 
 //            if we are editing student profile
             if (student != null)
-                listener.onStudentSubmit(new Student(
+                listener.onStudentEdit(new Student(
                         student.getID(),
                         selectedAdmissionID.get(),
                         selectedBatch.get(),
-                        student.getAddress(),
+                        selectedAddress.get(),
                         student.getProfilePictureURL(),
                         selectedSection.get(),
                         student.getToken(),
@@ -126,7 +129,7 @@ public class StudentDetailsController implements Initializable {
                         "",
                         selectedAdmissionID.get(),
                         selectedBatch.get(),
-                        "",
+                        selectedAddress.get(),
                         "",
                         selectedSection.get(),
                         "",
@@ -195,6 +198,10 @@ public class StudentDetailsController implements Initializable {
         selectedProfileCompleteValue.set(student.isProfileCompleted());
 
 
+        addressTextField.setText(student.getAddress());
+        selectedAddress.set(student.getAddress());
+
+        submitButton.setText("Update");
     }
 
     public void setStudent(Student student) {

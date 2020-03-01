@@ -13,16 +13,16 @@
          stylesheets="@/styles/dark_metro_style.css"
 >
 
-    <Tab fx:id="profileTab" text="Profile">
+    <Tab fx:id="profileTab" text="Profile" closable="false">
     </Tab>
 
-    <Tab fx:id="attendanceTab" text="Attendance">
+    <Tab fx:id="attendanceTab" text="Attendance" closable="false">
     </Tab>
 
-    <Tab fx:id="feeTab" text="Fee">
+    <Tab fx:id="feeTab" text="Fee" closable="false">
     </Tab>
 
-    <Tab fx:id="backlogTab" text="Back Logs">
+    <Tab fx:id="backlogTab" text="Back Logs" closable="false">
     </Tab>
 
 

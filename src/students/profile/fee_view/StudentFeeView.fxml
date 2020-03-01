@@ -17,37 +17,40 @@
 
 
         <top>
-            <GridPane hgap="10" vgap="10" alignment="CENTER_LEFT">
+            <VBox>
+                <GridPane hgap="10" vgap="10" alignment="CENTER_LEFT">
 
 
-                <padding>
-                    <Insets topRightBottomLeft="20"/>
-                </padding>
-                <Label text="Total Fee: " GridPane.columnIndex="0"
-                       GridPane.rowIndex="1">
-                </Label>
-                <Label fx:id="totalFeeLabel" prefHeight="40"
-                       GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    <padding>
+                        <Insets topRightBottomLeft="20"/>
+                    </padding>
+                    <Label text="Total Fee: " GridPane.columnIndex="0"
+                           GridPane.rowIndex="1">
+                    </Label>
+                    <Label fx:id="totalFeeLabel" prefHeight="40"
+                           GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                <Label text="Amount Paid: " GridPane.columnIndex="2"
-                       GridPane.rowIndex="1">
-                </Label>
-                <Label fx:id="amountPaidLabel" prefHeight="40"
-                       GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                    <Label text="Amount Paid: " GridPane.columnIndex="2"
+                           GridPane.rowIndex="1">
+                    </Label>
+                    <Label fx:id="amountPaidLabel" prefHeight="40"
+                           GridPane.columnIndex="3" GridPane.rowIndex="1"/>
 
-                <Label text="Due Amount: " GridPane.columnIndex="4"
-                       GridPane.rowIndex="1">
-                </Label>
-                <Label fx:id="dueAmountLabel" prefHeight="40"
-                       GridPane.columnIndex="5" GridPane.rowIndex="1"/>
+                    <Label text="Due Amount: " GridPane.columnIndex="4"
+                           GridPane.rowIndex="1">
+                    </Label>
+                    <Label fx:id="dueAmountLabel" prefHeight="40"
+                           GridPane.columnIndex="5" GridPane.rowIndex="1"/>
 
-                <Label text="Scholarship: " GridPane.columnIndex="6"
-                       GridPane.rowIndex="1">
-                </Label>
-                <Label fx:id="scholarshipLabel" prefHeight="40"
-                       GridPane.columnIndex="7" GridPane.rowIndex="1"/>
+                    <Label text="Scholarship: " GridPane.columnIndex="6"
+                           GridPane.rowIndex="1">
+                    </Label>
+                    <Label fx:id="scholarshipLabel" prefHeight="40"
+                           GridPane.columnIndex="7" GridPane.rowIndex="1"/>
 
-            </GridPane>
+                </GridPane>
+                <Button fx:id="addButton" text="Add Fee" defaultButton="true"/>
+            </VBox>
         </top>
         <center>
 

@@ -466,7 +466,7 @@ button_background_color: white;
  * Date Picker                                                                 *
  *                                                                             *
  ******************************************************************************/
-/*
+
 .date-picker {
     graphic_color: #111;
     graphic_focused_color: #111;
@@ -502,7 +502,6 @@ button_background_color: white;
 
     text_field_disabled_background_color: #eaeaea;
 }
-*/
 
 /*******************************************************************************
  *                                                                             *

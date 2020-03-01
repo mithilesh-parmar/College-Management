@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.input.MouseEvent;
 import listeners.DataChangeListener;
+import model.Fee;
 import model.Notification;
 import model.Student;
 import students.StudentCardListener;
@@ -100,6 +101,41 @@ public class StudentFirestoreUtility {
         }
 
 
+    }
+
+
+    public void addStudent(Student student, File profileImage) {
+
+        if (profileImage == null) {
+            System.out.println("No Profile Image Choosen uploading " + student.toJSON());
+            DocumentReference document = FirestoreConstants.studentCollectionReference.document();
+            student.setID(document.getId());
+            document.set(student.toJSON());
+            documentUploadListener.onSuccess(null);
+        } else {
+            CloudStorageUtility storageUtility = CloudStorageUtility.getInstance();
+
+            storageUtility.setListener(new DocumentUploadListener() {
+                @Override
+                public void onSuccess(Blob blob) {
+
+                    student.setProfilePictureURL(blob.getMediaLink());
+
+                    DocumentReference document = FirestoreConstants.studentCollectionReference.document();
+                    student.setID(document.getId());
+                    document.set(student.toJSON());
+                    documentUploadListener.onSuccess(blob);
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    documentUploadListener.onFailure(e);
+                }
+            });
+
+            new Thread(() -> storageUtility.uploadDocument(Constants.profileImageFolder, student.getNameWithoutSpaces(), profileImage, DocumentType.IMAGE.toString())).start();
+
+        }
     }
 
     public void setDocumentUploadListener(DocumentUploadListener documentUploadListener) {

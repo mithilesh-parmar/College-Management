@@ -7,11 +7,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import model.Fee;
 import model.Student;
 import students.profile.attendance.AttendanceController;
 import students.profile.back_logs.StudentBackLogController;
 import students.profile.detail_view.StudentDetailsController;
 import students.profile.detail_view.StudentListener;
+import students.profile.fee_view.StudentFeeCallback;
 import students.profile.fee_view.StudentFeeController;
 
 import java.io.File;
@@ -26,6 +28,7 @@ public class StudentProfile implements Initializable {
     @FXML
     private Tab profileTab, attendanceTab, feeTab, backlogTab;
 
+    private StudentProfileCallback profileCallback;
 
     private final String DETAIL_VIEW = "/students/profile/detail_view/StudentDetailView.fxml",
             ATTENDANCE_VIEW = "/students/profile/attendance/AttendanceView.fxml",
@@ -45,19 +48,15 @@ public class StudentProfile implements Initializable {
             if (t1 == null) return;
             if (detailsController != null) {
                 detailsController.setStudent(t1);
-
             }
             if (attendanceController != null) {
                 attendanceController.setStudent(t1);
-
             }
             if (feeController != null) {
                 feeController.setStudent(t1);
-
             }
             if (backLogController != null) {
                 backLogController.setStudent(t1);
-
             }
         });
 
@@ -66,23 +65,25 @@ public class StudentProfile implements Initializable {
             detailsController.setListener(new StudentListener() {
                 @Override
                 public void onStudentSubmit(Student student, File profileImage) {
-                    System.out.println("New Student Submited");
-                    System.out.println(student.toJSON());
+                    if (profileCallback == null) return;
+                    profileCallback.onStudentSubmit(student, profileImage);
                 }
 
                 @Override
-                public void onStudentEdit(Student student) {
-                    System.out.println("Student Edited");
-                    System.out.println(student.toJSON());
+                public void onStudentEdit(Student student, File profileImage) {
+                    if (profileCallback == null) return;
+                    profileCallback.onStudentEdit(student, profileImage);
                 }
 
-                @Override
-                public void onCancel() {
-
-                }
             });
         attendanceController = (AttendanceController) loadView(ATTENDANCE_VIEW, attendanceTab);
         feeController = (StudentFeeController) loadView(FEE_VIEW, feeTab);
+        if (feeController != null) {
+            feeController.setCallback(fee -> {
+                if (profileCallback == null) return;
+                profileCallback.onStudentFeeAdded(fee);
+            });
+        }
         backLogController = (StudentBackLogController) loadView(BACKLOG_VIEW, backlogTab);
     }
 
@@ -99,6 +100,10 @@ public class StudentProfile implements Initializable {
         return null;
     }
 
+
+    public void setCallback(StudentProfileCallback profileCallback) {
+        this.profileCallback = profileCallback;
+    }
 
     public void setStudent(Student student) {
         this.student.set(student);

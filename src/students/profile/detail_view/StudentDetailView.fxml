@@ -25,14 +25,14 @@
         <padding>
             <Insets top="40" right="40" bottom="40" left="40"/>
         </padding>
-        <columnConstraints>
-            <ColumnConstraints minWidth="100" prefWidth="200"
-                               maxWidth="Infinity" halignment="RIGHT">
-            </ColumnConstraints>
-            <ColumnConstraints minWidth="200" prefWidth="400"
-                               maxWidth="Infinity" hgrow="ALWAYS">
-            </ColumnConstraints>
-        </columnConstraints>
+<!--        <columnConstraints>-->
+<!--            <ColumnConstraints minWidth="100" prefWidth="200"-->
+<!--                               maxWidth="Infinity" halignment="RIGHT">-->
+<!--            </ColumnConstraints>-->
+<!--            <ColumnConstraints minWidth="200" prefWidth="400"-->
+<!--                               maxWidth="Infinity" hgrow="ALWAYS">-->
+<!--            </ColumnConstraints>-->
+<!--        </columnConstraints>-->
 
         <!-- Profile Image -->
         <ImageButton
@@ -111,9 +111,15 @@
         <ComboBox fx:id="profileCompleteComboBox" prefHeight="40"
                   GridPane.columnIndex="1" GridPane.rowIndex="10"/>
 
+        <Label text="Address : " GridPane.columnIndex="0"
+               GridPane.rowIndex="11">
+        </Label>
+        <TextField fx:id="addressTextField" prefHeight="40"
+                   GridPane.columnIndex="1" GridPane.rowIndex="11" />
+
 
         <!-- Add Submit Button -->
-        <Button fx:id="submitButton" text="Update"
+        <Button fx:id="submitButton" text="Submit"
                 prefWidth="100" prefHeight="40" defaultButton="true"
                 GridPane.columnIndex="0" GridPane.rowIndex="12"
                 GridPane.columnSpan="2" GridPane.rowSpan="1"

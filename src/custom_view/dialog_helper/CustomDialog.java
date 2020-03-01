@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
+import model.Fee;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -165,6 +166,53 @@ public class CustomDialog {
 
         return dialog.showAndWait();
     }
+
+
+//    public static Optional<Fee> showInputDialogForFee(String title, String studentAdmissionID) {
+//        Dialog<Fee> dialog = new Dialog<>();
+//        dialog.setTitle(title);
+//
+//        // Set the button types.
+//        ButtonType loginButtonType = new ButtonType("Submit", ButtonBar.ButtonData.OK_DONE);
+//        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+//
+//        GridPane gridPane = new GridPane();
+//        gridPane.setHgap(10);
+//        gridPane.setVgap(10);
+//        gridPane.setPadding(new Insets(20, 150, 10, 10));
+//
+//
+//
+//        TextField amountTextField = new TextField("Amount");
+//        ComboBox feeType = new ComboBox();
+//        DatePicker datePicker = new DatePicker();
+//
+//
+//        gridPane.add(new Label("Amount"), 0, 0);
+//        gridPane.add(amountTextField, 1, 0);
+//
+//        gridPane.add(new Label("Type"), 0, 1);
+//        gridPane.add(amountTextField, 1, 1);
+//
+//        gridPane.add(new Label("Date"), 0, 2);
+//        gridPane.add(amountTextField, 1, 2);
+//
+//
+//        dialog.getDialogPane().setContent(gridPane);
+//
+//        // Request focus on the username field by default.
+//        Platform.runLater(from::requestFocus);
+//
+//        // Convert the result to a username-password-pair when the login button is clicked.
+//        dialog.setResultConverter(dialogButton -> {
+//            if (dialogButton == loginButtonType) {
+//                return new Pair<>(from.getText(), to.getText());
+//            }
+//            return null;
+//        });
+//
+//        return dialog.showAndWait();
+//    }
 
 
 }

@@ -64,18 +64,18 @@ public class HomeController implements Initializable {
     }
 
     private void setUpMenu() {
-        menuList.add(getScreenButton("Back Logs", "/backlog/BackLogView.fxml", "/assets/backlog.png"));
-        menuList.add(getScreenButton("Fee", "/fee/FeeView.fxml", "/assets/fee.png"));
         menuList.add(getScreenButton("Students", "/students/StudentView.fxml", "/assets/student.png"));
         menuList.add(getScreenButton("Teachers", "/teachers/TeacherView.fxml", "/assets/teacher.png"));
-        menuList.add(getScreenButton("Events", "/events/EventsView.fxml", "/assets/event.png"));
         menuList.add(getScreenButton("Time Table", "/time_table/TimeTableView.fxml", "/assets/timetable.png"));
-        menuList.add(getScreenButton("Course", "/course/CourseView.fxml", "/assets/course.png"));
-        menuList.add(getScreenButton(" Leaves", "/teacher_leaves/LeavesView.fxml", "/assets/leave.png"));
         menuList.add(getScreenButton("Attendance", "/attendance/AttendanceView.fxml", "/assets/attendance.png"));
+        menuList.add(getScreenButton("Fee", "/fee/FeeView.fxml", "/assets/fee.png"));
+        menuList.add(getScreenButton("Events", "/events/EventsView.fxml", "/assets/event.png"));
+        menuList.add(getScreenButton("Course", "/course/CourseView.fxml", "/assets/course.png"));
+        menuList.add(getScreenButton("Leaves", "/teacher_leaves/LeavesView.fxml", "/assets/leave.png"));
         menuList.add(getScreenButton("Documents", "/documents/DocumentView.fxml", "/assets/documents.png"));
         menuList.add(getScreenButton("Exams", "/exams/ExamView.fxml", "/assets/exam.png"));
         menuList.add(getScreenButton("Result", "/result/ResultView.fxml", "/assets/backlog.png"));
+        menuList.add(getScreenButton("Back Logs", "/backlog/BackLogView.fxml", "/assets/backlog.png"));
         menuList.add(getScreenButton("Exit", QUIT, "/assets/exit.png"));
     }
 

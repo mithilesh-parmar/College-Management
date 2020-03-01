@@ -115,7 +115,4 @@ public class FeeFirestoreUtility {
         document.set(fee.toJSON());
     }
 
-    public void updateEvent(Fee updatedEvent) {
-
-    }
 }

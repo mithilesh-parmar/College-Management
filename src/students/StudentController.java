@@ -22,16 +22,20 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
 import custom_view.notification_view.NotificationDialogListener;
+import model.Fee;
 import model.Notification;
 import model.Student;
 import custom_view.notification_view.NotificationsController;
+import students.profile.StudentProfileCallback;
 import students.profile.attendance.AttendanceController;
 import students.profile.fee_view.StudentFeeController;
 import students.profile.StudentProfile;
 import utility.DocumentUploadListener;
+import utility.FeeFirestoreUtility;
 import utility.SearchCallback;
 import utility.StudentFirestoreUtility;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -46,7 +50,10 @@ public class StudentController implements Initializable, DataChangeListener, Sea
     public Button addStudent;
 
     private StudentFirestoreUtility firestoreUtility = StudentFirestoreUtility.getInstance();
+    private FeeFirestoreUtility feeFirestoreUtility = FeeFirestoreUtility.getInstance();
     private BooleanProperty loadingData = new SimpleBooleanProperty(true);
+    private BooleanProperty loadingFeeData = new SimpleBooleanProperty(false);
+
     private ContextMenu tableContextMenu = new ContextMenu();
     private MenuItem attendanceMenuButton = new MenuItem("Attendance");
     private MenuItem feesMenuButton = new MenuItem("Fees");
@@ -101,12 +108,29 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         tableContextMenu.setHideOnEscape(true);
         tableContextMenu.setAutoHide(true);
 
+        feeFirestoreUtility.setListener(new DataChangeListener() {
+            @Override
+            public void onDataLoaded(ObservableList data) {
+                loadingFeeData.set(false);
+            }
+
+            @Override
+            public void onDataChange(QuerySnapshot data) {
+                loadingFeeData.set(true);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                loadingFeeData.set(false);
+            }
+        });
+
         firestoreUtility.setListener(this);
         firestoreUtility.setCardListener(this);
         firestoreUtility.setDocumentUploadListener(this);
         firestoreUtility.getStudents();
         searchTextField.setCallback(this);
-        progressIndicator.visibleProperty().bind(loadingData);
+        progressIndicator.visibleProperty().bind(loadingData.and(loadingFeeData));
 
     }
 
@@ -169,6 +193,28 @@ public class StudentController implements Initializable, DataChangeListener, Sea
             stage.setScene(scene);
             StudentProfile controller = loader.getController();
             controller.setStudent(student);
+            controller.setCallback(new StudentProfileCallback() {
+                @Override
+                public void onStudentSubmit(Student student, File profileImage) {
+                    loadingData.set(true);
+                    close(stage);
+                    firestoreUtility.addStudent(student, profileImage);
+                }
+
+                @Override
+                public void onStudentEdit(Student student, File profileImage) {
+                    loadingData.set(true);
+                    close(stage);
+                    firestoreUtility.updateStudent(student, profileImage);
+                }
+
+                @Override
+                public void onStudentFeeAdded(Fee fee) {
+                    loadingFeeData.set(true);
+                    close(stage);
+                    feeFirestoreUtility.addFee(fee);
+                }
+            });
             stage.showAndWait();
 
 
@@ -177,6 +223,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         }
 
     }
+
 
     private void loadAttendanceView(Student student) {
         FXMLLoader loader;
