@@ -11,7 +11,7 @@
             stylesheets="@/styles/dark_metro_style.css">
 
     <left>
-        <VBox fx:id="mainMenu" spacing="2"/>
+        <VBox fx:id="mainMenu" spacing="15"/>
 
 
     </left>
