@@ -19,6 +19,10 @@ public class AttendanceCard extends AnimatingCard {
     private CardListener cardListener;
 
 
+    public void setCardListener(CardListener cardListener) {
+        this.cardListener = cardListener;
+    }
+
     public AttendanceCard(SectionAttendance sectionAttendance) {
         this.courseName = new SimpleStringProperty(sectionAttendance.getClassName());
         this.year = new SimpleStringProperty(sectionAttendance.getSectionName());
@@ -32,7 +36,7 @@ public class AttendanceCard extends AnimatingCard {
         initRearView();
         setFrontView(frontView);
         setRearView(rearView);
-        setShouldAnimate(true);
+//        setShouldAnimate(true);
     }
 
 

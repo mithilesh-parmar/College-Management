@@ -10,4 +10,6 @@ public interface LectureListener {
     default void close(Stage stage){
         stage.close();
     }
+
+    void onLectureUpdated(Lecture lecture);
 }

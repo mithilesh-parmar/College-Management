@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class SectionAttendanceController implements Initializable, DataChangeListener, AttendanceListener, SearchCallback {
+public class SectionAttendanceController implements Initializable, DataChangeListener, AttendanceListener, SearchCallback, AttendanceViewCardListener {
 
 
     public SearchTextFieldController searchTextField;
@@ -51,12 +51,9 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         scrollPane.setContent(attendanceFlowPane);
-        scrollPane.viewportBoundsProperty().addListener(new ChangeListener<Bounds>() {
-            @Override
-            public void changed(ObservableValue<? extends Bounds> ov, Bounds oldBounds, Bounds bounds) {
-                attendanceFlowPane.setPrefWidth(bounds.getWidth());
-                attendanceFlowPane.setPrefHeight(bounds.getHeight());
-            }
+        scrollPane.viewportBoundsProperty().addListener((ov, oldBounds, bounds) -> {
+            attendanceFlowPane.setPrefWidth(bounds.getWidth());
+            attendanceFlowPane.setPrefHeight(bounds.getHeight());
         });
 
 
@@ -66,6 +63,7 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
         attendanceFlowPane.setPadding(new Insets(16));
         attendanceFlowPane.setAlignment(Pos.TOP_LEFT);
         firestoreUtility.setListener(this);
+        firestoreUtility.setCardListener(this);
         firestoreUtility.getAttendance();
         searchTextField.setCallback(this);
         addAttendance.setId("menubutton");
@@ -161,5 +159,10 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
 
         }
         attendanceFlowPane.getChildren().setAll(subList);
+    }
+
+    @Override
+    public void onCardClick(SectionAttendance attendance) {
+        loadEditView();
     }
 }

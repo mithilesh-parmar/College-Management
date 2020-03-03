@@ -36,6 +36,8 @@ public class AddLectureController implements Initializable {
 
     private LectureListener listener;
 
+    private ObjectProperty<Lecture> lecture = new SimpleObjectProperty<>();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         submitButton.visibleProperty().bind(canSubmit);
@@ -80,10 +82,45 @@ public class AddLectureController implements Initializable {
     public void setSection(Section section) {
         this.section.set(section);
         if (section == null) return;
-        for (int i = 1; i <= 6; i++) {
+        for (int i = 1; i <= 7; i++) {
             days.get().add(getWeekDay(i));
         }
         subjects.get().setAll(section.getSubjects());
+    }
+
+    public void setLecture(Lecture lecture) {
+        this.lecture.set(lecture);
+
+        selectedStartTime.set(lecture.getStartTime());
+        startTimeTextField.setText(lecture.getStartTime());
+
+        selectedDay.set(lecture.getDayOfWeek());
+        dayComboBox.getSelectionModel().select(getWeekDay(Integer.parseInt(lecture.getDayOfWeek())));
+        dayComboBox.disableProperty().set(true);
+
+        selectedEndTime.set(lecture.getEndTime());
+        endTimeTextField.setText(lecture.getEndTime());
+
+        selectedSubject.set(lecture.getName());
+        subjectComboBox.getSelectionModel().select(lecture.getName());
+    }
+
+
+    private void processData() {
+
+        if (listener == null) return;
+        Lecture newLecture = new Lecture(
+                selectedSubject.get(),
+                selectedEndTime.get(),
+                selectedStartTime.get(),
+                String.valueOf(getDay(selectedDay.get()))
+        );
+        if (lecture.get() == null) {
+            listener.onLectureAdded(newLecture);
+        } else {
+            listener.onLectureUpdated(newLecture);
+        }
+
     }
 
     private int getDay(String day) {
@@ -100,6 +137,8 @@ public class AddLectureController implements Initializable {
                 return 5;
             case "Saturday":
                 return 6;
+            case "Sunday":
+                return 7;
         }
         return -1;
     }
@@ -118,18 +157,9 @@ public class AddLectureController implements Initializable {
                 return "Friday";
             case 6:
                 return "Saturday";
+            case 7:
+                return "Sunday";
         }
         return "Error";
-    }
-
-    private void processData() {
-        if (listener == null) return;
-        Lecture lecture = new Lecture(
-                selectedSubject.get(),
-                selectedEndTime.get(),
-                selectedStartTime.get(),
-                String.valueOf(getDay(selectedDay.get()))
-        );
-        listener.onLectureAdded(lecture);
     }
 }

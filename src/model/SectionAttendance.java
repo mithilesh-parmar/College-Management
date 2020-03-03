@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//TODO show all the attendance of section
+
 public class SectionAttendance {
     private StringProperty className, subject, date, sectionName;
     private ObjectProperty<Timestamp> dateUnix;

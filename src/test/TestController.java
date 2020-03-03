@@ -143,6 +143,11 @@ public class TestController implements Initializable, DataChangeListener, ClassS
                             selectedSection.get()
                     );
                 }
+
+                @Override
+                public void onLectureUpdated(Lecture lecture) {
+
+                }
             });
 
 

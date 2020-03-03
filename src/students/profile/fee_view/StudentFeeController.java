@@ -146,7 +146,6 @@ public class StudentFeeController implements Initializable {
         final Stage stage = new Stage();
         Parent parent = null;
         try {
-
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Add Fee Details");
 

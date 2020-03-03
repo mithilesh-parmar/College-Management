@@ -74,37 +74,53 @@ public class SectionsFirestoreUtility {
     }
 
     public void addLecture(Lecture lecture, Section section) {
-//        System.out.println(lecture + "" + lecture.getDayOfWeek() + "" + section);
+
+        DocumentReference document = FirestoreConstants
+                .sectionsCollectionReference.document(section.getId());
+//                .whereEqualTo("name", section.getSectionName())
+//                .whereEqualTo("class_id", section.getClassID())
+//                .whereEqualTo("id", section.getId());
+//        System.out.println("Section name " + section.getSectionName() + " class id " + section.getClassID() + " id " + section.getId());
+//        System.out.println(query);
+
         section.addLecture(lecture);
-//        System.out.println(section.toJSON());
 
-        Query query = FirestoreConstants
+        document.update(section.toJSON());
+
+//        try {
+//            query.get().get().forEach(queryDocumentSnapshot -> {
+//                System.out.println("Found: " + queryDocumentSnapshot.getData());
+//                section.addLecture(lecture);
+//
+////                  write data to firestore
+//                ApiFuture<WriteResult> attendance = queryDocumentSnapshot
+//                        .getReference()
+//                        .set(section.toJSON());
+//
+//
+//            });
+//        } catch (InterruptedException | ExecutionException e) {
+//            e.printStackTrace();
+//        }
+
+    }
+
+    public void updateLecture(Lecture prevLecture, Lecture updatedLecture, Section section) {
+//        Remove the previous lecture value from section timetable
+//        get the day of week (this value cannot be changed)
+        String dayOfWeek = prevLecture.getDayOfWeek();
+//        remove prev value
+        section.getClassSchedules().get(dayOfWeek).remove(prevLecture);
+//        add new value for section
+        addLecture(updatedLecture, section);
+    }
+
+    public void deleteLecture(Lecture lecture, Section section) {
+        section.removeLecture(lecture);
+        DocumentReference document = FirestoreConstants
                 .sectionsCollectionReference
-                .whereEqualTo("name", section.getSectionName())
-                .whereEqualTo("class_id", section.getClassID())
-                .whereEqualTo("id", section.getId());
-        System.out.println("Section name " + section.getSectionName() + " class id " + section.getClassID() + " id " + section.getId());
-        System.out.println(query);
-        new Thread(() -> {
-            try {
-                query.get().get().forEach(queryDocumentSnapshot -> {
-                    System.out.println("Found: " + queryDocumentSnapshot.getData());
-
-
-//                  write data to firestore
-                    ApiFuture<WriteResult> attendance = queryDocumentSnapshot
-                            .getReference()
-                            .set(section.toJSON());
-
-
-                });
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-        }).start();
-
-//        new Thread(() -> FirestoreConstants.sectionsClassScheduleCollectionReference.document(section.getName()).set(section.toJSON())).start();
-
+                .document(section.getId());
+        document.update(section.toJSON());
     }
 
     public void setListener(DataChangeListener listener) {
@@ -119,4 +135,6 @@ public class SectionsFirestoreUtility {
         }
 
     }
+
+
 }

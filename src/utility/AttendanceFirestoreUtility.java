@@ -5,6 +5,7 @@ import com.google.cloud.firestore.EventListener;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import custom_view.card_view.AttendanceCard;
+import custom_view.card_view.CardListener;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.MapProperty;
@@ -12,6 +13,7 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.input.MouseEvent;
 import listeners.DataChangeListener;
 import model.SectionAttendance;
 
@@ -67,6 +69,8 @@ public class AttendanceFirestoreUtility {
 
     }
 
+
+
     private void parseSectionAttendanceData(List<QueryDocumentSnapshot> data) {
         sectionAttendances.clear();
         attendanceCards.clear();
@@ -76,9 +80,32 @@ public class AttendanceFirestoreUtility {
                 SectionAttendance item = SectionAttendance.fromJSON(document.getData());
 
                 AttendanceCard card = new AttendanceCard(item);
+                card.setCardListener(new CardListener() {
+                    @Override
+                    public void onCardClick() {
+                        cardListener.onCardClick(item);
+                    }
 
+                    @Override
+                    public void onDeleteButtonClick() {
 
+                    }
 
+                    @Override
+                    public void onEditButtonClick() {
+
+                    }
+
+                    @Override
+                    public void onNotificationButtonClick() {
+
+                    }
+
+                    @Override
+                    public void onContextMenuRequested(MouseEvent event) {
+
+                    }
+                });
                 sectionAttendances.add(item);
                 attendanceCards.add(card);
                 sectionAttendanceCardMapProperty.put(item, card);

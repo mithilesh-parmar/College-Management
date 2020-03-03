@@ -118,6 +118,17 @@ button_background_color: white;
     cell_selected_pressed_color: derive(accent_color, 60%);
 }
 
+#staticListView{
+ cell_hover_color: transparent;
+    cell_pressed_color:transparent;
+
+    cell_selected_unfocused_color: transparent;
+
+    cell_selected_color: transparent;
+    cell_selected_hover_color: transparent;
+    cell_selected_pressed_color: transparent;
+}
+
 /*******************************************************************************
  *                                                                             *
  * Button and ToggleButton                                                     *

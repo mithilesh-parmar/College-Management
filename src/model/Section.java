@@ -119,6 +119,12 @@ public class Section {
 
     }
 
+    public void removeLecture(Lecture lecture) {
+        String dayOfWeek = lecture.getDayOfWeek();
+        classSchedules.get(dayOfWeek).remove(lecture);
+    }
+
+
     public Map<String, Object> toJSON() {
         Map<String, Object> json = new HashMap<>();
         json.put("class_name", className.get());
@@ -144,7 +150,7 @@ public class Section {
         return json;
     }
 
-    public ObservableList<Lecture>  getLectures(DAY day) {
+    public ObservableList<Lecture> getLectures(DAY day) {
         return classSchedules.get(day.toString());
     }
 
@@ -229,4 +235,5 @@ public class Section {
     public void setClassSchedules(ObservableMap<String, ObservableList<Lecture>> classSchedules) {
         this.classSchedules.set(classSchedules);
     }
+
 }
