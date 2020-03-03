@@ -150,6 +150,11 @@ public class TeacherController implements Initializable,
         dataLoading.set(false);
     }
 
+    @Override
+    public void onStart() {
+
+    }
+
     private void loadNotificationsView(Teacher teacher) {
         FXMLLoader loader;
         loader = new FXMLLoader(getClass().getResource("/custom_view/notification_view/NotificationsView.fxml"));

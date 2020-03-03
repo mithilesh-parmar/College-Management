@@ -54,11 +54,11 @@
                     </cellValueFactory>
                 </TableColumn>
 
-                <TableColumn text="Type">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="fileType"/>
-                    </cellValueFactory>
-                </TableColumn>
+<!--                <TableColumn text="Type">-->
+<!--                    <cellValueFactory>-->
+<!--                        <PropertyValueFactory property="fileType"/>-->
+<!--                    </cellValueFactory>-->
+<!--                </TableColumn>-->
 
             </columns>
 

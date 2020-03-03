@@ -107,6 +107,11 @@ public class TeacherFirestoreUtility {
                 public void onFailure(Exception e) {
                     documentUploadListener.onFailure(e);
                 }
+
+                @Override
+                public void onStart() {
+
+                }
             });
 
             new Thread(() -> storageUtility.uploadDocument(Constants.profileImageFolder, teacher.getNameWithoutSpaces(), profileImage, DocumentType.IMAGE.toString())).start();
@@ -145,6 +150,11 @@ public class TeacherFirestoreUtility {
             @Override
             public void onFailure(Exception e) {
                 documentUploadListener.onFailure(e);
+            }
+
+            @Override
+            public void onStart() {
+
             }
         });
 

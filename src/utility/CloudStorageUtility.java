@@ -95,16 +95,17 @@ public class CloudStorageUtility {
     }
 
     void uploadStudentDocument(StudentDocument studentDocument) {
-        try {
-            System.out.println("Uploading to: " + studentDocument.getCloudStoragePath());
-            Blob blob = projectBucket.create(studentDocument.getCloudStoragePath(), new FileInputStream(studentDocument.getFile()), studentDocument.getFileType());
-
-            blob.createAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER));
-            if (listener != null) listener.onSuccess(blob);
-        } catch (FileNotFoundException e) {
-            listener.onFailure(e);
-
-        }
+        if (listener != null) listener.onStart();
+        new Thread(() -> {
+            try {
+                System.out.println("Uploading to: " + studentDocument.getCloudStoragePath());
+                Blob blob = projectBucket.create(studentDocument.getCloudStoragePath(), new FileInputStream(studentDocument.getFile()), studentDocument.getFileType());
+                blob.createAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER));
+                if (listener != null) listener.onSuccess(blob);
+            } catch (FileNotFoundException e) {
+                listener.onFailure(e);
+            }
+        }).start();
     }
 
     private String getFileExtension(String fileName) {

@@ -9,5 +9,9 @@ public interface DocumentUploadListener {
 
     void onFailure(Exception e);
 
+    default void onStart(){
+
+    }
+
 
 }

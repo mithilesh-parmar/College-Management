@@ -1,6 +1,7 @@
 package documents;
 
 import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.storage.Blob;
 import custom_view.SearchTextFieldController;
 import documents.add_document.AddDocumentController;
 import documents.add_document.AddDocumentListener;
@@ -23,6 +24,7 @@ import javafx.stage.Stage;
 import listeners.DataChangeListener;
 import model.StudentDocument;
 import utility.CloudStorageStudentDocumentListener;
+import utility.DocumentUploadListener;
 import utility.SearchCallback;
 import utility.StudentDocumentCloudStorageUtility;
 
@@ -116,7 +118,22 @@ public class DocumentController implements Initializable, DataChangeListener, Cl
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.OK) {
-            cloudStorageUtility.deleteDocument(studentDocument);
+            cloudStorageUtility.deleteDocument(studentDocument, new DocumentUploadListener() {
+                @Override
+                public void onSuccess(Blob blob) {
+                    dataLoading.set(false);
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    dataLoading.set(false);
+                }
+
+                @Override
+                public void onStart() {
+                    dataLoading.set(true);
+                }
+            });
         }
 
 
@@ -143,7 +160,25 @@ public class DocumentController implements Initializable, DataChangeListener, Cl
             controller.setListener(new AddDocumentListener() {
                 @Override
                 public void onDocumentSubmit(String reregistrationNumber, List<File> documents) {
-                    documents.forEach(file -> cloudStorageUtility.uploadDocument(reregistrationNumber, file));
+                    dataLoading.set(true);
+                    documents.forEach(file -> cloudStorageUtility.uploadDocument(reregistrationNumber, file, new DocumentUploadListener() {
+                        @Override
+                        public void onSuccess(Blob blob) {
+                            dataLoading.set(false);
+                            refreshData();
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            dataLoading.set(false);
+                            System.out.println(e);
+                        }
+
+                        @Override
+                        public void onStart() {
+                            dataLoading.set(true);
+                        }
+                    }));
                     close(stage);
                 }
             });

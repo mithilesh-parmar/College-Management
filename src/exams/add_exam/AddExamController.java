@@ -7,6 +7,7 @@ import custom_view.loading_combobox.section.SectionLoadingComboBox;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -61,6 +62,7 @@ public class AddExamController implements Initializable {
 
 
         subjectListView.itemsProperty().bind(subjectList);
+        subjectListView.setId("staticListView");
 
         submitButton.visibleProperty().bind(canSubmit);
         subjectListView.setCellFactory(listView1 -> new ExamSubjectCell(() -> {
@@ -215,6 +217,7 @@ public class AddExamController implements Initializable {
                 setText(null);
                 setGraphic(null);
             } else {
+                borderPane.setPadding(new Insets(4));
                 datePicker.valueProperty().bindBidirectional(obj.dateProperty());
                 subjectNameLabel.setText(obj.getName());
                 datePicker.setValue(datePicker.getValue());

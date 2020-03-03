@@ -57,7 +57,7 @@
                GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
     <!-- Add Submit Button -->
-    <Button fx:id="submitButton" text="Update"
+    <Button fx:id="submitButton" text="Submit"
             prefWidth="100" prefHeight="40" defaultButton="true"
             GridPane.columnIndex="0" GridPane.rowIndex="5"
             GridPane.columnSpan="2" GridPane.rowSpan="1"

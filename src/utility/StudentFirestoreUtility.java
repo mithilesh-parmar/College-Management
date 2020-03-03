@@ -94,6 +94,11 @@ public class StudentFirestoreUtility {
                 public void onFailure(Exception e) {
                     documentUploadListener.onFailure(e);
                 }
+
+                @Override
+                public void onStart() {
+
+                }
             });
 
             new Thread(() -> storageUtility.uploadDocument(Constants.profileImageFolder, student.getNameWithoutSpaces(), profileImage, DocumentType.IMAGE.toString())).start();
@@ -131,6 +136,7 @@ public class StudentFirestoreUtility {
                 public void onFailure(Exception e) {
                     documentUploadListener.onFailure(e);
                 }
+
             });
 
             new Thread(() -> storageUtility.uploadDocument(Constants.profileImageFolder, student.getNameWithoutSpaces(), profileImage, DocumentType.IMAGE.toString())).start();

@@ -25,8 +25,9 @@ public class StudentDocumentCloudStorageUtility {
     private StudentDocumentCloudStorageUtility() {
     }
 
-    public void deleteDocument(StudentDocument studentDocument) {
+    public void deleteDocument(StudentDocument studentDocument, DocumentUploadListener listener) {
         if (studentDocumentListener != null) studentDocumentListener.onStart();
+        storageUtility.setListener(listener);
         new Thread(() -> {
             storageUtility
                     .projectBucket
@@ -77,11 +78,12 @@ public class StudentDocumentCloudStorageUtility {
         }).start();
     }
 
-    public void uploadDocument(String registerationNumber, File document) {
-        if (listener != null) listener.onDataChange(null);
-        StudentDocument studentDocument = new StudentDocument(document, "documents/" + registerationNumber + "/" + document.getName(), registerationNumber, document.getName(), "", "");
+    public void uploadDocument(String registrationNumber, File document, DocumentUploadListener listener) {
+
+        StudentDocument studentDocument = new StudentDocument(document, "documents/" + registrationNumber + "/" + document.getName(), registrationNumber, document.getName(), "", "");
         storageUtility.uploadStudentDocument(studentDocument);
-        if (listener != null) listener.onDataLoaded(null);
+        storageUtility.setListener(listener);
+
     }
 
     private void parseStudentDocumentsData(Iterable<Blob> documents) {
