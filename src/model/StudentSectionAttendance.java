@@ -8,6 +8,10 @@ import javafx.beans.property.StringProperty;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+
+This class has no significance as of now it is used for displaying the attendance of a section
+* */
 public class StudentSectionAttendance {
     private StringProperty admissionID, email, ppUrl, studentID, readableValueOfPresent;
     private BooleanProperty present;

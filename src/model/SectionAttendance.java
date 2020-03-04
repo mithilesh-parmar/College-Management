@@ -11,11 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//TODO show all the attendance of section
-
 public class SectionAttendance {
 
-    private StringProperty className, subject, date, sectionName;
+    private StringProperty className, subject, date, sectionName, batch;
     private ObjectProperty<Timestamp> dateUnix;
     private ListProperty<Map<String, Object>> lectureAttendance;
     private IntegerProperty presentStudent, absentStudent;
@@ -25,13 +23,14 @@ public class SectionAttendance {
                              String subject,
                              String section,
                              String date,
+                             String batch,
                              Timestamp dateUnix,
                              List<Map<String, Object>> lectureAttendance
     ) {
         this.className = new SimpleStringProperty(className);
         this.subject = new SimpleStringProperty(subject);
         this.sectionName = new SimpleStringProperty(section);
-
+        this.batch = new SimpleStringProperty(batch);
 
         this.date = new SimpleStringProperty(date);
         this.dateUnix = new SimpleObjectProperty<>(dateUnix);
@@ -48,6 +47,7 @@ public class SectionAttendance {
                 (String) json.get("subject"),
                 (String) json.get("section"),
                 (String) json.get("date"),
+                (String) json.get("batch"),
                 (Timestamp) json.get("date_unix"),
                 (List<Map<String, Object>>) json.get("lecture_attendance")
 
@@ -60,6 +60,7 @@ public class SectionAttendance {
         json.put("subject", subject.get());
         json.put("section", sectionName.get());
         json.put("date", date.get());
+        json.put("batch", batch.get());
         json.put("date_unix", dateUnix.get());
         json.put("lecture_attendance", lectureAttendance.get());
         return json;
@@ -73,6 +74,18 @@ public class SectionAttendance {
             if (isPresent) presentStudent.set(presentStudent.get() + 1);
             else absentStudent.set(absentStudent.get() + 1);
         });
+    }
+
+    public String getBatch() {
+        return batch.get();
+    }
+
+    public StringProperty batchProperty() {
+        return batch;
+    }
+
+    public void setBatch(String batch) {
+        this.batch.set(batch);
     }
 
     public int getPresentStudent() {

@@ -38,18 +38,14 @@
                     </columnConstraints>
 
 
-                    <!-- Add Name Label -->
                     <Label text="Class :" GridPane.columnIndex="0"
                            GridPane.rowIndex="1"/>
-                    <!-- Add Name Text Field -->
                     <Label fx:id="classNameLabel" prefHeight="40"
                            GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                    <!-- Add Email Label -->
                     <Label text="Section :" GridPane.columnIndex="2"
                            GridPane.rowIndex="1">
                     </Label>
-                    <!-- Add Email Text Field -->
                     <Label fx:id="sectionNameLabel" prefHeight="40"
                            GridPane.columnIndex="3" GridPane.rowIndex="1"/>
 
@@ -59,6 +55,18 @@
                     </Label>
                     <Label fx:id="dateLabel" prefHeight="40"
                            GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                    <Label text="Lecture : " GridPane.columnIndex="2"
+                           GridPane.rowIndex="2">
+                    </Label>
+                    <Label fx:id="lectureLabel" prefHeight="40"
+                           GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+
+                    <Label text="Batch : " GridPane.columnIndex="0"
+                           GridPane.rowIndex="3">
+                    </Label>
+                    <Label fx:id="batchLabel" prefHeight="40"
+                           GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
                 </GridPane>
             </ScrollPane>

@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 
 <?import custom_view.SearchTextFieldController?>
-<?import javafx.scene.image.ImageView?>
-<?import custom_view.loading_combobox.section.SectionLoadingComboBox?>
-<?import custom_view.loading_combobox.batches.BatchLoadingComboBox?>
+
 <?import javafx.geometry.Insets?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
@@ -26,6 +22,22 @@
             <left>
                 <Label id="headline" text="Section Attendances"/>
             </left>
+            <center>
+                <HBox spacing="5" alignment="CENTER">
+
+                    <padding>
+                        <Insets topRightBottomLeft="14"/>
+                    </padding>
+
+                    <Button fx:id="batchFilterButton" text="For Batch"/>
+                    <Button fx:id="subjectFilterButton" text="For Subject"/>
+                    <Button fx:id="sectionFilterButton" text="For Section"/>
+
+                    <Button fx:id="clearButton" text="Clear"/>
+
+
+                </HBox>
+            </center>
             <right>
                 <SearchTextFieldController fx:id="searchTextField"/>
 

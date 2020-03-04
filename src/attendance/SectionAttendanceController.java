@@ -6,8 +6,13 @@ import attendance.details.SectionAttendanceDetails;
 import com.google.cloud.firestore.QuerySnapshot;
 import custom_view.SearchTextFieldController;
 import custom_view.card_view.AttendanceCard;
+import custom_view.dialog_helper.CustomDialog;
+import custom_view.loading_combobox.class_section_combobox.ClassSectionComboBox;
+import custom_view.loading_combobox.section.SectionLoadingComboBox;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -19,13 +24,16 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import listeners.DataChangeListener;
+import model.Batch;
+import model.ClassItem;
 import model.Section;
 import model.SectionAttendance;
 import utility.AttendanceFirestoreUtility;
@@ -35,7 +43,13 @@ import utility.SearchCallback;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
+
+import static custom_view.dialog_helper.CustomDialog.showInputDialogWithOneParameter;
+import static custom_view.dialog_helper.CustomDialog.showInputDialogWithTwoParameter;
 
 public class SectionAttendanceController implements Initializable, DataChangeListener, AttendanceListener, SearchCallback, AttendanceViewCardListener {
 
@@ -45,10 +59,16 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
     public ProgressIndicator progressIndicator;
     public Button addAttendance;
     public ScrollPane scrollPane;
+    public Button batchFilterButton;
+    public Button subjectFilterButton;
+    public Button sectionFilterButton;
+    public Button clearButton;
 
     private AttendanceFirestoreUtility firestoreUtility = AttendanceFirestoreUtility.getInstance();
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
 
+    private ObjectProperty<Button> selectedButton = new SimpleObjectProperty<>();
+    private List<Button> buttonList = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -71,6 +91,91 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
         searchTextField.setCallback(this);
         addAttendance.setId("menubutton");
         addAttendance.setOnAction(actionEvent -> loadEditView());
+
+
+        batchFilterButton.setUserData("Batch Filter");
+        sectionFilterButton.setUserData("Section Filter");
+        subjectFilterButton.setUserData("Subject Filter");
+        clearButton.setUserData("Clear Filter");
+
+        buttonList.add(batchFilterButton);
+        buttonList.add(sectionFilterButton);
+        buttonList.add(subjectFilterButton);
+        buttonList.add(clearButton);
+
+//        Set action listeners
+        batchFilterButton.setOnAction(actionEvent -> {
+            showBatchAttendance();
+            selectedButton.set(batchFilterButton);
+        });
+        sectionFilterButton.setOnAction(actionEvent -> {
+            showSectionAttendance();
+            selectedButton.set(sectionFilterButton);
+        });
+        subjectFilterButton.setOnAction(actionEvent -> {
+            showSubjectAttendance();
+            selectedButton.set(subjectFilterButton);
+        });
+
+        clearButton.setOnAction(actionEvent -> {
+            attendanceFlowPane.getChildren().setAll(firestoreUtility.attendanceCards);
+            selectedButton.set(clearButton);
+            highlightAll();
+        });
+
+        selectedButton.addListener((observableValue, button, t1) -> {
+            if (t1 == null || t1.getUserData().toString().matches(clearButton.getUserData().toString())) return;
+            highlightButton(t1);
+        });
+    }
+
+    private void showSubjectAttendance() {
+        Optional<Pair<Section, String>> result = CustomDialog.showDialogWithClassSectionAndSubjectComboBox("Choose Subject");
+
+        result.ifPresentOrElse(sectionStringPair -> {
+            String subject = sectionStringPair.getValue();
+            Section section = sectionStringPair.getKey();
+            attendanceFlowPane.getChildren().setAll(firestoreUtility.getSubjectAttendance(section, subject));
+        }, () -> selectedButton.set(clearButton));
+
+    }
+
+    private void showSectionAttendance() {
+        Optional<Pair<ClassItem, Section>> result = CustomDialog.showDialogWithClassAndSectionComboBox("Choose Section");
+
+        result.ifPresentOrElse(classItemSectionPair -> {
+            ClassItem classItem = classItemSectionPair.getKey();
+            Section section = classItemSectionPair.getValue();
+            attendanceFlowPane.getChildren().setAll(firestoreUtility.getSectionAttendance(classItem, section));
+        }, () -> selectedButton.set(clearButton));
+
+    }
+
+    private void showBatchAttendance() {
+        Optional<Batch> result = CustomDialog.showDialogWithBatchComboBox("Choose Batch");
+
+        result.ifPresentOrElse(batch -> {
+            attendanceFlowPane.getChildren().setAll(firestoreUtility.getBatchAttendance(batch));
+        }, () -> selectedButton.set(clearButton));
+    }
+
+    private void highlightAll() {
+        buttonList.forEach(button -> {
+            button.setDefaultButton(false);
+            button.disableProperty().set(false);
+        });
+    }
+
+    private void highlightButton(Button selectedButton) {
+        buttonList.forEach(button -> {
+            if (button.getUserData().toString().matches(selectedButton.getUserData().toString())
+                    || button.getUserData().toString().matches(clearButton.getUserData().toString())) {
+                button.setDefaultButton(true);
+                button.disableProperty().set(false);
+            } else {
+                button.disableProperty().set(true);
+            }
+        });
     }
 
     private void loadEditView() {

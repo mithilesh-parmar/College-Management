@@ -22,6 +22,8 @@ public class SectionAttendanceDetails implements Initializable {
     public Label classNameLabel;
     public Label sectionNameLabel;
     public Label dateLabel;
+    public Label lectureLabel;
+    public Label batchLabel;
     private ObjectProperty<SectionAttendance> sectionAttendance = new SimpleObjectProperty<>();
     private ListProperty<StudentSectionAttendance> sectionAttendances = new SimpleListProperty<>(FXCollections.observableArrayList());
 
@@ -40,6 +42,8 @@ public class SectionAttendanceDetails implements Initializable {
         classNameLabel.setText(sectionAttendance.getClassName());
         sectionNameLabel.setText(sectionAttendance.getSectionName());
         dateLabel.setText(sectionAttendance.getDate());
+        lectureLabel.setText(sectionAttendance.getSubject());
+        batchLabel.setText(sectionAttendance.getBatch());
         progressIndicator.setVisible(false);
     }
 }

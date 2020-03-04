@@ -1,10 +1,18 @@
 package custom_view.dialog_helper;
 
+import custom_view.loading_combobox.batches.BatchLoadingComboBox;
+import custom_view.loading_combobox.class_section_combobox.ClassSectionComboBox;
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
+import model.Batch;
+import model.ClassItem;
+import model.Section;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -185,5 +193,143 @@ public class CustomDialog {
         return dialog.showAndWait();
     }
 
+
+    public static Optional<Pair<Section, String>> showDialogWithClassSectionAndSubjectComboBox(String title) {
+        Dialog<Pair<Section, String>> dialog = new Dialog<>();
+
+        ObjectProperty<Section> selectedSection = new SimpleObjectProperty<>();
+
+        dialog.setTitle(title);
+
+        // Set the button types.
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType submitButton = new ButtonType("Submit", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(cancelButton);
+        dialog.getDialogPane().getButtonTypes().addAll(submitButton);
+
+        ClassSectionComboBox classSectionComboBox = new ClassSectionComboBox();
+        ComboBox<String> subjectComboBox = new ComboBox();
+        subjectComboBox.setMinWidth(80);
+        subjectComboBox.setMinHeight(30);
+
+        classSectionComboBox.sectionComboBox.setListener(result -> {
+            selectedSection.set((Section) result);
+            subjectComboBox.getItems().setAll(selectedSection.get().getSubjects());
+        });
+
+
+        GridPane gridPane = new GridPane();
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 150, 10, 10));
+
+
+        gridPane.add(classSectionComboBox, 0, 0, 2, 2);
+
+        gridPane.add(new Label("Subject"), 0, 3);
+        gridPane.add(subjectComboBox, 1, 3, 2, 2);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == submitButton) {
+                return new Pair<Section, String>(selectedSection.get(), subjectComboBox.getSelectionModel().getSelectedItem());
+            }
+            return null;
+        });
+
+
+        dialog.getDialogPane().setContent(gridPane);
+        return dialog.showAndWait();
+
+    }
+
+
+    public static Optional<Pair<ClassItem, Section>> showDialogWithClassAndSectionComboBox(String title) {
+        Dialog<Pair<ClassItem, Section>> dialog = new Dialog<>();
+
+        ObjectProperty<Section> selectedSection = new SimpleObjectProperty<>();
+        ObjectProperty<ClassItem> selectedClass = new SimpleObjectProperty<>();
+
+        dialog.setTitle(title);
+
+        // Set the button types.
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType submitButton = new ButtonType("Submit", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(cancelButton);
+        dialog.getDialogPane().getButtonTypes().addAll(submitButton);
+
+        ClassSectionComboBox classSectionComboBox = new ClassSectionComboBox();
+
+
+        classSectionComboBox.sectionComboBox.setListener(result -> selectedSection.set((Section) result));
+
+        classSectionComboBox.classComboBox.setListener(result -> selectedClass.set((ClassItem) result));
+
+
+        GridPane gridPane = new GridPane();
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 150, 10, 10));
+
+
+        gridPane.add(classSectionComboBox, 0, 0, 2, 2);
+
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == submitButton) {
+                return new Pair<>(selectedClass.get(), selectedSection.get());
+            }
+            return null;
+        });
+
+
+        dialog.getDialogPane().setContent(gridPane);
+        return dialog.showAndWait();
+
+    }
+
+    public static Optional<Batch> showDialogWithBatchComboBox(String title) {
+        Dialog<Batch> dialog = new Dialog<>();
+
+        ObjectProperty<Batch> selectedBatch = new SimpleObjectProperty<>();
+
+        dialog.setTitle(title);
+
+        // Set the button types.
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType submitButton = new ButtonType("Submit", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(cancelButton);
+        dialog.getDialogPane().getButtonTypes().addAll(submitButton);
+
+
+        BatchLoadingComboBox comboBox = new BatchLoadingComboBox();
+
+        comboBox.setListener(result -> {
+            selectedBatch.set((Batch) result);
+        });
+
+        GridPane gridPane = new GridPane();
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 150, 10, 10));
+
+
+        gridPane.add(comboBox, 0, 0, 2, 2);
+
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == submitButton) {
+                return selectedBatch.get();
+            }
+            return null;
+        });
+
+
+        dialog.getDialogPane().setContent(gridPane);
+        return dialog.showAndWait();
+
+    }
 
 }

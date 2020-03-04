@@ -18,12 +18,14 @@ public class AttendanceCard extends AnimatingCard {
     private IntegerProperty totalPresent, totalAbsent;
     private CardListener cardListener;
 
+    private SectionAttendance attendance;
 
     public void setCardListener(CardListener cardListener) {
         this.cardListener = cardListener;
     }
 
     public AttendanceCard(SectionAttendance sectionAttendance) {
+        this.attendance = sectionAttendance;
         this.courseName = new SimpleStringProperty(sectionAttendance.getClassName());
         this.year = new SimpleStringProperty(sectionAttendance.getSectionName());
         this.totalPresent = sectionAttendance.presentStudentProperty();
@@ -39,6 +41,9 @@ public class AttendanceCard extends AnimatingCard {
 //        setShouldAnimate(true);
     }
 
+    public SectionAttendance getAttendance() {
+        return attendance;
+    }
 
     @Override
     public void initFrontView() {

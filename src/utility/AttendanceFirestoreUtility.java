@@ -13,11 +13,18 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Pair;
 import listeners.DataChangeListener;
+import model.Batch;
+import model.ClassItem;
+import model.Section;
 import model.SectionAttendance;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AttendanceFirestoreUtility {
 
@@ -68,7 +75,6 @@ public class AttendanceFirestoreUtility {
                 .addSnapshotListener(attendanceListener);
 
     }
-
 
 
     private void parseSectionAttendanceData(List<QueryDocumentSnapshot> data) {
@@ -127,5 +133,31 @@ public class AttendanceFirestoreUtility {
         return instance;
     }
 
+    public ObservableList getSubjectAttendance(Section section, String subject) {
+        List<AttendanceCard> collect = attendanceCards
+                .stream()
+                .filter(attendanceCard -> attendanceCard.getAttendance().getSectionName().toUpperCase().contains(section.getSectionName().toUpperCase()))
+                .filter(attendanceCard -> attendanceCard.getAttendance().getSubject().toUpperCase().contains(subject.toUpperCase()))
+                .collect(Collectors.toList());
+        return FXCollections.observableArrayList(collect);
+    }
 
+
+    public ObservableList getSectionAttendance(ClassItem classItem, Section section) {
+        List<AttendanceCard> collect = attendanceCards
+                .stream()
+                .filter(attendanceCard -> attendanceCard.getAttendance().getSectionName().toUpperCase().contains(section.getSectionName().toUpperCase()))
+                .filter(attendanceCard -> attendanceCard.getAttendance().getClassName().toUpperCase().contains(classItem.getName().toUpperCase()))
+                .collect(Collectors.toList());
+        return FXCollections.observableArrayList(collect);
+    }
+
+    public ObservableList getBatchAttendance(Batch batch) {
+        List<AttendanceCard> collect = attendanceCards
+                .stream()
+                .filter(attendanceCard -> attendanceCard.getAttendance().getBatch().toUpperCase().contains(batch.getName().toUpperCase()))
+                .collect(Collectors.toList());
+        return FXCollections.observableArrayList(collect);
+
+    }
 }
