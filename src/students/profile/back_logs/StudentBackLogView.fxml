@@ -23,21 +23,6 @@
             <!--            </right>-->
         </BorderPane>
 
-        <HBox spacing="5" alignment="CENTER">
-
-            <padding>
-                <Insets topRightBottomLeft="14"/>
-            </padding>
-
-            <Button fx:id="subjectBackLogButton" text="For Subject"/>
-            <Button fx:id="sectionBackLogButton" text="For Section"/>
-            <Button fx:id="examBackLogButton" text="For Exam"/>
-
-            <Button fx:id="clearButton" text="Clear"/>
-
-
-        </HBox>
-
         <TableView fx:id="backLogTable" VBox.vgrow="ALWAYS">
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>

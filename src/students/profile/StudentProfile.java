@@ -85,6 +85,9 @@ public class StudentProfile implements Initializable {
             });
         }
         backLogController = (StudentBackLogController) loadView(BACKLOG_VIEW, backlogTab);
+        if (backLogController != null) {
+            backLogController.setStudent(student.get());
+        }
     }
 
 
