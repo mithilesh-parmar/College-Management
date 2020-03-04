@@ -26,7 +26,7 @@
                            maxWidth="Infinity" halignment="LEFT">
         </ColumnConstraints>
         <ColumnConstraints minWidth="200" prefWidth="200"
-                           maxWidth="Infinity" hgrow="ALWAYS" halignment="CENTER">
+                           maxWidth="Infinity" hgrow="ALWAYS" halignment="LEFT">
         </ColumnConstraints>
     </columnConstraints>
 

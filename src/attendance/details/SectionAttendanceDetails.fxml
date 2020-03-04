@@ -22,7 +22,46 @@
         </padding>
 
         <top>
-            <ComboBox fx:id="filterComboBox"/>
+            <ScrollPane>
+                <GridPane alignment="center"
+                          hgap="10" vgap="10">
+                    <padding>
+                        <Insets top="40" right="40" bottom="40" left="40"/>
+                    </padding>
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="100" prefWidth="100"
+                                           maxWidth="Infinity" halignment="RIGHT">
+                        </ColumnConstraints>
+                        <ColumnConstraints minWidth="200" prefWidth="200"
+                                           maxWidth="Infinity" hgrow="ALWAYS">
+                        </ColumnConstraints>
+                    </columnConstraints>
+
+
+                    <!-- Add Name Label -->
+                    <Label text="Class :" GridPane.columnIndex="0"
+                           GridPane.rowIndex="1"/>
+                    <!-- Add Name Text Field -->
+                    <Label fx:id="classNameLabel" prefHeight="40"
+                           GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <!-- Add Email Label -->
+                    <Label text="Section :" GridPane.columnIndex="2"
+                           GridPane.rowIndex="1">
+                    </Label>
+                    <!-- Add Email Text Field -->
+                    <Label fx:id="sectionNameLabel" prefHeight="40"
+                           GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+
+
+                    <Label text="Date : " GridPane.columnIndex="0"
+                           GridPane.rowIndex="2">
+                    </Label>
+                    <Label fx:id="dateLabel" prefHeight="40"
+                           GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                </GridPane>
+            </ScrollPane>
         </top>
 
         <center>
@@ -32,27 +71,22 @@
                 </columnResizePolicy>
                 <columns>
 
-                    <TableColumn text="Student ID">
+                    <TableColumn text="Admission ID">
                         <cellValueFactory>
-                            <PropertyValueFactory property="date"/>
+                            <PropertyValueFactory property="admissionID"/>
                         </cellValueFactory>
                     </TableColumn>
 
-                    <TableColumn text="Date">
+                    <TableColumn text="Email">
                         <cellValueFactory>
-                            <PropertyValueFactory property="date"/>
+                            <PropertyValueFactory property="email"/>
                         </cellValueFactory>
                     </TableColumn>
 
-                    <TableColumn text="Lecture">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="lecture"/>
-                        </cellValueFactory>
-                    </TableColumn>
 
                     <TableColumn text="Present">
                         <cellValueFactory>
-                            <PropertyValueFactory property="present"/>
+                            <PropertyValueFactory property="readableValueOfPresent"/>
                         </cellValueFactory>
                     </TableColumn>
 

@@ -2,6 +2,7 @@ package attendance;
 
 import attendance.add_attendance.AddAttendanceController;
 import attendance.add_attendance.AddAttendanceListener;
+import attendance.details.SectionAttendanceDetails;
 import com.google.cloud.firestore.QuerySnapshot;
 import custom_view.SearchTextFieldController;
 import custom_view.card_view.AttendanceCard;
@@ -25,6 +26,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
+import model.Section;
 import model.SectionAttendance;
 import utility.AttendanceFirestoreUtility;
 import utility.AttendanceListener;
@@ -166,6 +168,34 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
 
     @Override
     public void onCardClick(SectionAttendance attendance) {
-        loadEditView();
+        loadAttendanceDetails(attendance);
+    }
+
+    private void loadAttendanceDetails(SectionAttendance attendance) {
+
+        FXMLLoader loader;
+        loader = new FXMLLoader(getClass().getResource("/attendance/details/SectionAttendanceDetails.fxml"));
+        final Stage stage = new Stage();
+        stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
+        stage.setWidth(ScreenUtility.getScreenHalfWidth());
+        Parent parent = null;
+        try {
+
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Add Attendance");
+
+            parent = loader.load();
+            Scene scene = new Scene(parent);
+            stage.setScene(scene);
+            SectionAttendanceDetails controller = loader.getController();
+            controller.setSectionAttendance(attendance);
+
+            stage.showAndWait();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

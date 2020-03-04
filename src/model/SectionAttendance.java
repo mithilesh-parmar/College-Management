@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 
 import javafx.collections.ObservableList;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +14,10 @@ import java.util.Map;
 //TODO show all the attendance of section
 
 public class SectionAttendance {
+
     private StringProperty className, subject, date, sectionName;
     private ObjectProperty<Timestamp> dateUnix;
     private ListProperty<Map<String, Object>> lectureAttendance;
-
     private IntegerProperty presentStudent, absentStudent;
 
 
@@ -25,7 +26,8 @@ public class SectionAttendance {
                              String section,
                              String date,
                              Timestamp dateUnix,
-                             List<Map<String, Object>> lectureAttendance) {
+                             List<Map<String, Object>> lectureAttendance
+    ) {
         this.className = new SimpleStringProperty(className);
         this.subject = new SimpleStringProperty(subject);
         this.sectionName = new SimpleStringProperty(section);
