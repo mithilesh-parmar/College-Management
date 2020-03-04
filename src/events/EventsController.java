@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import listeners.DataChangeListener;
 import model.Event;
 import utility.EventFirestoreUtility;
+import utility.ScreenUtility;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -113,6 +114,8 @@ public class EventsController implements Initializable, DataChangeListener {
         FXMLLoader loader;
         loader = new FXMLLoader(getClass().getResource("/events/add_event/AddEventView.fxml"));
         final Stage stage = new Stage();
+        stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
+        stage.setWidth(ScreenUtility.getScreenHalfWidth());
         Parent parent = null;
         try {
 

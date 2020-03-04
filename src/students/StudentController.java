@@ -30,10 +30,7 @@ import students.profile.StudentProfileCallback;
 import students.profile.attendance.AttendanceController;
 import students.profile.fee_view.StudentFeeController;
 import students.profile.StudentProfile;
-import utility.DocumentUploadListener;
-import utility.FeeFirestoreUtility;
-import utility.SearchCallback;
-import utility.StudentFirestoreUtility;
+import utility.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -183,6 +180,8 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         FXMLLoader loader;
         loader = new FXMLLoader(getClass().getResource("/students/profile/StudentProfile.fxml"));
         final Stage stage = new Stage();
+        stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
+        stage.setWidth(ScreenUtility.getScreenHalfWidth());
         Parent parent = null;
         try {
 
@@ -229,6 +228,8 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         FXMLLoader loader;
         loader = new FXMLLoader(getClass().getResource("/students/profile/attendance/AttendanceView.fxml"));
         final Stage stage = new Stage();
+        stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
+        stage.setWidth(ScreenUtility.getScreenHalfWidth());
         Parent parent = null;
         try {
 
@@ -255,6 +256,8 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         FXMLLoader loader;
         loader = new FXMLLoader(getClass().getResource("/custom_view/fees_notification_view/FeesNotificationView.fxml"));
         final Stage stage = new Stage();
+        stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
+        stage.setWidth(ScreenUtility.getScreenHalfWidth());
         Parent parent = null;
         try {
 
@@ -290,6 +293,8 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         FXMLLoader loader;
         loader = new FXMLLoader(getClass().getResource("/custom_view/notification_view/NotificationsView.fxml"));
         final Stage stage = new Stage();
+        stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
+        stage.setWidth(ScreenUtility.getScreenHalfWidth());
         Parent parent = null;
         try {
 

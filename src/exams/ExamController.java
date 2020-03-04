@@ -27,6 +27,7 @@ import listeners.DataChangeListener;
 import model.Exam;
 import utility.ExamFirestoreUtility;
 import utility.ResultFirestoreUtility;
+import utility.ScreenUtility;
 import utility.SearchCallback;
 
 import java.io.IOException;
@@ -72,6 +73,8 @@ public class ExamController implements Initializable, DataChangeListener, Search
         FXMLLoader loader;
         loader = new FXMLLoader(getClass().getResource("/exams/add_exam/AddExamView.fxml"));
         final Stage stage = new Stage();
+        stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
+        stage.setWidth(ScreenUtility.getScreenHalfWidth());
         Parent parent = null;
         try {
             stage.initModality(Modality.APPLICATION_MODAL);

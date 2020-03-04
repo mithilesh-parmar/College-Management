@@ -63,6 +63,7 @@ public class AddCourseController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        subjectListView.setId("staticListView");
         progressIndicator.visibleProperty().bind(loadingSections);
         deleteButton.visibleProperty().bind(canDelete);
         feeTextField.textProperty().addListener((observable, oldValue, newValue) -> {

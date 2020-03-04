@@ -23,6 +23,7 @@ import listeners.DataChangeListener;
 import model.Lecture;
 import model.Section;
 import model.Student;
+import utility.ScreenUtility;
 import utility.SectionsFirestoreUtility;
 
 import java.io.IOException;
@@ -201,6 +202,8 @@ public class TimeTableController implements Initializable, DataChangeListener {
         FXMLLoader loader;
         loader = new FXMLLoader((getClass().getResource("AddLectureView.fxml")));
         final Stage stage = new Stage();
+        stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
+        stage.setWidth(ScreenUtility.getScreenHalfWidth());
         Parent parent = null;
         try {
 

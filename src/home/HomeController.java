@@ -86,8 +86,8 @@ public class HomeController implements Initializable {
         toggleButton.setMinHeight(35);
         toggleButton.setMaxHeight(55);
 
-        toggleButton.setMinWidth(100);
-        toggleButton.setMaxWidth(200);
+        toggleButton.setMinWidth(180);
+        toggleButton.setMaxWidth(250);
         toggleButton.setAlignment(Pos.CENTER_LEFT);
 
         ImageView imageView = new ImageView(iconPath);

@@ -22,6 +22,7 @@ import listeners.DataChangeListener;
 import model.ClassItem;
 import model.Course;
 import utility.CourseFirestoreUtility;
+import utility.ScreenUtility;
 
 import java.io.IOException;
 import java.net.URL;
@@ -59,6 +60,8 @@ public class CourseController implements Initializable, DataChangeListener, Cour
         FXMLLoader loader;
         loader = new FXMLLoader(getClass().getResource("/course/add_course/AddCourseView.fxml"));
         final Stage stage = new Stage();
+        stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
+        stage.setWidth(ScreenUtility.getScreenHalfWidth());
         Parent parent = null;
         try {
 

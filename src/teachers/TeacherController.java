@@ -31,6 +31,7 @@ import model.Teacher;
 import teachers.add_teacher.AddTeacherController;
 import custom_view.notification_view.NotificationsController;
 import utility.DocumentUploadListener;
+import utility.ScreenUtility;
 import utility.SearchCallback;
 import utility.TeacherFirestoreUtility;
 
@@ -159,6 +160,8 @@ public class TeacherController implements Initializable,
         FXMLLoader loader;
         loader = new FXMLLoader(getClass().getResource("/custom_view/notification_view/NotificationsView.fxml"));
         final Stage stage = new Stage();
+        stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
+        stage.setWidth(ScreenUtility.getScreenHalfWidth());
         Parent parent = null;
         try {
 
@@ -193,6 +196,8 @@ public class TeacherController implements Initializable,
         FXMLLoader loader;
         loader = new FXMLLoader(getClass().getResource("/teachers/add_teacher/AddTeacherView.fxml"));
         final Stage stage = new Stage();
+        stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
+        stage.setWidth(ScreenUtility.getScreenHalfWidth());
         Parent parent = null;
         try {
 

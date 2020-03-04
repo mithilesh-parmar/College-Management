@@ -13,75 +13,78 @@
 <?import custom_view.ImageButton?>
 <?import custom_view.card_view.ImageCard?>
 <?import custom_view.image_gallery_view.Gallery?>
-<VBox fx:controller="events.add_event.AddEventController"
-      xmlns:fx="http://javafx.com/fxml" alignment="center"
+<ScrollPane fx:controller="events.add_event.AddEventController"
+            xmlns:fx="http://javafx.com/fxml"
 
-      stylesheets="@/styles/dark_metro_style.css"
+            stylesheets="@/styles/dark_metro_style.css"
 >
-    <Gallery fx:id="galleryView"/>
 
-    <GridPane hgap="10" vgap="10">
+    <VBox alignment="center">
+        <Gallery fx:id="galleryView"/>
 
-
-        <padding>
-            <Insets top="40" right="40" bottom="40" left="40"/>
-        </padding>
-        <columnConstraints>
-            <ColumnConstraints minWidth="100" prefWidth="100"
-                               maxWidth="Infinity" halignment="RIGHT">
-            </ColumnConstraints>
-            <ColumnConstraints minWidth="200" prefWidth="200"
-                               maxWidth="Infinity" hgrow="ALWAYS">
-            </ColumnConstraints>
-        </columnConstraints>
+        <GridPane hgap="10" vgap="10">
 
 
-        <!-- Add Name Label -->
-        <Label text="Title : " GridPane.columnIndex="0"
-               GridPane.rowIndex="2"/>
-        <!-- Add Name Text Field -->
-        <TextField fx:id="titleTextField" prefHeight="40"
-                   GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            <padding>
+                <Insets top="40" right="40" bottom="40" left="40"/>
+            </padding>
+            <columnConstraints>
+                <ColumnConstraints minWidth="100" prefWidth="100"
+                                   maxWidth="Infinity" halignment="RIGHT">
+                </ColumnConstraints>
+                <ColumnConstraints minWidth="200" prefWidth="200"
+                                   maxWidth="Infinity" hgrow="ALWAYS">
+                </ColumnConstraints>
+            </columnConstraints>
 
 
-        <!-- Add Email Label -->
-        <Label text="Description : " GridPane.columnIndex="0"
-               GridPane.rowIndex="3">
-        </Label>
-        <!-- Add Email Text Field -->
-        <TextField fx:id="descriptionTextField" prefHeight="40"
-                   GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            <!-- Add Name Label -->
+            <Label text="Title : " GridPane.columnIndex="0"
+                   GridPane.rowIndex="2"/>
+            <!-- Add Name Text Field -->
+            <TextField fx:id="titleTextField" prefHeight="40"
+                       GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
 
-        <Label text="Event Time : " GridPane.columnIndex="0"
-               GridPane.rowIndex="4">
-        </Label>
-        <TextField fx:id="eventTimeTextField" prefHeight="40" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
-
-        <Label text="Created At : " GridPane.columnIndex="0"
-               GridPane.rowIndex="5">
-        </Label>
-        <DatePicker fx:id="createdAtDatePicker" prefHeight="40"
-                    GridPane.columnIndex="1" GridPane.rowIndex="5"/>
-
-        <Label text="Event Date : " GridPane.columnIndex="0"
-               GridPane.rowIndex="6">
-        </Label>
-        <DatePicker fx:id="eventDatePicker" prefHeight="40"
-                    GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+            <!-- Add Email Label -->
+            <Label text="Description : " GridPane.columnIndex="0"
+                   GridPane.rowIndex="3">
+            </Label>
+            <!-- Add Email Text Field -->
+            <TextField fx:id="descriptionTextField" prefHeight="40"
+                       GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
 
-        <!-- Add Submit Button -->
-        <Button fx:id="submitButton" text="Submit"
-                prefWidth="100" prefHeight="40" defaultButton="true"
-                GridPane.columnIndex="0" GridPane.rowIndex="7"
-                GridPane.columnSpan="2" GridPane.rowSpan="1"
-                GridPane.halignment="CENTER"
-        >
-            <GridPane.margin>
-                <Insets top="20" right="0" bottom="20" left="0"/>
-            </GridPane.margin>
-        </Button>
-    </GridPane>
+            <Label text="Event Time : " GridPane.columnIndex="0"
+                   GridPane.rowIndex="4">
+            </Label>
+            <TextField fx:id="eventTimeTextField" prefHeight="40" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
-</VBox>
+            <Label text="Created At : " GridPane.columnIndex="0"
+                   GridPane.rowIndex="5">
+            </Label>
+            <DatePicker fx:id="createdAtDatePicker" prefHeight="40"
+                        GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+            <Label text="Event Date : " GridPane.columnIndex="0"
+                   GridPane.rowIndex="6">
+            </Label>
+            <DatePicker fx:id="eventDatePicker" prefHeight="40"
+                        GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+
+            <!-- Add Submit Button -->
+            <Button fx:id="submitButton" text="Submit"
+                    prefWidth="100" prefHeight="40" defaultButton="true"
+                    GridPane.columnIndex="0" GridPane.rowIndex="7"
+                    GridPane.columnSpan="2" GridPane.rowSpan="1"
+                    GridPane.halignment="CENTER"
+            >
+                <GridPane.margin>
+                    <Insets top="20" right="0" bottom="20" left="0"/>
+                </GridPane.margin>
+            </Button>
+        </GridPane>
+
+    </VBox>
+</ScrollPane>

@@ -28,6 +28,7 @@ import listeners.DataChangeListener;
 import model.SectionAttendance;
 import utility.AttendanceFirestoreUtility;
 import utility.AttendanceListener;
+import utility.ScreenUtility;
 import utility.SearchCallback;
 
 import java.io.IOException;
@@ -76,6 +77,8 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
         FXMLLoader loader;
         loader = new FXMLLoader(getClass().getResource("/attendance/add_attendance/AddAttendanceView.fxml"));
         final Stage stage = new Stage();
+        stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
+        stage.setWidth(ScreenUtility.getScreenHalfWidth());
         Parent parent = null;
         try {
 

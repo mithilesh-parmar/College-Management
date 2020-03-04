@@ -23,10 +23,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
 import model.StudentDocument;
-import utility.CloudStorageStudentDocumentListener;
-import utility.DocumentUploadListener;
-import utility.SearchCallback;
-import utility.StudentDocumentCloudStorageUtility;
+import utility.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -145,6 +142,8 @@ public class DocumentController implements Initializable, DataChangeListener, Cl
         FXMLLoader loader;
         loader = new FXMLLoader(getClass().getResource("/documents/add_document/AddDocumentView.fxml"));
         final Stage stage = new Stage();
+        stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
+        stage.setWidth(ScreenUtility.getScreenHalfWidth());
         Parent parent = null;
         try {
 
