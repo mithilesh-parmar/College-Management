@@ -100,12 +100,9 @@ public class LeavesController implements Initializable, SearchCallback, DataChan
         teacherLeavesFlowPane.setAlignment(Pos.TOP_LEFT);
 
 
-        scrollPane.viewportBoundsProperty().addListener(new ChangeListener<Bounds>() {
-            @Override
-            public void changed(ObservableValue<? extends Bounds> ov, Bounds oldBounds, Bounds bounds) {
-                teacherLeavesFlowPane.setPrefWidth(bounds.getWidth());
-                teacherLeavesFlowPane.setPrefHeight(bounds.getHeight());
-            }
+        scrollPane.viewportBoundsProperty().addListener((ov, oldBounds, bounds) -> {
+            teacherLeavesFlowPane.setPrefWidth(bounds.getWidth());
+            teacherLeavesFlowPane.setPrefHeight(bounds.getHeight());
         });
 
         teacherLeaveContextMenu.setHideOnEscape(true);

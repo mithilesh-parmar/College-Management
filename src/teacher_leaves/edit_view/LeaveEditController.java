@@ -13,6 +13,8 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
+
+//TODO status textfield displays 0,1,2
 public class LeaveEditController implements Initializable {
 
     public TextField teacherNameTextField;

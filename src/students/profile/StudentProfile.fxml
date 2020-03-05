@@ -6,24 +6,26 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<TabPane xmlns="http://javafx.com/javafx"
-         xmlns:fx="http://javafx.com/fxml"
-         fx:controller="students.profile.StudentProfile"
-         fx:id="tabs"
-         stylesheets="@/styles/dark_metro_style.css"
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="students.profile.StudentProfile"
+
+           stylesheets="@/styles/dark_metro_style.css"
 >
+    <TabPane fx:id="tabs">
+        <Tab fx:id="profileTab" text="Profile" closable="false">
+        </Tab>
 
-    <Tab fx:id="profileTab" text="Profile" closable="false">
-    </Tab>
+        <Tab fx:id="attendanceTab" text="Attendance" closable="false">
+        </Tab>
 
-    <Tab fx:id="attendanceTab" text="Attendance" closable="false">
-    </Tab>
+        <Tab fx:id="feeTab" text="Fee" closable="false">
+        </Tab>
 
-    <Tab fx:id="feeTab" text="Fee" closable="false">
-    </Tab>
-
-    <Tab fx:id="backlogTab" text="Back Logs" closable="false">
-    </Tab>
+        <Tab fx:id="backlogTab" text="Back Logs" closable="false">
+        </Tab>
 
 
-</TabPane>
+    </TabPane>
+    <ProgressIndicator fx:id="progressIndicator"/>
+</StackPane>

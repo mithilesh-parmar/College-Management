@@ -1,30 +1,19 @@
 package custom_view;
 
-import com.google.firebase.database.snapshot.StringNode;
 import javafx.animation.TranslateTransition;
-import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
-import javafx.scene.PerspectiveCamera;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.Reflection;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import utility.ScreenUtility;
-import utility.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class ImageCarousel extends Group {
 
