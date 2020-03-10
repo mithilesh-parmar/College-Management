@@ -57,7 +57,7 @@ public class Exam {
         });
 
         return new Exam(
-                "",
+                (String) json.get("id"),
                 (String) json.get("batch"),
                 (String) json.get("class_name"),
                 (String) json.get("name"),

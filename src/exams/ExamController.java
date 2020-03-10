@@ -45,7 +45,7 @@ public class ExamController implements Initializable, DataChangeListener, Search
     public Button addButton;
     private BooleanProperty dataLoading = new SimpleBooleanProperty(true);
     private ExamFirestoreUtility firestoreUtility = ExamFirestoreUtility.getInstance();
-    private ResultFirestoreUtility resultFirestoreUtility = ResultFirestoreUtility.getInstance();
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -62,7 +62,6 @@ public class ExamController implements Initializable, DataChangeListener, Search
 
         addButton.setOnAction(actionEvent -> loadEditView(null));
         examFlowPane.getChildren().addAll(firestoreUtility.examCards);
-
 
         progressIndicator.visibleProperty().bind(dataLoading);
         firestoreUtility.setListener(this);
@@ -96,6 +95,20 @@ public class ExamController implements Initializable, DataChangeListener, Search
                     close(stage);
                     dataLoading.set(true);
                     firestoreUtility.addExam(exam);
+                }
+
+                @Override
+                public void onExamUpdated(Exam prevValue, Exam updatedValue) {
+                    close(stage);
+                    dataLoading.set(true);
+                    firestoreUtility.updateExam(prevValue, updatedValue);
+                }
+
+                @Override
+                public void onExamDelete(Exam exam) {
+                    close(stage);
+                    dataLoading.set(true);
+                    firestoreUtility.examDelete(exam);
                 }
             });
 

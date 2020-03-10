@@ -64,6 +64,7 @@ public abstract class LoadingComboBox extends StackPane {
         comboBox = new ComboBox<>();
 
 
+
         getChildren().addAll(comboBox, progressIndicator);
         getCollectionReference().addSnapshotListener(dataListener);
 

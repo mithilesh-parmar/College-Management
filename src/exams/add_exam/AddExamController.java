@@ -2,12 +2,15 @@ package exams.add_exam;
 
 import com.google.cloud.Timestamp;
 import custom_view.loading_combobox.batches.BatchLoadingComboBox;
+import custom_view.loading_combobox.class_section_combobox.ClassSectionComboBox;
+import custom_view.loading_combobox.class_section_combobox.ClassSectionListener;
 import custom_view.loading_combobox.course.ClassLoadingComboBox;
 import custom_view.loading_combobox.section.SectionLoadingComboBox;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -21,12 +24,13 @@ import java.util.ResourceBundle;
 
 public class AddExamController implements Initializable {
 
+    public ClassSectionComboBox classSectionComboBox;
+    public Button deleteButton;
+    public DatePicker datePicker;
     private AddExamCallback listener;
 
     public TextField examNameTextField;
     public BatchLoadingComboBox batchComboBox;
-    public ClassLoadingComboBox classNameComboBoc;
-    public SectionLoadingComboBox sectionComboBox;
     public Button submitButton;
 
     public ListView<Exam.SubjectExam> subjectListView;
@@ -39,6 +43,7 @@ public class AddExamController implements Initializable {
     private StringProperty selectedBatch = new SimpleStringProperty();
     private StringProperty selectedTime = new SimpleStringProperty();
     private ObjectProperty<Section> selectedSection = new SimpleObjectProperty<>();
+    private ObjectProperty<LocalDate> selectedDate = new SimpleObjectProperty<>();
 
     private ListProperty<Exam.SubjectExam> subjectList = new SimpleListProperty<>(FXCollections.observableArrayList());
 
@@ -46,21 +51,39 @@ public class AddExamController implements Initializable {
 
     public void setExam(Exam exam) {
         this.exam = exam;
-        submitButton.setText("Delete");
+        submitButton.setText("Update");
 
         timeTextField.setText(exam.getTime());
         examNameTextField.setText(exam.getName());
         subjectList.setAll(exam.getSubjects());
         batchComboBox.setValue(exam.getBatch(), true);
-        classNameComboBoc.setValue(exam.getClassName(), true);
-        sectionComboBox.setValue(exam.getSection(), true);
 
+        classSectionComboBox.getClassComboBox().setValue(exam.getClassName(), true);
+        classSectionComboBox.getSectionComboBox().setValue(exam.getSection(), true);
+
+        if (exam.getDate() != null) {
+            selectedDate.set(DateUtility.dateToLocalDate(exam.getDate()));
+            datePicker.setValue(DateUtility.dateToLocalDate(exam.getDate()));
+        }
+        canSubmit.set(true);
+        submitButton.visibleProperty().unbind();
+        submitButton.setVisible(true);
+        deleteButton.setVisible(true);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
 
+        datePicker.valueProperty().addListener((observableValue, localDate, t1) -> {
+            if (t1 == null) return;
+            selectedDate.set(t1);
+            checkReadyToSubmit();
+        });
+        deleteButton.setVisible(false);
+        batchComboBox.getComboBox().setPrefWidth(150);
+        batchComboBox.getComboBox().setMinWidth(150);
+        batchComboBox.setAlignment(Pos.CENTER_LEFT);
         subjectListView.itemsProperty().bind(subjectList);
         subjectListView.setId("staticListView");
 
@@ -81,17 +104,30 @@ public class AddExamController implements Initializable {
         });
 
 
-        sectionComboBox.setListener(selctedItem -> {
-            selectedSection.set(((Section) selctedItem));
+        classSectionComboBox.setListener(new ClassSectionListener() {
+            @Override
+            public void onSectionSelected(Section section) {
+                selectedSection.set(section);
+                checkReadyToSubmit();
+            }
 
-            checkReadyToSubmit();
+            @Override
+            public void onClassSelected(ClassItem classItem) {
+                selectedClassName.set(classItem.getName());
+                checkReadyToSubmit();
+            }
         });
-
-        classNameComboBoc.setListener(selectedItem -> {
-            selectedClassName.set(((ClassItem) selectedItem).getName());
-
-            checkReadyToSubmit();
-        });
+//        classSectionComboBox.getSectionComboBox().setListener(selctedItem -> {
+//            selectedSection.set(((Section) selctedItem));
+//
+//            checkReadyToSubmit();
+//        });
+//
+//        classSectionComboBox.getClassComboBox().setListener(selectedItem -> {
+//            selectedClassName.set(((ClassItem) selectedItem).getName());
+//
+//            checkReadyToSubmit();
+//        });
 
         timeTextField.textProperty().addListener((observableValue, s, t1) -> {
             selectedTime.set(t1);
@@ -99,17 +135,10 @@ public class AddExamController implements Initializable {
         });
 
 
-        selectedClassName.addListener((observableValue, s, t1) -> {
-            sectionComboBox.showItemFor(t1);
-            checkReadyToSubmit();
-        });
-
         selectedSection.addListener((observableValue, s, t1) -> {
             subjectList.get().clear();
 
-            t1.getSubjects().forEach(subject -> {
-                subjectList.get().add(new Exam.SubjectExam(subject, LocalDate.now()));
-            });
+            t1.getSubjects().forEach(subject -> subjectList.get().add(new Exam.SubjectExam(subject, LocalDate.now())));
             checkReadyToSubmit();
         });
 
@@ -117,31 +146,38 @@ public class AddExamController implements Initializable {
 
 
             if (listener == null) return;
+//            if exam value was updated
             if (exam != null)
-                listener.onAddExam(new Exam(
+                listener.onExamUpdated(exam, new Exam(
                         this.exam.getId(),
                         this.exam.getBatch(),
                         this.exam.getClassName(),
-                        this.exam.getName(),
-                        selectedSection.get().getSectionName(),
-                        exam.getDateReadable(),
+                        examName.get(),
+                        this.exam.getSection(),
+                        DateUtility.timeStampToReadable(DateUtility.localDateToTimestamp(selectedDate.get())),
                         selectedTime.get(),
-                        exam.getDate(),
+                        DateUtility.localDateToTimestamp(selectedDate.get()),
                         subjectList
-
                 ));
+//            if new exam is being created
             else listener.onAddExam(new Exam(
                     "",
                     selectedBatch.get(),
                     selectedClassName.get(),
                     examName.get(),
                     selectedSection.get().getSectionName(),
-                    "",
+                    DateUtility.timeStampToReadable(DateUtility.localDateToTimestamp(selectedDate.get())),
                     selectedTime.get(),
-                    null,
+                    DateUtility.localDateToTimestamp(selectedDate.get()),
                     subjectList
             ));
 
+        });
+
+        deleteButton.setOnAction(actionEvent -> {
+            if (listener == null) return;
+            if (exam == null) return;
+            listener.onExamDelete(exam);
         });
 
     }
@@ -156,19 +192,20 @@ public class AddExamController implements Initializable {
                 classNameSelected = selectedClassName.get() != null && !selectedClassName.get().isEmpty(),
                 timeSelected = selectedTime.get() != null && !selectedTime.get().isEmpty(),
                 examNameSelected = examName.get() != null && !examName.get().isEmpty(),
+                dateSelected = selectedDate.get() != null,
                 batchSelected = selectedBatch.get() != null && !selectedBatch.get().isEmpty();
 
-        System.out.println(
-                "\nSection " + selectedSection.get() + " " + sectionSelected
-                        + "\nClass " + selectedClassName.get() + " " + classNameSelected
-                        + "\nTime " + selectedTime.get() + " " + timeSelected
-                        + "\nExam Name " + examName.get() + " " + examNameSelected
-                        + "\nBatch " + selectedBatch.get() + " " + batchSelected
-        );
+//        System.out.println(
+//                "\nSection " + selectedSection.get() + " " + sectionSelected
+//                        + "\nClass " + selectedClassName.get() + " " + classNameSelected
+//                        + "\nTime " + selectedTime.get() + " " + timeSelected
+//                        + "\nExam Name " + examName.get() + " " + examNameSelected
+//                        + "\nBatch " + selectedBatch.get() + " " + batchSelected
+//        );
 
 
         canSubmit.set(
-                (sectionSelected && classNameSelected && timeSelected && examNameSelected && batchSelected)
+                (sectionSelected && classNameSelected && timeSelected && examNameSelected && batchSelected && dateSelected)
         );
 
     }
@@ -201,8 +238,9 @@ public class AddExamController implements Initializable {
             imageView.setSmooth(true);
             imageView.setCache(true);
             imageView.setImage(new Image(GRAPHICS_PATH));
-            cancelButton.setGraphic(imageView);
-            cancelButton.visibleProperty().bind(selectedProperty());
+            cancelButton.setText("Delete");
+//            cancelButton.setGraphic(imageView);
+//            cancelButton.visibleProperty().bind(selectedProperty());
 
 
         }
@@ -224,6 +262,10 @@ public class AddExamController implements Initializable {
                 borderPane.setLeft(subjectNameLabel);
                 borderPane.setCenter(datePicker);
                 borderPane.setRight(cancelButton);
+                BorderPane.setMargin(subjectNameLabel, new Insets(4));
+                BorderPane.setMargin(cancelButton, new Insets(4));
+                BorderPane.setMargin(datePicker, new Insets(4));
+
                 setGraphic(borderPane);
             }
         }

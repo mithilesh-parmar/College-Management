@@ -12,11 +12,13 @@
 <?import custom_view.loading_combobox.course.ClassLoadingComboBox?>
 <?import custom_view.loading_combobox.section.SectionLoadingComboBox?>
 
+<?import custom_view.loading_combobox.class_section_combobox.ClassSectionComboBox?>
 <ScrollPane fx:controller="exams.add_exam.AddExamController"
             xmlns:fx="http://javafx.com/fxml"
             stylesheets="@/styles/dark_metro_style.css"
+
 >
-    <GridPane alignment="CENTER_LEFT"
+    <GridPane alignment="CENTER"
               hgap="10" vgap="10">
 
 
@@ -24,11 +26,11 @@
             <Insets top="40" right="40" bottom="40" left="40"/>
         </padding>
         <columnConstraints>
-            <ColumnConstraints minWidth="100" prefWidth="100"
-                               maxWidth="Infinity" halignment="RIGHT">
+            <ColumnConstraints halignment="CENTER"
+                               maxWidth="Infinity">
             </ColumnConstraints>
-            <ColumnConstraints minWidth="200" prefWidth="300"
-                               maxWidth="Infinity" hgrow="ALWAYS">
+            <ColumnConstraints
+                    maxWidth="Infinity" halignment="CENTER">
             </ColumnConstraints>
         </columnConstraints>
 
@@ -51,30 +53,23 @@
                               GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
 
-        <!-- Add Email Label -->
-        <Label text="Class : " GridPane.columnIndex="0"
-               GridPane.rowIndex="3">
-        </Label>
-        <!-- Add Email Text Field -->
-        <ClassLoadingComboBox fx:id="classNameComboBoc" prefHeight="40"
-                              GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        <ClassSectionComboBox fx:id="classSectionComboBox" alignment="CENTER" GridPane.columnIndex="2"
+                              GridPane.rowIndex="2"/>
 
-
-        <!-- Add Email Label -->
-        <Label text="Section : " GridPane.columnIndex="0"
-               GridPane.rowIndex="4">
-        </Label>
-        <!-- Add Email Text Field -->
-        <SectionLoadingComboBox fx:id="sectionComboBox" prefHeight="40"
-                                GridPane.columnIndex="1" GridPane.rowIndex="4"/>
-
-        <!-- Add Email Label -->
         <Label text="Time : " GridPane.columnIndex="0"
                GridPane.rowIndex="5">
         </Label>
         <!-- Add Email Text Field -->
         <TextField fx:id="timeTextField" prefHeight="40"
-                    GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                   GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+        <HBox GridPane.columnIndex="2"
+              GridPane.rowIndex="5" alignment="CENTER">
+            <Label text="Start Exam Date : ">
+            </Label>
+            <!-- Add Email Text Field -->
+            <DatePicker fx:id="datePicker" prefHeight="40"/>
+        </HBox>
 
 
         <!-- Add Email Label -->
@@ -83,7 +78,7 @@
         </Label>
         <!-- Add Email Text Field -->
         <ListView fx:id="subjectListView"
-                  GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.hgrow="ALWAYS" GridPane.columnSpan="3"/>
 
 
         <!-- Add Submit Button -->
@@ -91,6 +86,17 @@
                 prefWidth="100" prefHeight="40" defaultButton="true"
                 GridPane.columnIndex="0" GridPane.rowIndex="8"
                 GridPane.columnSpan="2" GridPane.rowSpan="1"
+                GridPane.halignment="CENTER"
+        >
+            <GridPane.margin>
+                <Insets top="20" right="0" bottom="20" left="0"/>
+            </GridPane.margin>
+        </Button>
+
+
+        <Button fx:id="deleteButton" text="Delete"
+                prefWidth="100" prefHeight="40"
+                GridPane.columnIndex="2" GridPane.rowIndex="8"
                 GridPane.halignment="CENTER"
         >
             <GridPane.margin>

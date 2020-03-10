@@ -104,4 +104,14 @@ public class ExamFirestoreUtility {
         exam.setId(document.getId());
         document.set(exam.toJSON());
     }
+
+    public void updateExam(Exam prevValue, Exam updatedValue) {
+        System.out.println("Prev Value: " + prevValue.toJSON());
+        System.out.println("Updated Value: " + updatedValue.toJSON());
+        FirestoreConstants.examsCollectionReference.document(prevValue.getId()).set(updatedValue.toJSON());
+    }
+
+    public void examDelete(Exam exam) {
+        FirestoreConstants.examsCollectionReference.document(exam.getId()).delete();
+    }
 }

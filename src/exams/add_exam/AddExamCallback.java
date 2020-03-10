@@ -5,7 +5,12 @@ import model.Exam;
 
 public interface AddExamCallback {
     void onAddExam(Exam exam);
-    default void close(Stage stage){
+
+    void onExamUpdated(Exam prevValue, Exam updatedValue);
+
+    void onExamDelete(Exam exam);
+
+    default void close(Stage stage) {
         stage.close();
     }
 }
