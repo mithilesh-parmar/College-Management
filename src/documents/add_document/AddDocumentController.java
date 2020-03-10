@@ -59,38 +59,43 @@ public class AddDocumentController implements Initializable {
         if (!canSubmit.get() || listener == null) return;
         progressIndicator.setVisible(true);
 
-        try {
-            StudentVerificationUtility.exist(selectedRegNumber.get(), new StudentVerificationUtility.Callback() {
-                @Override
-                public void onSuccess(Student student) {
+
+        StudentVerificationUtility.Callback callback = new StudentVerificationUtility.Callback() {
+            @Override
+            public void onSuccess(Student student) {
 //                    reg exist so can upload document
-                    progressIndicator.setVisible(false);
-                    listener.onDocumentSubmit(regNumberTextField.getText(), selectedDocument.get());
-                }
+                progressIndicator.setVisible(false);
+                listener.onDocumentSubmit(regNumberTextField.getText(), selectedDocument.get());
+            }
 
-                @Override
-                public void onFailure() {
+            @Override
+            public void onFailure() {
 //                    this reg does not exist so cannot upload document
-                    progressIndicator.setVisible(false);
+                progressIndicator.setVisible(false);
 //                    show alert
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                Alert alert = new Alert(Alert.AlertType.WARNING);
 
-                    alert.setTitle("Alert");
-                    alert.setHeaderText(
-                            "No Student Found"
-                    );
+                alert.setTitle("Alert");
+                alert.setHeaderText(
+                        "No Student Found"
+                );
 
-                    alert.showAndWait();
-                }
+                alert.showAndWait();
+            }
 
-                @Override
-                public void onStart() {
-                    progressIndicator.setVisible(true);
-                }
-            });
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
+            @Override
+            public void onStart() {
+                progressIndicator.setVisible(true);
+            }
+        };
+
+        Platform.runLater(() -> {
+            try {
+                StudentVerificationUtility.exist(selectedRegNumber.get(), callback);
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
 
 
     }
@@ -113,6 +118,7 @@ public class AddDocumentController implements Initializable {
                 selectedRegNumber.get() != null
                         && !selectedRegNumber.get().isEmpty()
                         && selectedDocument.get() != null
+                        && selectedDocument.get().size() > 0
         );
     }
 }

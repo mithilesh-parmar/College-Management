@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -19,8 +20,10 @@ import javafx.scene.control.*;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import listeners.DataChangeListener;
 import model.StudentDocument;
 import utility.*;
@@ -55,12 +58,13 @@ public class DocumentController implements Initializable, DataChangeListener, Cl
         refreshButton.visibleProperty().bind(dataLoading.not());
         documentTable.setItems(cloudStorageUtility.studentDocuments);
         documentTable.setOnKeyPressed(keyEvent -> handleOnTableClick(keyEvent, documentTable.getSelectionModel().getSelectedItem()));
-        documentTable.setOnContextMenuRequested(event -> {
-            showContextMenu(event, documentTable.getSelectionModel().getSelectedItem());
-        });
+
+        addButtonToTable();
     }
 
+
     private void handleOnTableClick(KeyEvent keyEvent, StudentDocument selectedItem) {
+
         if (keyEvent.getCode() == KeyCode.ENTER) {
             downloadDocument(selectedItem);
         } else if (keyEvent.getCode() == KeyCode.DELETE) {
@@ -68,27 +72,28 @@ public class DocumentController implements Initializable, DataChangeListener, Cl
         }
     }
 
-    private void showContextMenu(ContextMenuEvent event, StudentDocument selectedItem) {
-        ContextMenu contextMenu = new ContextMenu();
-        contextMenu.setAutoHide(true);
-        contextMenu.setHideOnEscape(true);
-
-        MenuItem deleteButton = new MenuItem("Delete");
-
-        deleteButton.setOnAction(actionEvent -> showConfirmationAlert(selectedItem));
-
-        MenuItem cancelButton = new MenuItem("Cancel");
-        cancelButton.setOnAction(actionEvent -> contextMenu.hide());
-
-        MenuItem downloadButton = new MenuItem("Download");
-        downloadButton.setOnAction(actionEvent -> downloadDocument(selectedItem));
-
-        contextMenu.getItems().addAll(downloadButton, deleteButton, cancelButton);
-
-        contextMenu.show(documentTable, event.getScreenX(), event.getScreenY());
-
-
-    }
+//    private void showContextMenu(ContextMenuEvent event, StudentDocument selectedItem) {
+//
+//        contextMenu.setAutoHide(true);
+//        contextMenu.setHideOnEscape(true);
+//
+//        MenuItem deleteButton = new MenuItem("Delete");
+//
+//        deleteButton.setOnAction(actionEvent -> showConfirmationAlert(selectedItem));
+//
+//        MenuItem cancelButton = new MenuItem("Cancel");
+//        cancelButton.setOnAction(actionEvent -> contextMenu.hide());
+//
+//        MenuItem downloadButton = new MenuItem("Download");
+//        downloadButton.setOnAction(actionEvent -> downloadDocument(selectedItem));
+//
+//        contextMenu.getItems().clear();
+//        contextMenu.getItems().addAll(downloadButton, deleteButton, cancelButton);
+//
+//        contextMenu.show(documentTable, event.getScreenX(), event.getScreenY());
+//
+//
+//    }
 
     private void downloadDocument(StudentDocument studentDocument) {
         cloudStorageUtility.downloadDocument(studentDocument);
@@ -160,6 +165,8 @@ public class DocumentController implements Initializable, DataChangeListener, Cl
                 @Override
                 public void onDocumentSubmit(String reregistrationNumber, List<File> documents) {
                     dataLoading.set(true);
+
+
                     documents.forEach(file -> cloudStorageUtility.uploadDocument(reregistrationNumber, file, new DocumentUploadListener() {
                         @Override
                         public void onSuccess(Blob blob) {
@@ -215,6 +222,56 @@ public class DocumentController implements Initializable, DataChangeListener, Cl
     @Override
     public void onStart() {
         dataLoading.set(true);
+    }
+
+    private void addButtonToTable() {
+        TableColumn<StudentDocument, Void> colBtn = new TableColumn("Actions");
+
+        Callback<TableColumn<StudentDocument, Void>, TableCell<StudentDocument, Void>> cellFactory = new Callback<>() {
+            @Override
+            public TableCell<StudentDocument, Void> call(final TableColumn<StudentDocument, Void> param) {
+                final TableCell<StudentDocument, Void> cell = new TableCell<>() {
+
+                    private final HBox hBox = new HBox(15);
+
+                    private final Button downloadButton = new Button("Download");
+
+                    {
+                        downloadButton.setOnAction((ActionEvent event) -> {
+                            StudentDocument data = getTableView().getItems().get(getIndex());
+                            downloadDocument(data);
+                        });
+                    }
+
+                    private final Button deleteButton = new Button("Delete");
+
+                    {
+                        deleteButton.setOnAction((ActionEvent event) -> {
+                            StudentDocument data = getTableView().getItems().get(getIndex());
+                            showConfirmationAlert(data);
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            hBox.getChildren().setAll(downloadButton, deleteButton);
+                            setGraphic(hBox);
+                        }
+                    }
+                };
+
+                return cell;
+            }
+        };
+
+        colBtn.setCellFactory(cellFactory);
+
+        documentTable.getColumns().add(colBtn);
+
     }
 
     @Override

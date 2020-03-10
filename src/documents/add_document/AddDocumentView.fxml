@@ -36,7 +36,7 @@
 
         <Button fx:id="fileChooserButton" text="Choose Document"
                 prefWidth="100" prefHeight="40" defaultButton="true"
-                GridPane.columnIndex="0" GridPane.rowIndex="2"
+                GridPane.columnIndex="1" GridPane.rowIndex="2"
                 GridPane.columnSpan="3" GridPane.rowSpan="1"
                 GridPane.halignment="CENTER">
             <GridPane.margin>
@@ -48,7 +48,7 @@
         <!-- Add Submit Button -->
         <Button fx:id="submitButton" text="Submit"
                 prefWidth="100" prefHeight="40" defaultButton="true"
-                GridPane.columnIndex="0" GridPane.rowIndex="3"
+                GridPane.columnIndex="1" GridPane.rowIndex="3"
                 GridPane.columnSpan="2" GridPane.rowSpan="1"
                 GridPane.halignment="CENTER">
             <GridPane.margin>

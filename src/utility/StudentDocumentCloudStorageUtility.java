@@ -43,14 +43,20 @@ public class StudentDocumentCloudStorageUtility {
     }
 
     public void downloadDocument(StudentDocument studentDocument) {
+        File file = new File("documents/" + studentDocument.getStudentAdmissionNumber());
+        file.mkdirs();
+
+
         new Thread(() -> {
             if (studentDocumentListener != null) studentDocumentListener.onStart();
             storageUtility
                     .projectBucket
                     .get(studentDocument.getCloudStoragePath())
-                    .downloadTo(Path.of(studentDocument.getFileName()));
+                    .downloadTo(Path.of("documents/" + studentDocument.getStudentAdmissionNumber() + "/" + studentDocument.getFileName()));
             if (studentDocumentListener != null) studentDocumentListener.onFinish();
         }).start();
+
+
     }
 
     public void getAllDocuments() {
