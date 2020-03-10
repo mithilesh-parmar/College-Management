@@ -22,6 +22,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
 import model.Event;
+import utility.DateUtility;
 import utility.EventFirestoreUtility;
 import utility.ScreenUtility;
 
@@ -57,6 +58,7 @@ public class EventsController implements Initializable, DataChangeListener {
     public Button editButton;
     public TextField searchTextField;
     public Gallery galleryView;
+    public VBox eventListView;
 
 
     private BooleanProperty loadingData = new SimpleBooleanProperty(true);
@@ -74,6 +76,10 @@ public class EventsController implements Initializable, DataChangeListener {
         imageView.setFitWidth(20);
         imageView.setFitHeight(20);
         imageView.setImage(new Image("assets/add.png"));
+
+        eventListView.setMinWidth(ScreenUtility.getScreenHalfWidth() / 2.5);
+        eventListView.setPrefWidth(ScreenUtility.getScreenHalfWidth() / 2.5);
+
 
         addButton.setGraphic(imageView);
 
@@ -102,8 +108,6 @@ public class EventsController implements Initializable, DataChangeListener {
 
         editButton.setOnAction(actionEvent -> loadAddView(eventsList.getSelectionModel().getSelectedItem()));
 
-
-//        addButton.setPadding(new Insets(15));
         addButton.setOnAction(actionEvent -> loadAddView(null));
 
     }
@@ -115,7 +119,7 @@ public class EventsController implements Initializable, DataChangeListener {
         loader = new FXMLLoader(getClass().getResource("/events/add_event/AddEventView.fxml"));
         final Stage stage = new Stage();
         stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
-        stage.setWidth(ScreenUtility.getScreenHalfWidth());
+        stage.setWidth(ScreenUtility.getScreenThreeFourthWidth());
         Parent parent = null;
         try {
 
@@ -168,13 +172,6 @@ public class EventsController implements Initializable, DataChangeListener {
         loadingData.set(true);
     }
 
-    private void setFieldsData(Event event) {
-        titleTextField.setText(event.getTitle());
-        descriptionTextField.setText(event.getDescription());
-        eventTimeTextField.setText(event.getTime());
-        createdAtTextField.setText(event.getCreatedAt().toString());
-        eventDateTextField.setText(event.getEventDate().toString());
-    }
 
     private void setfieldsvisiblity(boolean value) {
         eventDetailPane.setVisible(value);
@@ -185,18 +182,12 @@ public class EventsController implements Initializable, DataChangeListener {
         eventTitle.setText(event.getTitle());
         eventDescription.setText(event.getDescription());
         eventTime.setText(event.getTime());
-        createdAt.setText(event.getCreatedAt().toString());
-        eventDate.setText(event.getEventDate().toString());
+        createdAt.setText(DateUtility.timeStampToReadable(event.getCreatedAt()));
+        eventDate.setText(DateUtility.timeStampToReadable(event.getEventDate()));
         if (event.getImages() != null && event.getImages().size() > 0) {
             images.clear();
-
-
-            event.getImages().forEach(url -> {
-                        images.get().add(new ImageCard(url, false));
-                    }
+            event.getImages().forEach(url -> images.get().add(new ImageCard(url, false))
             );
-
-
         } else {
 
             images.clear();

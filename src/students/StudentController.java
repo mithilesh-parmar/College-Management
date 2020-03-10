@@ -127,7 +127,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         firestoreUtility.setDocumentUploadListener(this);
         firestoreUtility.getStudents();
         searchTextField.setCallback(this);
-        progressIndicator.visibleProperty().bind(loadingData.and(loadingFeeData));
+        progressIndicator.visibleProperty().bind(loadingData.or(loadingFeeData));
 
     }
 
@@ -181,7 +181,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         loader = new FXMLLoader(getClass().getResource("/students/profile/StudentProfile.fxml"));
         final Stage stage = new Stage();
         stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
-        stage.setWidth(ScreenUtility.getScreenHalfWidth());
+        stage.setWidth(ScreenUtility.getScreenThreeFourthWidth());
         Parent parent = null;
         try {
 
@@ -229,7 +229,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         loader = new FXMLLoader(getClass().getResource("/students/profile/attendance/AttendanceView.fxml"));
         final Stage stage = new Stage();
         stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
-        stage.setWidth(ScreenUtility.getScreenHalfWidth());
+        stage.setWidth(ScreenUtility.getScreenThreeFourthWidth());
         Parent parent = null;
         try {
 
@@ -257,7 +257,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         loader = new FXMLLoader(getClass().getResource("/custom_view/fees_notification_view/FeesNotificationView.fxml"));
         final Stage stage = new Stage();
         stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
-        stage.setWidth(ScreenUtility.getScreenHalfWidth());
+        stage.setWidth(ScreenUtility.getScreenThreeFourthWidth());
         Parent parent = null;
         try {
 
@@ -294,7 +294,7 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         loader = new FXMLLoader(getClass().getResource("/custom_view/notification_view/NotificationsView.fxml"));
         final Stage stage = new Stage();
         stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
-        stage.setWidth(ScreenUtility.getScreenHalfWidth());
+        stage.setWidth(ScreenUtility.getScreenThreeFourthWidth());
         Parent parent = null;
         try {
 

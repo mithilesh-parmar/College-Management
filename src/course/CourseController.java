@@ -61,7 +61,7 @@ public class CourseController implements Initializable, DataChangeListener, Cour
         loader = new FXMLLoader(getClass().getResource("/course/add_course/AddCourseView.fxml"));
         final Stage stage = new Stage();
         stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
-        stage.setWidth(ScreenUtility.getScreenHalfWidth());
+        stage.setWidth(ScreenUtility.getScreenThreeFourthWidth());
         Parent parent = null;
         try {
 

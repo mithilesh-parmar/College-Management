@@ -194,7 +194,7 @@ public class CustomDialog {
     }
 
 
-    public static Optional<Pair<Section, String>> showDialogWithClassSectionAndSubjectComboBox(String title) {
+    public static Optional<Pair<Section, String>> showDialogWithClassSectionAndSubjectComboBox(String title,boolean showEditButton ) {
         Dialog<Pair<Section, String>> dialog = new Dialog<>();
 
         ObjectProperty<Section> selectedSection = new SimpleObjectProperty<>();
@@ -208,6 +208,7 @@ public class CustomDialog {
         dialog.getDialogPane().getButtonTypes().addAll(submitButton);
 
         ClassSectionComboBox classSectionComboBox = new ClassSectionComboBox();
+        classSectionComboBox.setIsEditable(showEditButton);
         ComboBox<String> subjectComboBox = new ComboBox();
         subjectComboBox.setMinWidth(80);
         subjectComboBox.setMinHeight(30);

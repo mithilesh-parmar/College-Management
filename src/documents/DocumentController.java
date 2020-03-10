@@ -143,7 +143,7 @@ public class DocumentController implements Initializable, DataChangeListener, Cl
         loader = new FXMLLoader(getClass().getResource("/documents/add_document/AddDocumentView.fxml"));
         final Stage stage = new Stage();
         stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
-        stage.setWidth(ScreenUtility.getScreenHalfWidth());
+        stage.setWidth(ScreenUtility.getScreenThreeFourthWidth());
         Parent parent = null;
         try {
 

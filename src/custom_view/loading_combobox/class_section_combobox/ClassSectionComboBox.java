@@ -37,7 +37,7 @@ public class ClassSectionComboBox extends HBox {
         classComboBox = new ClassLoadingComboBox();
         sectionComboBox = new SectionLoadingComboBox();
         editButton = new Button("Edit");
-
+        editButton.visibleProperty().bind(isEditable);
         editButton.setOnAction(actionEvent -> {
             classComboBox.getComboBox().disableProperty().set(false);
         });
@@ -67,6 +67,9 @@ public class ClassSectionComboBox extends HBox {
 
     }
 
+    public void setIsEditable(boolean isEditable) {
+        this.isEditable.set(isEditable);
+    }
 
     public void setClass(String className) {
         classComboBox.setValue(className, true);

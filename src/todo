@@ -1,15 +1,8 @@
 
 
-
- - Student Module
-    - Add and edit functionality
-    - new Window or scene for adding students with all documents
-
-
- - Add network sensitivity to application
-
-
- KNOWN BUGS
-
-  Time Table Module
-  - On adding new lecture to a section the previously selected list is not highlighted again
+// TODO
+- make all number fields accept only numbers
+- try adding pagination
+- teacher leave
+- while adding new student check if student already exists
+- while adding fee and documents check the same

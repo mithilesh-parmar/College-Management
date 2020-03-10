@@ -44,7 +44,7 @@ public class ImageCarousel extends Group {
 
         slider.valueProperty().addListener((p, o, n) -> {
             if (n.doubleValue() == n.intValue())
-                images.stream().forEach(unit -> unit.update(n.intValue(), ScreenUtility.getScreenHalfWidth(), ScreenUtility.getScreenHalfHeight()));
+                images.stream().forEach(unit -> unit.update(n.intValue(), ScreenUtility.getScreenThreeFourthWidth(), ScreenUtility.getScreenHalfHeight()));
         });
 
         addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {

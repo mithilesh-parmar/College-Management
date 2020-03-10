@@ -2,34 +2,16 @@ package custom_view.image_gallery_view;
 
 import custom_view.card_view.ImageCard;
 import custom_view.card_view.ImageCardListener;
-import javafx.animation.TranslateTransition;
-import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.geometry.*;
-import javafx.scene.Group;
 import javafx.scene.control.*;
-import javafx.scene.effect.Reflection;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.transform.Rotate;
 import javafx.stage.FileChooser;
-import javafx.stage.Screen;
-import javafx.util.Duration;
-import model.Section;
-import org.apache.poi.ss.formula.functions.Even;
-import utility.ScreenUtility;
 
 import java.io.File;
 import java.net.URL;
@@ -70,17 +52,19 @@ public class Gallery extends BorderPane implements Initializable {
         listView.setOrientation(Orientation.HORIZONTAL);
         listView.setPlaceholder(new ProgressIndicator());
 
-        listView.setMaxWidth(getScreenHalfWidth());
-        listView.setMinWidth(getScreenHalfWidth());
+        listView.setMaxWidth(getScreenThreeFourthWidth());
+        listView.setMinWidth(getScreenThreeFourthWidth());
         listView.setMaxHeight(150);
         listView.itemsProperty().bind(imageViews);
         listView.setCache(true);
 
+        addButton.setPadding(new Insets(4));
+        setMargin(addButton, new Insets(8));
         addButton.setOnAction(actionEvent -> addImage());
 
-        setMaxWidth(getScreenHalfWidth());
+        setMaxWidth(getScreenThreeFourthWidth());
         setCenter(listView);
-        setRight(addButton);
+        setBottom(addButton);
 
     }
 

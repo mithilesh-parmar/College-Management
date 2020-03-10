@@ -20,7 +20,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listeners.DataChangeListener;
 import model.Fee;
-import org.apache.poi.ss.usermodel.BorderStyle;
 import utility.FeeFirestoreUtility;
 import utility.ScreenUtility;
 
@@ -92,7 +91,7 @@ public class FeeController implements Initializable, DataChangeListener {
         loader = new FXMLLoader(getClass().getResource("/fee/add_fee/AddFeeView.fxml"));
         final Stage stage = new Stage();
         stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
-        stage.setWidth(ScreenUtility.getScreenHalfWidth());
+        stage.setWidth(ScreenUtility.getScreenThreeFourthWidth());
         Parent parent = null;
         try {
 

@@ -11,18 +11,15 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import listeners.DataChangeListener;
 import model.Lecture;
 import model.Section;
-import model.Student;
 import utility.ScreenUtility;
 import utility.SectionsFirestoreUtility;
 
@@ -30,7 +27,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.concurrent.Flow;
 
 
 public class TimeTableController implements Initializable, DataChangeListener {
@@ -203,7 +199,7 @@ public class TimeTableController implements Initializable, DataChangeListener {
         loader = new FXMLLoader((getClass().getResource("AddLectureView.fxml")));
         final Stage stage = new Stage();
         stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
-        stage.setWidth(ScreenUtility.getScreenHalfWidth());
+        stage.setWidth(ScreenUtility.getScreenThreeFourthWidth());
         Parent parent = null;
         try {
 

@@ -34,6 +34,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+//TODO add exam controller look at class and section combobox
+//TODO while editng student the edit button should be visible
 public class ExamController implements Initializable, DataChangeListener, SearchCallback, ExamCardListener {
 
     public ScrollPane scroll;
@@ -74,7 +76,7 @@ public class ExamController implements Initializable, DataChangeListener, Search
         loader = new FXMLLoader(getClass().getResource("/exams/add_exam/AddExamView.fxml"));
         final Stage stage = new Stage();
         stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
-        stage.setWidth(ScreenUtility.getScreenHalfWidth());
+        stage.setWidth(ScreenUtility.getScreenThreeFourthWidth());
         Parent parent = null;
         try {
             stage.initModality(Modality.APPLICATION_MODAL);

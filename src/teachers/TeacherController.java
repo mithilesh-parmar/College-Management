@@ -161,7 +161,7 @@ public class TeacherController implements Initializable,
         loader = new FXMLLoader(getClass().getResource("/custom_view/notification_view/NotificationsView.fxml"));
         final Stage stage = new Stage();
         stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
-        stage.setWidth(ScreenUtility.getScreenHalfWidth());
+        stage.setWidth(ScreenUtility.getScreenThreeFourthWidth());
         Parent parent = null;
         try {
 
@@ -197,7 +197,7 @@ public class TeacherController implements Initializable,
         loader = new FXMLLoader(getClass().getResource("/teachers/add_teacher/AddTeacherView.fxml"));
         final Stage stage = new Stage();
         stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
-        stage.setWidth(ScreenUtility.getScreenHalfWidth());
+        stage.setWidth(ScreenUtility.getScreenThreeFourthWidth());
         Parent parent = null;
         try {
 

@@ -19,8 +19,12 @@ public class ScreenUtility {
     }
 
 
+    public static double getScreenThreeFourthWidth() {
+        return getScreenWidth() * 0.75;
+    }
+
     public static double getScreenHalfWidth() {
         return getScreenWidth() / 2;
     }
-
 }
+

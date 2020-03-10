@@ -23,7 +23,7 @@
 
 
         <HBox>
-            <VBox>
+            <VBox fx:id="eventListView">
 
 
                 <Label text="Events" alignment="CENTER" id="headline">
@@ -49,14 +49,14 @@
                 <ListView fx:id="eventsList" VBox.vgrow="ALWAYS"/>
             </VBox>
 
-            <VBox fx:id="eventDetailPane">
+            <VBox fx:id="eventDetailPane" alignment="TOP_LEFT">
                 <Label text="Details" id="headline">
 
                 </Label>
 
                 <Gallery fx:id="galleryView" HBox.hgrow="ALWAYS"/>
 
-                <GridPane vgap="10" alignment="TOP_CENTER">
+                <GridPane vgap="10" alignment="TOP_LEFT">
 
                     <padding>
                         <Insets topRightBottomLeft="16"/>

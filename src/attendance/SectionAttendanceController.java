@@ -7,27 +7,20 @@ import com.google.cloud.firestore.QuerySnapshot;
 import custom_view.SearchTextFieldController;
 import custom_view.card_view.AttendanceCard;
 import custom_view.dialog_helper.CustomDialog;
-import custom_view.loading_combobox.class_section_combobox.ClassSectionComboBox;
-import custom_view.loading_combobox.section.SectionLoadingComboBox;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -47,9 +40,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
-import static custom_view.dialog_helper.CustomDialog.showInputDialogWithOneParameter;
-import static custom_view.dialog_helper.CustomDialog.showInputDialogWithTwoParameter;
 
 public class SectionAttendanceController implements Initializable, DataChangeListener, AttendanceListener, SearchCallback, AttendanceViewCardListener {
 
@@ -130,7 +120,7 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
     }
 
     private void showSubjectAttendance() {
-        Optional<Pair<Section, String>> result = CustomDialog.showDialogWithClassSectionAndSubjectComboBox("Choose Subject");
+        Optional<Pair<Section, String>> result = CustomDialog.showDialogWithClassSectionAndSubjectComboBox("Choose Subject",false);
 
         result.ifPresentOrElse(sectionStringPair -> {
             String subject = sectionStringPair.getValue();
@@ -185,7 +175,7 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
         loader = new FXMLLoader(getClass().getResource("/attendance/add_attendance/AddAttendanceView.fxml"));
         final Stage stage = new Stage();
         stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
-        stage.setWidth(ScreenUtility.getScreenHalfWidth());
+        stage.setWidth(ScreenUtility.getScreenThreeFourthWidth());
         Parent parent = null;
         try {
 
@@ -282,7 +272,7 @@ public class SectionAttendanceController implements Initializable, DataChangeLis
         loader = new FXMLLoader(getClass().getResource("/attendance/details/SectionAttendanceDetails.fxml"));
         final Stage stage = new Stage();
         stage.setHeight(ScreenUtility.getScreenHeight() * 0.70);
-        stage.setWidth(ScreenUtility.getScreenHalfWidth());
+        stage.setWidth(ScreenUtility.getScreenThreeFourthWidth());
         Parent parent = null;
         try {
 

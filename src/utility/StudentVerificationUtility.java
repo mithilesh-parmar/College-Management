@@ -1,18 +1,15 @@
 package utility;
 
-import com.google.auth.oauth2.GoogleCredentials;
+
 import com.google.cloud.firestore.Query;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import constants.Constants;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import model.Student;
-
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
+
+
 
 public class StudentVerificationUtility {
 
