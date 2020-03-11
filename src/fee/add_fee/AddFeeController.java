@@ -1,5 +1,6 @@
 package fee.add_fee;
 
+import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -7,10 +8,10 @@ import model.Fee;
 import model.Student;
 import utility.DateUtility;
 import utility.FirestoreConstants;
+import utility.StudentVerificationUtility;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 
@@ -20,7 +21,6 @@ public class AddFeeController implements Initializable {
     public TextField studentIDField;
     public TextField amountField;
     public ComboBox<Fee.Type> typeComboBox;
-    public Button checkButton;
     public ProgressIndicator progressIndicator;
     public DatePicker datePicker;
 
@@ -40,7 +40,6 @@ public class AddFeeController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         submitButton.visibleProperty().bind(canSubmit);
         progressIndicator.visibleProperty().bind(dataLoading);
-        checkButton.setOnAction(actionEvent -> checkAdmissionNumber());
         typeComboBox.getItems().addAll(Fee.Type.ADMISSION_FEE, Fee.Type.FINE);
         studentIDField.textProperty().addListener((observableValue, s, t1) -> {
             selectedStudentAdmissionId.set(t1);
@@ -78,16 +77,61 @@ public class AddFeeController implements Initializable {
             }
         });
 
-        submitButton.setOnAction(actionEvent -> {
-            if (listener == null) return;
-            listener.onFeeSubmit(
-                    new Fee("",
-                            selectedStudentAdmissionId.get(),
-                            selectedAmount.get(),
-                            DateUtility.localDateToTimestamp(selectedDate.get()),
-                            selectedFeeType.get())
-            );
-        });
+        datePicker.setValue(LocalDate.now());
+
+        submitButton.setOnAction(actionEvent -> submitFee());
+    }
+
+    private void submitFee() {
+        if (listener == null) return;
+
+        StudentVerificationUtility.Callback callback = new StudentVerificationUtility.Callback() {
+            @Override
+            public void onSuccess(Student student) {
+                dataLoading.set(false);
+//                if reg is valid then upload the attendance
+                listener.onFeeSubmit(
+                        new Fee("",
+                                selectedStudentAdmissionId.get(),
+                                selectedAmount.get(),
+                                DateUtility.localDateToTimestamp(selectedDate.get()),
+                                selectedFeeType.get())
+                );
+            }
+
+            @Override
+            public void onFailure() {
+//                does not exist show alert
+                dataLoading.set(false);
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+
+                alert.setTitle("Alert");
+                alert.setHeaderText(
+                        "No Student with id " + selectedStudentAdmissionId.get() + " found."
+                );
+
+                alert.showAndWait();
+            }
+
+            @Override
+            public void onStart() {
+//                show progress indicator
+                dataLoading.set(true);
+            }
+        };
+
+        //        check if reg is valid
+        isRegistrationNumberValid(selectedStudentAdmissionId.get(), callback);
+
+
+    }
+
+    private void isRegistrationNumberValid(String admissionId, StudentVerificationUtility.Callback callback) {
+        try {
+            StudentVerificationUtility.exist(admissionId, callback);
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setListener(AddFeeListener listener) {

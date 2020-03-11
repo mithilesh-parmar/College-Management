@@ -77,7 +77,7 @@ public class AddDocumentController implements Initializable {
 
                 alert.setTitle("Alert");
                 alert.setHeaderText(
-                        "No Student Found"
+                        "No Student with id " + selectedRegNumber.get() + " found."
                 );
 
                 alert.showAndWait();
