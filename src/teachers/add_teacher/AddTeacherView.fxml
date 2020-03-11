@@ -59,16 +59,21 @@
               GridPane.rowIndex="3" alignment="CENTER" fx:id="comboBoxView">
             <Label text="Verified : ">
             </Label>
-            <ComboBox fx:id="verifiedComboBox" prefHeight="40"
-                      GridPane.columnIndex="4" GridPane.rowIndex="3"/>
+            <ComboBox fx:id="verifiedComboBox" prefHeight="40"/>
 
-            <Label text="Profile Complete : " GridPane.columnIndex="5"
-                   GridPane.rowIndex="3">
+            <Label text="Profile Complete : ">
             </Label>
             <ComboBox fx:id="profileCompleteComboBox" prefHeight="40"
-                      GridPane.columnIndex="6" GridPane.rowIndex="3"/>
+            />
         </HBox>
 
+        <!-- Add Email Label -->
+        <Label text="Verification Code : " GridPane.columnIndex="0"
+               GridPane.rowIndex="4">
+        </Label>
+        <!-- Add Email Text Field -->
+        <TextField fx:id="verificationCodeField" prefHeight="40"
+                   GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
         <!-- Add Submit Button -->
         <Button fx:id="submitButton" text="Update"

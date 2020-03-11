@@ -5,6 +5,7 @@ import custom_view.dialog_helper.CustomDialog;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -17,22 +18,23 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import listeners.DataChangeListener;
 import model.Lecture;
 import model.Section;
+import model.StudentDocument;
 import utility.ScreenUtility;
 import utility.SectionsFirestoreUtility;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class TimeTableController implements Initializable, DataChangeListener {
 
 
-    public ListView<Section> sectionsListView;
+    //    public ListView<Section> sectionsListView;
     public ProgressIndicator progressIndicator;
     public TextField searchTextField;
 
@@ -46,6 +48,8 @@ public class TimeTableController implements Initializable, DataChangeListener {
 
     public Button addButton;
     public ListView scheduleView;
+    public TreeView sectionsTreeView;
+    public Label selectedSectionLabel;
 
 
     private BooleanProperty loadingData = new SimpleBooleanProperty(true);
@@ -69,9 +73,7 @@ public class TimeTableController implements Initializable, DataChangeListener {
     private MenuItem editMenuButton = new MenuItem("Edit");
     private MenuItem cancelMenuButton = new MenuItem("Cancel");
 
-    //    Random choosen values does not have any significance
-    private final ButtonBar.ButtonData deleteButtonData = ButtonBar.ButtonData.OK_DONE;
-    private final ButtonBar.ButtonData editButtonData = ButtonBar.ButtonData.LEFT;
+    private TreeItem<Section> rootNode = new TreeItem<>();
 
 
     public TimeTableController() {
@@ -80,18 +82,23 @@ public class TimeTableController implements Initializable, DataChangeListener {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+
         scheduleView.setId("staticListView");
+
+        sectionsTreeView.setRoot(rootNode);
+
 
         selectedSection.addListener((observableValue, section, t1) -> {
             if (t1 == null) return;
             canViewSchedule.set(true);
+            selectedSectionLabel.setText("Section " + t1.getSectionName());
         });
 
         addButton.setPadding(new Insets(8));
 
         cellContextMenu.getItems().addAll(deleteMenuButton, editMenuButton, cancelMenuButton);
 
-        sectionsListView.setCellFactory(sectionListView -> new SectionListCell());
+//        sectionsListView.setCellFactory(sectionListView -> new SectionListCell());
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
@@ -102,7 +109,7 @@ public class TimeTableController implements Initializable, DataChangeListener {
             if (cellContextMenu.isShowing()) cellContextMenu.hide();
         });
 
-        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> performSearch(oldValue, newValue));
+//        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> performSearch(oldValue, newValue));
         progressIndicator.visibleProperty().bind(loadingData);
 
         addButton.visibleProperty().bind(canViewSchedule);
@@ -123,18 +130,18 @@ public class TimeTableController implements Initializable, DataChangeListener {
         addButton.setOnAction(actionEvent -> loadAddView(null));
 
 
-        sectionsListView.getSelectionModel().selectedItemProperty().addListener((observableValue, section, t1) -> {
-            if (t1 == null) return;
-            selectedSection.set(t1);
-            mondaySchedule.setValue(t1.getClassSchedules().get("1"));
-            tuesdaySchedule.setValue(t1.getClassSchedules().get("2"));
-            wednesdaySchedule.setValue(t1.getClassSchedules().get("3"));
-            thursdaySchedule.setValue(t1.getClassSchedules().get("4"));
-            fridaySchedule.setValue(t1.getClassSchedules().get("5"));
-            saturdaySchedule.setValue(t1.getClassSchedules().get("6"));
-            sundaySchedule.setValue(t1.getClassSchedules().get("7"));
-
-        });
+//        sectionsListView.getSelectionModel().selectedItemProperty().addListener((observableValue, section, t1) -> {
+//            if (t1 == null) return;
+//            selectedSection.set(t1);
+//            mondaySchedule.setValue(t1.getClassSchedules().get("1"));
+//            tuesdaySchedule.setValue(t1.getClassSchedules().get("2"));
+//            wednesdaySchedule.setValue(t1.getClassSchedules().get("3"));
+//            thursdaySchedule.setValue(t1.getClassSchedules().get("4"));
+//            fridaySchedule.setValue(t1.getClassSchedules().get("5"));
+//            saturdaySchedule.setValue(t1.getClassSchedules().get("6"));
+//            sundaySchedule.setValue(t1.getClassSchedules().get("7"));
+//
+//        });
 
         scheduleView.visibleProperty().bind(canViewSchedule);
 
@@ -145,6 +152,21 @@ public class TimeTableController implements Initializable, DataChangeListener {
 
         cellContextMenu.setHideOnEscape(true);
         cellContextMenu.setAutoHide(true);
+
+        sectionsTreeView.getSelectionModel().selectedItemProperty().addListener((observableValue, o, t1) -> {
+            if (t1 == null) return;
+            if (!((TreeItem) t1).isLeaf()) return;
+            TreeItem treeItem = (TreeItem) t1;
+            Section section = (Section) treeItem.getValue();
+            selectedSection.set(section);
+            mondaySchedule.setValue(section.getClassSchedules().get("1"));
+            tuesdaySchedule.setValue(section.getClassSchedules().get("2"));
+            wednesdaySchedule.setValue(section.getClassSchedules().get("3"));
+            thursdaySchedule.setValue(section.getClassSchedules().get("4"));
+            fridaySchedule.setValue(section.getClassSchedules().get("5"));
+            saturdaySchedule.setValue(section.getClassSchedules().get("6"));
+            sundaySchedule.setValue(section.getClassSchedules().get("7"));
+        });
     }
 
 
@@ -172,6 +194,64 @@ public class TimeTableController implements Initializable, DataChangeListener {
             });
 
         }
+    }
+
+    //    TODO add buttons to table if asked for
+    private void addButtonToTable() {
+        TableColumn<Lecture, Void> colBtn = new TableColumn("Actions");
+
+        Callback<TableColumn<Lecture, Void>, TableCell<Lecture, Void>> cellFactory = new Callback<>() {
+            @Override
+            public TableCell<Lecture, Void> call(final TableColumn<Lecture, Void> param) {
+                final TableCell<Lecture, Void> cell = new TableCell<>() {
+
+                    private final HBox hBox = new HBox(15);
+
+                    private final Button downloadButton = new Button("Edit");
+
+                    {
+                        downloadButton.setOnAction((ActionEvent event) -> {
+                            Lecture data = getTableView().getItems().get(getIndex());
+                            System.out.println(data);
+
+                        });
+                    }
+
+                    private final Button deleteButton = new Button("Delete");
+
+                    {
+                        deleteButton.setOnAction((ActionEvent event) -> {
+                            Lecture data = getTableView().getItems().get(getIndex());
+                            System.out.println(data);
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            hBox.getChildren().setAll(downloadButton, deleteButton);
+                            setGraphic(hBox);
+                        }
+                    }
+                };
+
+                return cell;
+            }
+        };
+
+        colBtn.setCellFactory(cellFactory);
+
+        mondayTableView.getColumns().add(colBtn);
+        tuesdayTableView.getColumns().add(colBtn);
+        wednesdayTableView.getColumns().add(colBtn);
+        thursdayTableView.getColumns().add(colBtn);
+        fridayTableView.getColumns().add(colBtn);
+        saturdayTableView.getColumns().add(colBtn);
+        sundayTableView.getColumns().add(colBtn);
+
     }
 
     private void deleteLecture(Lecture lecture, Section section) {
@@ -242,11 +322,41 @@ public class TimeTableController implements Initializable, DataChangeListener {
 
     @Override
     public void onDataLoaded(ObservableList data) {
-        sectionsListView.setItems(firestoreUtility.sections);
-        sectionsListView.getSelectionModel().selectFirst();
-        selectedSection.set(sectionsListView.getItems().get(0));
+//        sectionsListView.setItems(firestoreUtility.sections);
+//        sectionsListView.getSelectionModel().selectFirst();
+//        selectedSection.set(sectionsListView.getItems().get(0));
 
         loadingData.set(false);
+
+        processSections(firestoreUtility.sections);
+        sectionsTreeView.getSelectionModel().selectFirst();
+        selectedSection.set((Section) sectionsTreeView.getRoot().getValue());
+
+    }
+
+    private void processSections(ObservableList<Section> sections) {
+        rootNode.setExpanded(true);
+
+        for (Section section : sections) {
+            TreeItem<Section> leaf = new TreeItem<Section>(section, new Label(section.getSectionName()));
+
+            boolean found = false;
+            for (TreeItem<Section> branch : rootNode.getChildren()) {
+                if (branch.getValue().getClassID().matches(section.getClassID())) {
+                    branch.getChildren().add(leaf);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                TreeItem<Section> branch = new TreeItem<>(section, new Label(section.getClassName()));
+                rootNode.getChildren().add(branch);
+                branch.getChildren().add(leaf);
+            }
+        }
+
+        sectionsTreeView.setRoot(rootNode);
+
 
     }
 
@@ -265,60 +375,59 @@ public class TimeTableController implements Initializable, DataChangeListener {
     /**
      * called for filtering the observable list to show only those  that
      * matches the search text criteria
-     *
-     * @param oldValue
-     * @param newValue
+     * <p>
+     * //     * @param oldValue
+     * //     * @param newValue
      */
-    private void performSearch(String oldValue, String newValue) {
-        if (loadingData.get()) return;
-        // if pressing backspace then set initial values to list
-        if (oldValue != null && (newValue.length() < oldValue.length())) {
-            sectionsListView.setItems(firestoreUtility.sections);
-        }
-
-        // convert the searched text to uppercase
-        String searchtext = newValue.toUpperCase();
-
-        ObservableList<Section> subList = FXCollections.observableArrayList();
-        for (Section p : sectionsListView.getItems()) {
-            String text = p.getSectionName().toUpperCase() + " " + p.getClassName();
-            // if the search text contains the manufacturer then add it to sublist
-            if (text.contains(searchtext)) {
-                subList.add(p);
-            }
-
-        }
-        // set the items to listview that matches
-        sectionsListView.setItems(subList);
-    }
-
+//    private void performSearch(String oldValue, String newValue) {
+//        if (loadingData.get()) return;
+//        // if pressing backspace then set initial values to list
+//        if (oldValue != null && (newValue.length() < oldValue.length())) {
+////            sectionsListView.setItems(firestoreUtility.sections);
+//        }
+//
+//        // convert the searched text to uppercase
+//        String searchtext = newValue.toUpperCase();
+//
+//        ObservableList<Section> subList = FXCollections.observableArrayList();
+//        for (Section p : sectionsListView.getItems()) {
+//            String text = p.getSectionName().toUpperCase() + " " + p.getClassName();
+//            // if the search text contains the manufacturer then add it to sublist
+//            if (text.contains(searchtext)) {
+//                subList.add(p);
+//            }
+//
+//        }
+//        // set the items to listview that matches
+//        sectionsListView.setItems(subList);
+//    }
     public void onSearchTextEntered(KeyEvent keyEvent) {
-        if (!sectionsListView.isFocused()
-                && keyEvent.getCode() == KeyCode.ENTER)
-            sectionsListView.requestFocus();
+//        if (!sectionsListView.isFocused()
+//                && keyEvent.getCode() == KeyCode.ENTER)
+//            sectionsListView.requestFocus();
     }
 
 
-    private static class SectionListCell extends ListCell<Section> {
-
-        private final Label classNameLabel = new Label();
-        private final Label sectionNameLabel = new Label();
-        private VBox vBox = new VBox(5);
-
-
-        @Override
-        public void updateItem(Section obj, boolean empty) {
-            super.updateItem(obj, empty);
-            if (empty) {
-                setText(null);
-                setGraphic(null);
-            } else {
-                classNameLabel.setText("Class: " + obj.getClassName());
-
-                sectionNameLabel.setText("Section: " + obj.getSectionName());
-                vBox.getChildren().setAll(classNameLabel, sectionNameLabel);
-                setGraphic(vBox);
-            }
-        }
-    }
+//    private static class SectionListCell extends ListCell<Section> {
+//
+//        private final Label classNameLabel = new Label();
+//        private final Label sectionNameLabel = new Label();
+//        private VBox vBox = new VBox(5);
+//
+//
+//        @Override
+//        public void updateItem(Section obj, boolean empty) {
+//            super.updateItem(obj, empty);
+//            if (empty) {
+//                setText(null);
+//                setGraphic(null);
+//            } else {
+//                classNameLabel.setText("Course: " + obj.getClassName());
+//
+//                sectionNameLabel.setText("Year: " + obj.getSectionName());
+//                vBox.getChildren().setAll(classNameLabel, sectionNameLabel);
+//                setGraphic(vBox);
+//            }
+//        }
+//    }
 }

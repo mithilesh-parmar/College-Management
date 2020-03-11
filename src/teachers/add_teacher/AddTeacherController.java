@@ -24,6 +24,7 @@ public class AddTeacherController implements Initializable {
     public ComboBox<Boolean> verifiedComboBox;
     public ComboBox<Boolean> profileCompleteComboBox;
     public HBox comboBoxView;
+    public TextField verificationCodeField;
 
 
     private TeacherDetailViewListener listener;
@@ -36,6 +37,7 @@ public class AddTeacherController implements Initializable {
     private BooleanProperty selectedProfileCompleteValue = new SimpleBooleanProperty();
     private StringProperty selectedNameValue = new SimpleStringProperty();
     private StringProperty selectedEmailValue = new SimpleStringProperty();
+    private StringProperty selectedVerificationCodeValue = new SimpleStringProperty();
     private ObjectProperty<File> selectedProfileValue = new SimpleObjectProperty<>();
 
     private BooleanProperty canSubmit = new SimpleBooleanProperty(false);
@@ -53,6 +55,12 @@ public class AddTeacherController implements Initializable {
         profileImageView.setListener(file -> {
             if (file == null) return;
             selectedProfileValue.set(file);
+            checkCanSubmit();
+        });
+
+        verificationCodeField.textProperty().addListener((observableValue, s, t1) -> {
+            if (t1.isEmpty()) return;
+            selectedVerificationCodeValue.set(t1);
             checkCanSubmit();
         });
 
@@ -93,7 +101,7 @@ public class AddTeacherController implements Initializable {
                 selectedEmailValue.get(),
                 this.teacher.getProfilePictureUrl(), // this value is ususally empty if there's a prev url else we first specify prev url and pass the new file to listener where first the image is uploaded and the url will be updated
                 this.teacher.getToken(),
-                this.teacher.getVerificationCode(),
+                selectedVerificationCodeValue.get(),
                 selectedVerifiedValue.get(),
                 selectedProfileCompleteValue.get()
         ), selectedProfileValue.get());
@@ -105,6 +113,7 @@ public class AddTeacherController implements Initializable {
         canSubmit.set(
                 selectedEmailValue.get() != null && !selectedEmailValue.get().isEmpty()
                         && selectedNameValue.get() != null && !selectedNameValue.get().isEmpty()
+                        && selectedVerificationCodeValue.get() != null && !selectedVerificationCodeValue.get().isEmpty()
 
         );
     }
@@ -132,6 +141,8 @@ public class AddTeacherController implements Initializable {
         selectedVerifiedValue.set(teacher.isVerified());
         verifiedComboBox.setValue(teacher.isVerified());
 
+        selectedVerificationCodeValue.set(teacher.getVerificationCode());
+        verificationCodeField.setText(teacher.getVerificationCode());
         checkCanSubmit();
     }
 
