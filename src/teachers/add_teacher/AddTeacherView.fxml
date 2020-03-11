@@ -6,62 +6,80 @@
 
 <?import javafx.geometry.Insets?>
 <?import custom_view.ImageButton?>
-<GridPane fx:controller="teachers.add_teacher.AddTeacherController"
-          xmlns:fx="http://javafx.com/fxml" alignment="center"
-          hgap="10" vgap="10"
-          stylesheets="@/styles/dark_metro_style.css"
+<ScrollPane fx:controller="teachers.add_teacher.AddTeacherController"
+            xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@/styles/dark_metro_style.css"
 >
-    <padding>
-        <Insets top="40" right="40" bottom="40" left="40"/>
-    </padding>
-    <columnConstraints>
-        <ColumnConstraints minWidth="100" prefWidth="100"
-                           maxWidth="Infinity" halignment="RIGHT">
-        </ColumnConstraints>
-        <ColumnConstraints minWidth="200" prefWidth="200"
-                           maxWidth="Infinity" hgrow="ALWAYS">
-        </ColumnConstraints>
-    </columnConstraints>
 
-    <!-- Profile Image -->
-    <ImageButton
-            GridPane.columnIndex="0"
-            GridPane.rowIndex="0" GridPane.columnSpan="2"
-            GridPane.rowSpan="1" GridPane.halignment="CENTER"
-            minHeight="300" minWidth="300"
-            fx:id="profileImageView"
-    >
+    <GridPane alignment="center"
+              hgap="10" vgap="10">
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
+        <!--    <columnConstraints>-->
+        <!--        <ColumnConstraints minWidth="100" prefWidth="100"-->
+        <!--                           maxWidth="Infinity" halignment="RIGHT">-->
+        <!--        </ColumnConstraints>-->
+        <!--        <ColumnConstraints minWidth="200" prefWidth="200"-->
+        <!--                           maxWidth="Infinity" hgrow="ALWAYS">-->
+        <!--        </ColumnConstraints>-->
+        <!--    </columnConstraints>-->
 
-    </ImageButton>
+        <!-- Profile Image -->
+        <ImageButton
+                GridPane.columnIndex="0"
+                GridPane.rowIndex="0" GridPane.columnSpan="2"
+                GridPane.rowSpan="1" GridPane.halignment="CENTER"
+                minHeight="300" minWidth="300"
+                fx:id="profileImageView"
+        >
 
-
-    <!-- Add Name Label -->
-    <Label text="Full Name : " GridPane.columnIndex="0"
-           GridPane.rowIndex="1">
-    </Label>
-    <!-- Add Name Text Field -->
-    <TextField fx:id="nameField" prefHeight="40"
-               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        </ImageButton>
 
 
-    <!-- Add Email Label -->
-    <Label text="Email ID : " GridPane.columnIndex="0"
-           GridPane.rowIndex="2">
-    </Label>
-    <!-- Add Email Text Field -->
-    <TextField fx:id="emailField" prefHeight="40"
-               GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <!-- Add Name Label -->
+        <Label text="Full Name : " GridPane.columnIndex="0"
+               GridPane.rowIndex="1">
+        </Label>
+        <!-- Add Name Text Field -->
+        <TextField fx:id="nameField" prefHeight="40"
+                   GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
 
-    <!-- Add Submit Button -->
-    <Button fx:id="submitButton" text="Update"
-            prefWidth="100" prefHeight="40" defaultButton="true"
-            GridPane.columnIndex="0" GridPane.rowIndex="7"
-            GridPane.columnSpan="2" GridPane.rowSpan="1"
-            GridPane.halignment="CENTER"
-    >
-        <GridPane.margin>
-            <Insets top="20" right="0" bottom="20" left="0"/>
-        </GridPane.margin>
-    </Button>
-</GridPane>
+        <!-- Add Email Label -->
+        <Label text="Email ID : " GridPane.columnIndex="0"
+               GridPane.rowIndex="2">
+        </Label>
+        <!-- Add Email Text Field -->
+        <TextField fx:id="emailField" prefHeight="40"
+                   GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+
+        <HBox GridPane.columnIndex="1"
+              GridPane.rowIndex="3" alignment="CENTER" fx:id="comboBoxView">
+            <Label text="Verified : ">
+            </Label>
+            <ComboBox fx:id="verifiedComboBox" prefHeight="40"
+                      GridPane.columnIndex="4" GridPane.rowIndex="3"/>
+
+            <Label text="Profile Complete : " GridPane.columnIndex="5"
+                   GridPane.rowIndex="3">
+            </Label>
+            <ComboBox fx:id="profileCompleteComboBox" prefHeight="40"
+                      GridPane.columnIndex="6" GridPane.rowIndex="3"/>
+        </HBox>
+
+
+        <!-- Add Submit Button -->
+        <Button fx:id="submitButton" text="Update"
+                prefWidth="100" prefHeight="40" defaultButton="true"
+                GridPane.columnIndex="0" GridPane.rowIndex="7"
+                GridPane.columnSpan="2" GridPane.rowSpan="1"
+                GridPane.halignment="CENTER"
+        >
+            <GridPane.margin>
+                <Insets top="20" right="0" bottom="20" left="0"/>
+            </GridPane.margin>
+        </Button>
+    </GridPane>
+</ScrollPane>
