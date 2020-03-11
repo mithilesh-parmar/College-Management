@@ -18,13 +18,17 @@
             <left>
                 <Label id="headline" text="Students"/>
             </left>
+
             <right>
                 <SearchTextFieldController fx:id="searchTextField"/>
             </right>
         </BorderPane>
 
-        <Button text="Add Student" fx:id="addStudent"/>
-
+        <HBox spacing="15">
+            <Button text="Add Student" fx:id="addStudent"/>
+            <ComboBox fx:id="filterComboBox"/>
+            <Button text="Clear" fx:id="clearButton"/>
+        </HBox>
         <ScrollPane fx:id="scroll" VBox.vgrow="ALWAYS">
             <FlowPane fx:id="studentFlowPane"/>
         </ScrollPane>

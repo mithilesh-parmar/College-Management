@@ -75,12 +75,9 @@ public class TeacherController implements Initializable,
         teacherFlowPane.setPadding(new Insets(10));
 
         scroll.setContent(teacherFlowPane);
-        scroll.viewportBoundsProperty().addListener(new ChangeListener<Bounds>() {
-            @Override
-            public void changed(ObservableValue<? extends Bounds> ov, Bounds oldBounds, Bounds bounds) {
-                teacherFlowPane.setPrefWidth(bounds.getWidth());
-                teacherFlowPane.setPrefHeight(bounds.getHeight());
-            }
+        scroll.viewportBoundsProperty().addListener((ov, oldBounds, bounds) -> {
+            teacherFlowPane.setPrefWidth(bounds.getWidth());
+            teacherFlowPane.setPrefHeight(bounds.getHeight());
         });
 
         teacherFlowPane.getChildren().addAll(firestoreUtility.teacherCards);
@@ -254,11 +251,11 @@ public class TeacherController implements Initializable,
 
         ObservableList<Card> subList = FXCollections.observableArrayList();
         for (Teacher p : firestoreUtility.teachers) {
-            String text =
-                    p.getName().toUpperCase() + " "
-                            + p.getVerificationCode().toUpperCase() + " ";
+            StringBuilder text = new StringBuilder();
+            text.append((p.getName() == null || !p.getName().isEmpty()) ? "" : p.getName().toUpperCase())
+                    .append((p.getEmail() == null || !p.getEmail().isEmpty()) ? "" : p.getEmail().toUpperCase());
             // if the search text contains the manufacturer then add it to sublist
-            if (text.contains(searchtext)) {
+            if (text.toString().contains(searchtext)) {
                 subList.add(firestoreUtility.teacherCardMapProperty.get(p));
             }
 

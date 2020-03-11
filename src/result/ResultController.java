@@ -2,6 +2,8 @@ package result;
 
 import com.google.cloud.firestore.QuerySnapshot;
 import custom_view.loading_combobox.batches.BatchLoadingComboBox;
+import custom_view.loading_combobox.class_section_combobox.ClassSectionComboBox;
+import custom_view.loading_combobox.class_section_combobox.ClassSectionListener;
 import custom_view.loading_combobox.course.ClassLoadingComboBox;
 import custom_view.loading_combobox.section.SectionLoadingComboBox;
 import javafx.beans.property.*;
@@ -26,12 +28,11 @@ public class ResultController implements Initializable, DataChangeListener {
 
     public TableView<Result> resultTable;
     public BatchLoadingComboBox batchComboBox;
-    public SectionLoadingComboBox sectionComboBox;
-    public ClassLoadingComboBox classComboBox;
     public Button submitButton;
     public ProgressIndicator progressIndicator;
     public HBox filterView;
     public Button clearButton;
+    public ClassSectionComboBox classSectionComboBox;
 
     private ResultFirestoreUtility firestoreUtility = ResultFirestoreUtility.getInstance();
     private StringProperty selectedClassName = new SimpleStringProperty();
@@ -49,7 +50,6 @@ public class ResultController implements Initializable, DataChangeListener {
         submitButton.disableProperty().bind(canSubmit.not());
         clearButton.disableProperty().bind(canSubmit.not());
         resultTable.getSelectionModel().selectedItemProperty().addListener((observableValue, result, t1) -> viewMarksForExam(t1));
-
         progressIndicator.visibleProperty().bind(dataLoading);
         resultTable.itemsProperty().bind(results);
         submitButton.setDefaultButton(true);
@@ -59,19 +59,20 @@ public class ResultController implements Initializable, DataChangeListener {
             selectedBatch.set(String.valueOf(selctedItem));
             checkReadyToSubmit();
         });
-        sectionComboBox.setListener(selctedItem -> {
-            selectedSection.set(((Section) selctedItem));
-            checkReadyToSubmit();
-        });
-        classComboBox.setListener(selectedItem -> {
-            selectedClassName.set(((ClassItem) selectedItem).getName());
-            checkReadyToSubmit();
-        });
-        selectedClassName.addListener((observableValue, s, t1) -> {
-            sectionComboBox.showItemFor(t1);
-            checkReadyToSubmit();
-        });
 
+        classSectionComboBox.setListener(new ClassSectionListener() {
+            @Override
+            public void onSectionSelected(Section section) {
+                selectedSection.set(section);
+                checkReadyToSubmit();
+            }
+
+            @Override
+            public void onClassSelected(ClassItem classItem) {
+                selectedClassName.set(classItem.getName());
+                checkReadyToSubmit();
+            }
+        });
 
         submitButton.setOnAction(actionEvent -> loadData());
 
@@ -161,9 +162,9 @@ public class ResultController implements Initializable, DataChangeListener {
     }
 
     private void clearFilters() {
-        classComboBox.reset();
         batchComboBox.reset();
-        sectionComboBox.reset();
+        classSectionComboBox.getClassComboBox().reset();
+        classSectionComboBox.getSectionComboBox().reset();
         setAllData();
     }
 

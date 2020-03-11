@@ -11,7 +11,9 @@
             stylesheets="@/styles/dark_metro_style.css">
 
     <left>
-        <VBox fx:id="mainMenu" spacing="15"/>
+        <ScrollPane>
+            <VBox fx:id="mainMenu" spacing="15"/>
+        </ScrollPane>
 
 
     </left>

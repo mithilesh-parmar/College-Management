@@ -16,15 +16,15 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Menu;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import listeners.DataChangeListener;
 import custom_view.notification_view.NotificationDialogListener;
-import model.Fee;
-import model.Notification;
-import model.Student;
+import model.*;
 import custom_view.notification_view.NotificationsController;
 import students.profile.StudentProfileCallback;
 import students.profile.attendance.AttendanceController;
@@ -36,21 +36,51 @@ import utility.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+
+import static custom_view.dialog_helper.CustomDialog.*;
+
 
 public class StudentController implements Initializable, DataChangeListener, SearchCallback, StudentCardListener, DocumentUploadListener {
 
 
+    enum Filter {
+
+        ALL("All"),
+        CLASS("Class"),
+        SECTION("Section"),
+        BATCH("Batch"),
+        ADMISSION_ID("Admission ID"),
+        EMAIL("Email");
+
+        private String title;
+
+        Filter(String title) {
+            this.title = title;
+        }
+
+        @Override
+        public String toString() {
+            return title;
+        }
+    }
+
+    public Button clearButton;
     public ProgressIndicator progressIndicator;
     public SearchTextFieldController searchTextField;
     public FlowPane studentFlowPane;
     public ScrollPane scroll;
     public Button addStudent;
+    public ComboBox<Filter> filterComboBox;
 
     private StudentFirestoreUtility firestoreUtility = StudentFirestoreUtility.getInstance();
     private FeeFirestoreUtility feeFirestoreUtility = FeeFirestoreUtility.getInstance();
     private BooleanProperty loadingData = new SimpleBooleanProperty(true);
     private BooleanProperty loadingFeeData = new SimpleBooleanProperty(false);
+    private BooleanProperty showingFilteredData = new SimpleBooleanProperty(false);
 
     private ContextMenu tableContextMenu = new ContextMenu();
     private MenuItem attendanceMenuButton = new MenuItem("Attendance");
@@ -128,8 +158,139 @@ public class StudentController implements Initializable, DataChangeListener, Sea
         firestoreUtility.setDocumentUploadListener(this);
         firestoreUtility.getStudents();
         searchTextField.setCallback(this);
+
+        clearButton.setOnAction(actionEvent -> {
+            filterComboBox.setValue(Filter.ALL);
+            showingFilteredData.set(false);
+            filterAll();
+        });
         progressIndicator.visibleProperty().bind(loadingData.or(loadingFeeData));
 
+        filterComboBox.visibleProperty().bind(loadingData.not());
+        clearButton.visibleProperty().bind(showingFilteredData);
+
+        filterComboBox.setPadding(new Insets(25));
+
+
+        filterComboBox.getItems().addAll(Filter.ALL, Filter.ADMISSION_ID, Filter.EMAIL, Filter.BATCH, Filter.SECTION);
+
+        filterComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, filter, t1) -> {
+
+            if (t1 == null) return;
+            switch (t1) {
+                case ALL:
+                    filterAll();
+                    break;
+                case BATCH:
+                    filterBatch();
+                    break;
+                case EMAIL:
+                    filterEmail();
+                    break;
+                case SECTION:
+                    filterSection();
+                    break;
+                case ADMISSION_ID:
+                    filterAdmission();
+            }
+        });
+
+        filterComboBox.getSelectionModel().selectFirst();
+    }
+
+    private void filterAdmission() {
+
+        Optional<String> admissionID = showInputDialogWithOneParameter("Admission ID", "Student ID");
+        admissionID.ifPresent(s -> {
+            List<Student> collect =
+                    firestoreUtility.students
+                            .stream()
+                            .filter(student -> {
+                                if (student.getAdmissionID() != null && !student.getAdmissionID().isEmpty())
+                                    return student.getAdmissionID().matches(s);
+                                return false;
+                            })
+                            .collect(Collectors.toList());
+            ObservableList<Card> studentCards = FXCollections.observableArrayList();
+            collect.forEach(student -> {
+                studentCards.add(firestoreUtility.studentCardMapProperty.get(student));
+            });
+            studentFlowPane.getChildren().setAll(studentCards);
+            showingFilteredData.set(true);
+        });
+    }
+
+    private void filterSection() {
+        Optional<Pair<ClassItem, Section>> section = showDialogWithClassAndSectionComboBox("Choose Section");
+        System.out.println(section);
+        section.ifPresent(classItemSectionPair -> {
+            List<Student> collect =
+                    firestoreUtility
+                            .students
+                            .stream()
+                            .filter(student -> {
+                                if (student.getClassName() != null && !student.getClassName().isEmpty() && student.getSectionID() != null && !student.getSectionID().isEmpty())
+                                    return student.getSectionID().matches(classItemSectionPair.getValue().getId()) && student.getClassName().matches(classItemSectionPair.getKey().getName());
+                                return false;
+                            })
+                            .collect(Collectors.toList());
+            ObservableList<Card> studentCards = FXCollections.observableArrayList();
+            collect.forEach(student -> {
+                studentCards.add(firestoreUtility.studentCardMapProperty.get(student));
+            });
+            studentFlowPane.getChildren().setAll(studentCards);
+            showingFilteredData.set(true);
+        });
+    }
+
+    private void filterEmail() {
+
+        Optional<String> email = showInputDialogWithOneParameter("Email", "Enter Email");
+        email.ifPresent(s -> {
+            List<Student> collect =
+                    firestoreUtility.students
+                            .stream()
+                            .filter(student -> {
+                                if (student.getEmail() != null && !student.getEmail().isEmpty())
+                                    return student.getEmail().matches(s);
+                                return false;
+                            })
+                            .collect(Collectors.toList());
+            ObservableList<Card> studentCards = FXCollections.observableArrayList();
+            collect.forEach(student -> {
+                studentCards.add(firestoreUtility.studentCardMapProperty.get(student));
+            });
+            studentFlowPane.getChildren().setAll(studentCards);
+            showingFilteredData.set(true);
+        });
+    }
+
+    private void filterBatch() {
+
+        Optional<Batch> batchResult = showDialogWithBatchComboBox("Choose Batch");
+        batchResult.ifPresent(s -> {
+            List<Student> collect =
+                    firestoreUtility.students
+                            .stream()
+                            .filter(student -> {
+                                if (student.getBatch() != null && !student.getBatch().isEmpty())
+                                    return student.getBatch().matches(s.getName());
+                                return false;
+
+                            })
+                            .collect(Collectors.toList());
+            ObservableList<Card> studentCards = FXCollections.observableArrayList();
+            collect.forEach(student -> {
+                studentCards.add(firestoreUtility.studentCardMapProperty.get(student));
+            });
+            studentFlowPane.getChildren().setAll(studentCards);
+            showingFilteredData.set(true);
+        });
+    }
+
+    private void filterAll() {
+        showingFilteredData.set(false);
+        studentFlowPane.getChildren().setAll(firestoreUtility.studentCards);
     }
 
     private void loadFeeView(Student student) {
@@ -355,18 +516,15 @@ public class StudentController implements Initializable, DataChangeListener, Sea
 
         // convert the searched text to uppercase
         String searchtext = newValue.toUpperCase();
-
         ObservableList<Card> subList = FXCollections.observableArrayList();
         for (Student p : firestoreUtility.students) {
-            String text =
-                    p.getName().toUpperCase() + " "
-                            + p.getClassName().toUpperCase() + " "
-                            + p.getAddress().toUpperCase() + " "
-                            + p.getEmail().toUpperCase() + " "
-                            + p.getParentNumber().toUpperCase() + " "
-                            + p.getSection().toUpperCase() + " ";
+            StringBuilder text = new StringBuilder();
+            text.append((p.getName() == null || p.getName().isEmpty()) ? "" : p.getName().toUpperCase())
+                    .append((p.getEmail() == null || p.getEmail().isEmpty()) ? "" : p.getEmail().toUpperCase())
+                    .append((p.getParentNumber() == null || p.getParentNumber().isEmpty()) ? "" : p.getParentNumber().toUpperCase())
+                    .append((p.getClassName() == null || p.getClassName().isEmpty()) ? "" : p.getClassName().toUpperCase());
             // if the search text contains the manufacturer then add it to sublist
-            if (text.contains(searchtext)) {
+            if (text.toString().contains(searchtext)) {
                 subList.add(firestoreUtility.studentCardMapProperty.get(p));
             }
 

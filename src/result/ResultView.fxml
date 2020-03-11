@@ -13,6 +13,7 @@
 <?import custom_view.loading_combobox.batches.BatchLoadingComboBox?>
 <?import custom_view.loading_combobox.section.SectionLoadingComboBox?>
 <?import custom_view.loading_combobox.course.ClassLoadingComboBox?>
+<?import custom_view.loading_combobox.class_section_combobox.ClassSectionComboBox?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="result.ResultController"
@@ -36,11 +37,12 @@
             <Label text="Batch"/>
             <BatchLoadingComboBox fx:id="batchComboBox"/>
 
-            <Label text="Class"/>
-            <ClassLoadingComboBox fx:id="classComboBox"/>
+            <ClassSectionComboBox fx:id="classSectionComboBox"/>
+<!--            <Label text="Class"/>-->
+<!--            <ClassLoadingComboBox fx:id="classComboBox"/>-->
 
-            <Label text="Section"/>
-            <SectionLoadingComboBox fx:id="sectionComboBox"/>
+<!--            <Label text="Section"/>-->
+<!--            <SectionLoadingComboBox fx:id="sectionComboBox"/>-->
 
 
             <Button fx:id="submitButton" text="Submit"/>

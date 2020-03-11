@@ -2,6 +2,7 @@ package custom_view.dialog_helper;
 
 import custom_view.loading_combobox.batches.BatchLoadingComboBox;
 import custom_view.loading_combobox.class_section_combobox.ClassSectionComboBox;
+import custom_view.loading_combobox.class_section_combobox.ClassSectionListener;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -194,7 +195,7 @@ public class CustomDialog {
     }
 
 
-    public static Optional<Pair<Section, String>> showDialogWithClassSectionAndSubjectComboBox(String title,boolean showEditButton ) {
+    public static Optional<Pair<Section, String>> showDialogWithClassSectionAndSubjectComboBox(String title, boolean showEditButton) {
         Dialog<Pair<Section, String>> dialog = new Dialog<>();
 
         ObjectProperty<Section> selectedSection = new SimpleObjectProperty<>();
@@ -209,13 +210,23 @@ public class CustomDialog {
 
         ClassSectionComboBox classSectionComboBox = new ClassSectionComboBox();
         classSectionComboBox.setIsEditable(showEditButton);
+        classSectionComboBox.getSectionComboBox().setMinWidth(100);
+        classSectionComboBox.getClassComboBox().setMinWidth(100);
         ComboBox<String> subjectComboBox = new ComboBox();
         subjectComboBox.setMinWidth(80);
         subjectComboBox.setMinHeight(30);
 
-        classSectionComboBox.sectionComboBox.setListener(result -> {
-            selectedSection.set((Section) result);
-            subjectComboBox.getItems().setAll(selectedSection.get().getSubjects());
+        classSectionComboBox.setListener(new ClassSectionListener() {
+            @Override
+            public void onSectionSelected(Section section) {
+                selectedSection.set(section);
+                subjectComboBox.getItems().setAll(selectedSection.get().getSubjects());
+            }
+
+            @Override
+            public void onClassSelected(ClassItem classItem) {
+
+            }
         });
 
 
@@ -261,11 +272,20 @@ public class CustomDialog {
 
         ClassSectionComboBox classSectionComboBox = new ClassSectionComboBox();
 
+        classSectionComboBox.getSectionComboBox().setMinWidth(100);
+        classSectionComboBox.getClassComboBox().setMinWidth(100);
 
-        classSectionComboBox.sectionComboBox.setListener(result -> selectedSection.set((Section) result));
+        classSectionComboBox.setListener(new ClassSectionListener() {
+            @Override
+            public void onSectionSelected(Section section) {
+                selectedSection.set(section);
+            }
 
-        classSectionComboBox.classComboBox.setListener(result -> selectedClass.set((ClassItem) result));
-
+            @Override
+            public void onClassSelected(ClassItem classItem) {
+                selectedClass.set(classItem);
+            }
+        });
 
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
@@ -274,7 +294,7 @@ public class CustomDialog {
         gridPane.setPadding(new Insets(20, 150, 10, 10));
 
 
-        gridPane.add(classSectionComboBox, 0, 0, 2, 2);
+        gridPane.add(classSectionComboBox, 0, 0, 4, 2);
 
 
         dialog.setResultConverter(dialogButton -> {
@@ -305,7 +325,7 @@ public class CustomDialog {
 
 
         BatchLoadingComboBox comboBox = new BatchLoadingComboBox();
-
+        comboBox.setMinWidth(100);
         comboBox.setListener(result -> {
             selectedBatch.set((Batch) result);
         });

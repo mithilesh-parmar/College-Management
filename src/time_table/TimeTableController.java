@@ -36,7 +36,7 @@ public class TimeTableController implements Initializable, DataChangeListener {
 
     //    public ListView<Section> sectionsListView;
     public ProgressIndicator progressIndicator;
-    public TextField searchTextField;
+//    public TextField searchTextField;
 
     public TableView<Lecture> mondayTableView;
     public TableView<Lecture> tuesdayTableView;
@@ -385,32 +385,11 @@ public class TimeTableController implements Initializable, DataChangeListener {
      * //     * @param oldValue
      * //     * @param newValue
      */
-//    private void performSearch(String oldValue, String newValue) {
-//        if (loadingData.get()) return;
-//        // if pressing backspace then set initial values to list
-//        if (oldValue != null && (newValue.length() < oldValue.length())) {
-////            sectionsListView.setItems(firestoreUtility.sections);
-//        }
-//
-//        // convert the searched text to uppercase
-//        String searchtext = newValue.toUpperCase();
-//
-//        ObservableList<Section> subList = FXCollections.observableArrayList();
-//        for (Section p : sectionsListView.getItems()) {
-//            String text = p.getSectionName().toUpperCase() + " " + p.getClassName();
-//            // if the search text contains the manufacturer then add it to sublist
-//            if (text.contains(searchtext)) {
-//                subList.add(p);
-//            }
-//
-//        }
-//        // set the items to listview that matches
-//        sectionsListView.setItems(subList);
-//    }
+
     public void onSearchTextEntered(KeyEvent keyEvent) {
-//        if (!sectionsListView.isFocused()
-//                && keyEvent.getCode() == KeyCode.ENTER)
-//            sectionsListView.requestFocus();
+        if (!sectionsTreeView.isFocused()
+                && keyEvent.getCode() == KeyCode.ENTER)
+            sectionsTreeView.requestFocus();
     }
 
 
