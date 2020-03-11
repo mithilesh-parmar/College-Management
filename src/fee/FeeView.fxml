@@ -17,18 +17,19 @@
             <padding>
                 <Insets topRightBottomLeft="18"/>
             </padding>
-            <left>
+            <right>
 
                 <HBox spacing="5">
+
                     <Button fx:id="findButton" text="Find"/>
                     <Button fx:id="clearButton" text="Clear"/>
                 </HBox>
 
-            </left>
-
-            <right>
-                <Button fx:id="addButton" text="Add" defaultButton="true"/>
             </right>
+
+            <left>
+                <Button fx:id="addButton" text="Add" defaultButton="true"/>
+            </left>
         </BorderPane>
 
         <TableView fx:id="feeTable" VBox.vgrow="ALWAYS">
@@ -39,7 +40,7 @@
 
                 <TableColumn text="Date">
                     <cellValueFactory>
-                        <PropertyValueFactory property="date"/>
+                        <PropertyValueFactory property="dateReadable"/>
                     </cellValueFactory>
                 </TableColumn>
 

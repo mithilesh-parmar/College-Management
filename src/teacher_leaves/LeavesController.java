@@ -36,25 +36,6 @@ import java.util.ResourceBundle;
 
 public class LeavesController implements Initializable, SearchCallback, DataChangeListener, LeaveCardListener {
 
-    enum Filter {
-
-        ALL("All"),
-        APPROVED("Approved"),
-        DECLINED("Declined"),
-        PENDING("Pending");
-
-        private String title;
-
-        Filter(String title) {
-            this.title = title;
-        }
-
-        @Override
-        public String toString() {
-            return title;
-        }
-    }
-
 
     public SearchTextFieldController searchTextField;
     public FlowPane teacherLeavesFlowPane;
@@ -110,7 +91,7 @@ public class LeavesController implements Initializable, SearchCallback, DataChan
         teacherLeavesFlowPane.setPadding(new Insets(10));
         filterComboBox.setPadding(new Insets(25));
 
-        filterComboBox.getItems().addAll(Filter.ALL, Filter.APPROVED, Filter.PENDING, Filter.DECLINED);
+        filterComboBox.getItems().addAll(Filter.APPROVED, Filter.PENDING, Filter.DECLINED);
 
         filterComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, filter, t1) -> {
             if (t1 == Filter.ALL) {
@@ -124,7 +105,8 @@ public class LeavesController implements Initializable, SearchCallback, DataChan
             }
         });
 
-        filterComboBox.getSelectionModel().selectFirst();
+        filterComboBox.getSelectionModel().select(Filter.APPROVED);
+
         teacherLeaveContextMenu.getItems().addAll(acceptMenuButton, declineMenuButton, editMenuButton, cancelMenuButton);
 
         teacherLeavesFlowPane.getChildren().setAll(firestoreUtility.teacherLeavesCards);
@@ -158,7 +140,8 @@ public class LeavesController implements Initializable, SearchCallback, DataChan
     @Override
     public void onDataLoaded(ObservableList data) {
         dataLoading.set(false);
-        teacherLeavesFlowPane.getChildren().setAll(firestoreUtility.teacherLeavesCards);
+        filterComboBox.getSelectionModel().select(Filter.APPROVED);
+        teacherLeavesFlowPane.getChildren().setAll(firestoreUtility.approvedLeavesCards);
     }
 
     @Override

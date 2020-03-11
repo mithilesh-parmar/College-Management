@@ -45,7 +45,7 @@ public class LeaveCard extends AnimatingCard {
         initRearView();
         setFrontView(frontView);
         setRearView(rearView);
-        setShouldAnimate(true);
+//        setShouldAnimate(true);
 
     }
 
@@ -53,6 +53,13 @@ public class LeaveCard extends AnimatingCard {
     public void initFrontView() {
         Label teacherNameLabel = new Label(title.get());
         Label reasonLabel = new Label(subTitle.get());
+
+        Label fromDateLabel = new Label(fromDate.get());
+        Label tillDateLabel = new Label(tillDate.get());
+
+
+        fromDateLabel.textProperty().bind(this.fromDate);
+        tillDateLabel.textProperty().bind(this.tillDate);
 
 
         teacherNameLabel.textProperty().bind(this.title);
@@ -74,6 +81,12 @@ public class LeaveCard extends AnimatingCard {
         frontView.add(new Label("Reason: "), 0, 1);
         frontView.add(reasonLabel, 1, 1);
 
+        frontView.add(new Label("Start Date: "), 0, 2);
+        frontView.add(fromDateLabel, 1, 2);
+
+        frontView.add(new Label("End Date: "), 0, 3);
+        frontView.add(tillDateLabel, 1, 3);
+
 
         frontView.setHgap(4);
         frontView.setVgap(4);
@@ -82,57 +95,49 @@ public class LeaveCard extends AnimatingCard {
 
         setBorder(new Border(new BorderStroke(Color.SLATEGREY,
                 BorderStrokeStyle.SOLID, new CornerRadii(8), new BorderWidths(1))));
-        setPadding(new Insets(14));
+        setPadding(new Insets(24));
         setId("card");
 
         setStyle("/styles/dark_metro_style.css");
-
+        setOnMouseClicked(event -> {
+            if (listener == null) return;
+            if (event.getClickCount() == 2)
+                listener.onClick(leave);
+        });
 
     }
 
     @Override
     void initRearView() {
-        Label fromDateLabel = new Label(fromDate.get());
-        Label tillDateLabel = new Label(tillDate.get());
 
-
-        fromDateLabel.textProperty().bind(this.fromDate);
-        tillDateLabel.textProperty().bind(this.tillDate);
-
-
-        ColumnConstraints columnConstraints = new ColumnConstraints();
-        columnConstraints.setMinWidth(100);
-        columnConstraints.setHalignment(HPos.LEFT);
-
-        rearView.setPadding(new Insets(4));
-
-        rearView.getColumnConstraints()
-                .addAll(columnConstraints, columnConstraints);
-
-        Button acceptButton = new Button("Accept");
-        acceptButton.setDefaultButton(true);
-        Button declineButton = new Button("Decline");
-        Button editButton = new Button("Edit");
-
-        acceptButton.setOnAction(actionEvent -> listener.onAcceptAction(leave));
-        editButton.setOnAction(actionEvent -> listener.onClick(leave));
-        declineButton.setOnAction(actionEvent -> listener.onDeclineAction(leave));
-
-        rearView.add(new Label("Start Date: "), 0, 0);
-        rearView.add(fromDateLabel, 1, 0);
-
-        rearView.add(new Label("End Date: "), 0, 1);
-        rearView.add(tillDateLabel, 1, 1);
-
-
-        rearView.add(acceptButton, 0, 2);
-        rearView.add(declineButton, 1, 2);
-        rearView.add(editButton, 2, 2);
-
-
-        rearView.setHgap(4);
-        rearView.setVgap(4);
-        rearView.setAlignment(Pos.CENTER_LEFT);
+//
+//        ColumnConstraints columnConstraints = new ColumnConstraints();
+//        columnConstraints.setMinWidth(100);
+//        columnConstraints.setHalignment(HPos.LEFT);
+//
+//        rearView.setPadding(new Insets(4));
+//
+//        rearView.getColumnConstraints()
+//                .addAll(columnConstraints, columnConstraints);
+//
+//        Button acceptButton = new Button("Accept");
+//        acceptButton.setDefaultButton(true);
+//        Button declineButton = new Button("Decline");
+//        Button editButton = new Button("Edit");
+//
+//        acceptButton.setOnAction(actionEvent -> listener.onAcceptAction(leave));
+//        editButton.setOnAction(actionEvent -> listener.onClick(leave));
+//        declineButton.setOnAction(actionEvent -> listener.onDeclineAction(leave));
+//
+//
+//        rearView.add(acceptButton, 0, 2);
+//        rearView.add(declineButton, 1, 2);
+//        rearView.add(editButton, 2, 2);
+//
+//
+//        rearView.setHgap(4);
+//        rearView.setVgap(4);
+//        rearView.setAlignment(Pos.CENTER_LEFT);
 
     }
 }

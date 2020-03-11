@@ -57,7 +57,7 @@
            GridPane.rowIndex="4">
     </Label>
     <!-- Add Email Text Field -->
-    <TextField fx:id="statusTextField" prefHeight="40"
+    <ComboBox fx:id="statusComboBox" prefHeight="40"
                GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
     <!-- Add Email Label -->

@@ -14,6 +14,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
@@ -54,9 +56,15 @@ public class FeeController implements Initializable, DataChangeListener {
         });
 
 
+        ImageView imageView = new ImageView();
+        Image image = new Image("assets/search.png");
+        imageView.setFitHeight(20);
+        imageView.setFitWidth(20);
+        imageView.setImage(image);
+        findButton.setGraphic(imageView);
+        findButton.setGraphicTextGap(10);
         findButton.disableProperty().bind(canViewClearButton);
         findButton.setPadding(new Insets(8));
-        findButton.setDefaultButton(true);
         findButton.setOnAction(actionEvent -> loadStudentFee());
         findButton.setBorder(createBorder(Color.WHITESMOKE, BorderStrokeStyle.SOLID, 8, 2));
 

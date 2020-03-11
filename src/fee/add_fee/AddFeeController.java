@@ -1,5 +1,6 @@
 package fee.add_fee;
 
+import com.google.cloud.Timestamp;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.fxml.Initializable;
@@ -90,12 +91,14 @@ public class AddFeeController implements Initializable {
             public void onSuccess(Student student) {
                 dataLoading.set(false);
 //                if reg is valid then upload the attendance
+                Timestamp timestamp = DateUtility.localDateToTimestamp(selectedDate.get());
                 listener.onFeeSubmit(
                         new Fee("",
                                 selectedStudentAdmissionId.get(),
                                 selectedAmount.get(),
-                                DateUtility.localDateToTimestamp(selectedDate.get()),
-                                selectedFeeType.get())
+                                timestamp,
+                                selectedFeeType.get(),
+                                DateUtility.timeStampToReadable(timestamp))
                 );
             }
 

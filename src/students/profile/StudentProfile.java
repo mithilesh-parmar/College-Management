@@ -72,7 +72,7 @@ public class StudentProfile implements Initializable {
                 public void onStudentSubmit(Student student, File profileImage) {
                     if (profileCallback == null) return;
 
-                    Platform.runLater(() -> checkIfStudentExist(student,profileImage));
+                    Platform.runLater(() -> checkIfStudentExist(student, profileImage));
                 }
 
                 @Override
@@ -83,8 +83,11 @@ public class StudentProfile implements Initializable {
 
             });
         attendanceController = (AttendanceController) loadView(ATTENDANCE_VIEW, attendanceTab);
+//        TODO fee window should close on submit
+//       TODO individual fee window add operation not working
         feeController = (StudentFeeController) loadView(FEE_VIEW, feeTab);
         if (feeController != null) {
+
             feeController.setCallback(fee -> {
                 if (profileCallback == null) return;
                 profileCallback.onStudentFeeAdded(fee);

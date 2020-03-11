@@ -17,7 +17,7 @@
 
 
         <top>
-            <VBox>
+            <VBox spacing="2">
                 <GridPane hgap="10" vgap="10" alignment="CENTER_LEFT">
 
 
@@ -49,7 +49,7 @@
                            GridPane.columnIndex="7" GridPane.rowIndex="1"/>
 
                 </GridPane>
-                <Button fx:id="addButton" text="Add Fee" defaultButton="true"/>
+                <Button fx:id="addButton" text="Add Fee" defaultButton="true" />
             </VBox>
         </top>
         <center>
@@ -62,7 +62,7 @@
 
                     <TableColumn text="Date">
                         <cellValueFactory>
-                            <PropertyValueFactory property="date"/>
+                            <PropertyValueFactory property="dateReadable"/>
                         </cellValueFactory>
                     </TableColumn>
 

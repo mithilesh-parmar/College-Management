@@ -68,16 +68,7 @@
                 <Insets topRightBottomLeft="4"/>
             </GridPane.margin>
         </Button>
-        <Button fx:id="deleteButton" text="Delete Course"
-                prefWidth="100" prefHeight="40"
-                GridPane.columnIndex="3" GridPane.rowIndex="7"
-                GridPane.columnSpan="1" GridPane.rowSpan="1"
-                GridPane.halignment="CENTER"
-        >
-            <GridPane.margin>
-                <Insets topRightBottomLeft="4"/>
-            </GridPane.margin>
-        </Button>
+
     </GridPane>
     <ProgressIndicator fx:id="progressIndicator"/>
 

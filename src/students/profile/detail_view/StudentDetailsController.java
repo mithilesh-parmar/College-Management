@@ -62,13 +62,28 @@ public class StudentDetailsController implements Initializable {
         verifiedComboBox.getItems().addAll(true, false);
         profileCompleteComboBox.getItems().addAll(true, false);
 
+        parentNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                parentNumberTextField.setText(oldValue);
+            } else {
+                selectedParentNumber.set(newValue);
+            }
+        });
+
+        scholarshipTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                scholarshipTextField.setText(oldValue);
+            } else {
+                selectedScholarship.set(Long.parseLong(newValue));
+            }
+        });
 
         profileImageView.setListener(file -> selectedProfilePicture.set(file));
         nameField.textProperty().addListener((observableValue, s, t1) -> selectedName.set(t1));
         emailField.textProperty().addListener((observableValue, s, t1) -> selectedEmail.set(t1));
-        parentNumberTextField.textProperty().addListener((observableValue, s, t1) -> selectedParentNumber.set(t1));
+//        parentNumberTextField.textProperty().addListener((observableValue, s, t1) -> selectedParentNumber.set(t1));
         requestedRemarkTextField.textProperty().addListener((observableValue, s, t1) -> selectedRemark.set(t1));
-        scholarshipTextField.textProperty().addListener((observableValue, s, t1) -> selectedScholarship.set(Long.parseLong(t1)));
+//        scholarshipTextField.textProperty().addListener((observableValue, s, t1) -> selectedScholarship.set(Long.parseLong(t1)));
         admissionIDTextField.textProperty().addListener((observableValue, s, t1) -> selectedAdmissionID.set(t1));
         addressTextField.textProperty().addListener((observableValue, s, t1) -> selectedAddress.set(t1));
         verifiedComboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, aBoolean, t1) -> {

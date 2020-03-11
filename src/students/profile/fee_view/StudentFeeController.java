@@ -56,7 +56,7 @@ public class StudentFeeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        addButton.setPadding(new Insets(8));
+        VBox.setMargin(addButton, new Insets(18));
         progressIndicator.visibleProperty().bind(feeDataLoading);
         addButton.setOnAction(actionEvent -> loadAddView());
         addButton.setBorder(createBorder(Color.WHITESMOKE, BorderStrokeStyle.SOLID, 8, 2));
@@ -155,7 +155,14 @@ public class StudentFeeController implements Initializable {
             AddFeeController controller = loader.getController();
             controller.setStudent(student.get());
             if (feeCallback != null)
-                controller.setListener(fee -> feeCallback.onStudentFeeAdded(fee));
+                controller.setListener(new AddFeeListener() {
+                    @Override
+                    public void onFeeSubmit(Fee fee) {
+                        close(stage);
+                        feeCallback.onStudentFeeAdded(fee);
+                    }
+                });
+
             stage.showAndWait();
 
         } catch (IOException e) {

@@ -28,6 +28,7 @@ import model.Student;
 import custom_view.notification_view.NotificationsController;
 import students.profile.StudentProfileCallback;
 import students.profile.attendance.AttendanceController;
+import students.profile.fee_view.StudentFeeCallback;
 import students.profile.fee_view.StudentFeeController;
 import students.profile.StudentProfile;
 import utility.*;
@@ -148,6 +149,12 @@ public class StudentController implements Initializable, DataChangeListener, Sea
             StudentFeeController controller = loader.getController();
             if (student != null)
                 controller.setStudent(student);
+            controller.setCallback(new StudentFeeCallback() {
+                @Override
+                public void onStudentFeeAdded(Fee fee) {
+                    feeFirestoreUtility.addFee(fee);
+                }
+            });
             stage.showAndWait();
 
 
@@ -209,8 +216,6 @@ public class StudentController implements Initializable, DataChangeListener, Sea
 
                 @Override
                 public void onStudentFeeAdded(Fee fee) {
-                    loadingFeeData.set(true);
-                    close(stage);
                     feeFirestoreUtility.addFee(fee);
                 }
             });

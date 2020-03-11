@@ -74,7 +74,6 @@ public class CourseController implements Initializable, DataChangeListener, Cour
             stage.setScene(scene);
             AddCourseController controller = loader.getController();
             if (course != null) {
-
                 controller.setClassItem(course);
             }
             controller.setCallback(new AddCourseCallback() {
@@ -130,7 +129,6 @@ public class CourseController implements Initializable, DataChangeListener, Cour
 
     @Override
     public void onCardClick(ClassItem course) {
-//        System.out.println(course);
         loadAddVew(course);
     }
 }

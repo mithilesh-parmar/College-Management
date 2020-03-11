@@ -2,6 +2,7 @@ package model;
 
 import com.google.cloud.Timestamp;
 import javafx.beans.property.*;
+import utility.DateUtility;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,14 +29,16 @@ public class Fee {
     private StringProperty studentID;
     private LongProperty amount;
     private ObjectProperty<Type> type;
+    private StringProperty dateReadable;
 
 
-    public Fee(String id, String studentId, long amount, Timestamp date, Type type) {
+    public Fee(String id, String studentId, long amount, Timestamp date, Type type, String dateReadable) {
         this.id = new SimpleStringProperty(id);
         this.studentID = new SimpleStringProperty(studentId);
         this.amount = new SimpleLongProperty(amount);
         this.date = new SimpleObjectProperty<>(date);
         this.type = new SimpleObjectProperty<>(type);
+        this.dateReadable = new SimpleStringProperty((dateReadable == null || dateReadable.isEmpty()) ? DateUtility.timeStampToReadable(date) : dateReadable);
     }
 
     public static Fee fromJSON(Map<String, Object> json) {
@@ -44,7 +47,8 @@ public class Fee {
                 (String) json.get("student_id"),
                 (long) json.get("amount"),
                 (Timestamp) json.get("date"),
-                getType((String) json.get("fee_type"))
+                getType((String) json.get("fee_type")),
+                (String) json.get("date_readable")
         );
     }
 
@@ -55,6 +59,7 @@ public class Fee {
         json.put("date", date.get());
         json.put("amount", amount.get());
         json.put("fee_type", type.get().toString());
+        json.put("date_readable", dateReadable.get());
         return json;
     }
 
@@ -62,6 +67,18 @@ public class Fee {
         if (value.matches("Admission_Fee")) return Type.ADMISSION_FEE;
         else if (value.matches("FINE")) return Type.FINE;
         return null;
+    }
+
+    public String getDateReadable() {
+        return dateReadable.get();
+    }
+
+    public StringProperty dateReadableProperty() {
+        return dateReadable;
+    }
+
+    public void setDateReadable(String dateReadable) {
+        this.dateReadable.set(dateReadable);
     }
 
     public String getId() {
@@ -86,6 +103,7 @@ public class Fee {
 
     public void setDate(Timestamp date) {
         this.date.set(date);
+        setDateReadable(DateUtility.timeStampToReadable(date));
     }
 
     public String getStudentID() {

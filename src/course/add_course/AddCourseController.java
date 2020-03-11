@@ -28,7 +28,7 @@ public class AddCourseController implements Initializable {
 
     private final int MAX_YEARS = 5;
     public ListView<ChipView> subjectListView;
-    public Button deleteButton;
+
     public ProgressIndicator progressIndicator;
     public TextField feeTextField;
     private ListProperty<Long> yearsList = new SimpleListProperty<>(FXCollections.observableArrayList());
@@ -65,7 +65,7 @@ public class AddCourseController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         subjectListView.setId("staticListView");
         progressIndicator.visibleProperty().bind(loadingSections);
-        deleteButton.visibleProperty().bind(canDelete);
+
         feeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 feeTextField.setText(oldValue);
@@ -94,16 +94,9 @@ public class AddCourseController implements Initializable {
 
         submitButton.visibleProperty().bind(canSubmit);
 
-        deleteButton.setOnAction(actionEvent -> onDeleteAction());
+
     }
 
-    private void onDeleteAction() {
-//        if (callback == null || course == null) return;
-//        processSubjectsFromView();
-//        callback.onCourseDelete(
-//                course
-//        );
-    }
 
     private void processSubjectsFromView() {
         chipViews.forEach(chipView -> {

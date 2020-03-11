@@ -4,9 +4,12 @@ import com.google.cloud.Timestamp;
 import javafx.beans.property.*;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import model.Leave;
+import teacher_leaves.Filter;
+import teacher_leaves.LeavesController;
 import utility.DateUtility;
 
 import java.net.URL;
@@ -14,19 +17,19 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 
-//TODO status textfield displays 0,1,2
 public class LeaveEditController implements Initializable {
 
     public TextField teacherNameTextField;
-    public TextField statusTextField;
+    //    public TextField statusTextField;
     public TextField reasonTextField;
     public Button submitButton;
     public DatePicker endDatePicker;
     public DatePicker startDatePicker;
+    public ComboBox<Filter> statusComboBox;
 
     private StringProperty teacherName = new SimpleStringProperty(),
             reason = new SimpleStringProperty();
-    private IntegerProperty status = new SimpleIntegerProperty();
+    private LongProperty status = new SimpleLongProperty();
     private ObjectProperty<LocalDate> startDate = new SimpleObjectProperty<>(),
             endDate = new SimpleObjectProperty<>();
 
@@ -38,8 +41,8 @@ public class LeaveEditController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        statusComboBox.getItems().setAll(Filter.APPROVED, Filter.PENDING, Filter.DECLINED);
 
-        submitButton.visibleProperty().bind(canSubmit);
         submitButton.setOnAction(actionEvent -> handleSubmitAction());
 
         teacherNameTextField.textProperty().addListener((observableValue, s, t1) -> {
@@ -47,8 +50,9 @@ public class LeaveEditController implements Initializable {
             checkCanSubmit();
         });
 
-        statusTextField.textProperty().addListener((observableValue, s, t1) -> {
-            status.set(Integer.parseInt(t1));
+        statusComboBox.valueProperty().addListener((observableValue, o, t1) -> {
+            if (t1 == null) return;
+            status.set(Filter.getStatusCode(t1));
             checkCanSubmit();
         });
 
@@ -103,7 +107,7 @@ public class LeaveEditController implements Initializable {
         teacherNameTextField.setText(leave.getTeacherName());
         startDatePicker.setValue(DateUtility.dateToLocalDate(leave.getStartDate()));
         endDatePicker.setValue(DateUtility.dateToLocalDate(leave.getEndDate()));
-        statusTextField.setText(String.valueOf(leave.getStatus()));
+        statusComboBox.setValue(Filter.getStatusFilter(leave.getStatus()));
         reasonTextField.setText(leave.getReason());
         dataLoading.set(false);
     }
