@@ -91,7 +91,7 @@ public class TimeTableController implements Initializable, DataChangeListener {
         selectedSection.addListener((observableValue, section, t1) -> {
             if (t1 == null) return;
             canViewSchedule.set(true);
-            selectedSectionLabel.setText("Section " + t1.getSectionName());
+            selectedSectionLabel.setText(t1.getClassName() + " - " + t1.getSectionName());
         });
 
         addButton.setPadding(new Insets(8));
@@ -155,20 +155,23 @@ public class TimeTableController implements Initializable, DataChangeListener {
 
         sectionsTreeView.getSelectionModel().selectedItemProperty().addListener((observableValue, o, t1) -> {
             if (t1 == null) return;
-            if (!((TreeItem) t1).isLeaf()) return;
+//            if (!((TreeItem) t1).isLeaf()) return;
             TreeItem treeItem = (TreeItem) t1;
             Section section = (Section) treeItem.getValue();
             selectedSection.set(section);
-            mondaySchedule.setValue(section.getClassSchedules().get("1"));
-            tuesdaySchedule.setValue(section.getClassSchedules().get("2"));
-            wednesdaySchedule.setValue(section.getClassSchedules().get("3"));
-            thursdaySchedule.setValue(section.getClassSchedules().get("4"));
-            fridaySchedule.setValue(section.getClassSchedules().get("5"));
-            saturdaySchedule.setValue(section.getClassSchedules().get("6"));
-            sundaySchedule.setValue(section.getClassSchedules().get("7"));
+            addClassSchedulesToTables(section);
         });
     }
 
+    private void addClassSchedulesToTables(Section section) {
+        mondaySchedule.setValue(section.getClassSchedules().get("1"));
+        tuesdaySchedule.setValue(section.getClassSchedules().get("2"));
+        wednesdaySchedule.setValue(section.getClassSchedules().get("3"));
+        thursdaySchedule.setValue(section.getClassSchedules().get("4"));
+        fridaySchedule.setValue(section.getClassSchedules().get("5"));
+        saturdaySchedule.setValue(section.getClassSchedules().get("6"));
+        sundaySchedule.setValue(section.getClassSchedules().get("7"));
+    }
 
     public void onTableCellClicked(MouseEvent mouseEvent) {
         if (mouseEvent.getClickCount() == 2) {
@@ -331,14 +334,15 @@ public class TimeTableController implements Initializable, DataChangeListener {
         processSections(firestoreUtility.sections);
         sectionsTreeView.getSelectionModel().selectFirst();
         selectedSection.set((Section) sectionsTreeView.getRoot().getValue());
-
+        canViewSchedule.set(false);
     }
 
     private void processSections(ObservableList<Section> sections) {
         rootNode.setExpanded(true);
 
+        rootNode.getChildren().clear();
         for (Section section : sections) {
-            TreeItem<Section> leaf = new TreeItem<Section>(section, new Label(section.getSectionName()));
+            TreeItem<Section> leaf = new TreeItem<Section>(section);
 
             boolean found = false;
             for (TreeItem<Section> branch : rootNode.getChildren()) {
@@ -349,7 +353,9 @@ public class TimeTableController implements Initializable, DataChangeListener {
                 }
             }
             if (!found) {
-                TreeItem<Section> branch = new TreeItem<>(section, new Label(section.getClassName()));
+                TreeItem<Section> branch = new TreeItem<>();
+                branch.setValue(section);
+                branch.setGraphic(new Label(section.getClassName()));
                 rootNode.getChildren().add(branch);
                 branch.getChildren().add(leaf);
             }
